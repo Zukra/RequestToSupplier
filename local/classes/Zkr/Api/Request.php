@@ -13,7 +13,6 @@ use Bitrix\Iblock\Elements\EO_ElementRequestSpecification;
 use Bitrix\Iblock\Elements\EO_ElementSupplier;
 use Bitrix\Iblock\Elements\EO_ElementSupplierContact;
 use Bitrix\Iblock\Iblock;
-use Bitrix\Main\Diag\Debug;
 use CIBlockElement;
 use DateTime;
 
@@ -24,6 +23,7 @@ class Request
     protected $arSelect = [
         "ID", "NAME", 'REQUEST_ID', 'PAYMENT_ORDER', 'DELIVERY_TIME', 'INCOTERMS',
         "EMAIL", 'COMMENT', "CONTACT", 'CURRENCY', 'STATUS', 'EVENT', 'SUPPLIER_COMMENT',
+        'IS_BLOCKED',
         "SPECIFICATION", "SUPPLIER",
     ];
     protected $arFilter = ["ACTIVE" => "Y"];
@@ -31,32 +31,62 @@ class Request
 
     public function get($query, $n, \CRestServer $server)
     {
-        $result = $this->getQuery($query, $n, $server);
+        $result = [];
+        if (! empty($query['id'])) {
+            $request = $this->getRequest($query);
+            $result = $this->getRequestValues($request);
+        } else {
+//            $result = $this->getQuery($query, $n, $server);
+        }
 
         //        return ['query' => $query, 'result' => $result, 'n' => $n];
-        return ['result' => $result];
+        return ['status' => $result ? 1 : 0, 'result' => $result];
     }
 
     public function update($query, $n, \CRestServer $server)
     {
-        $result = [];
+        $result = null;
+
         if (! empty($query['data'])) {
             foreach ($query['data'] as $datum) {
                 if ($elem = $this->isHasElem($datum['id'])) {
-                    $elem = $this->updateElem($elem->getId(), $datum);
-                    $result[] = 'update -> ' . $elem->getId() . ' / ' . $elem->getName();
+                    $elem->fillIsBlocked();
+                    $isBlocked = $elem->getIsBlocked() ? $elem->getIsBlocked()->getValue() : 0;
+                    if ($isBlocked) {
+                        $elem->fillRequestId();
+                        $elem->fillContact();
+                        $elem->fillSupplier();
+                        $supplier = $this->getSupplier($elem);
+                        $result[] = [
+                            'status'     => 0,
+                            'errors'     => 'Request to update is blocked by supplier',
+                            "request_id" => $elem->getRequestId()->getValue(),
+                            "contact"    => $this->getContactById($elem->getContact()->getValue()),
+                            "supplier"   => ['id' => $supplier['id'], 'name' => $supplier['name']],
+                        ];
+                    } else {
+                        $elem = $this->updateElem($elem->getId(), $datum);
+                        $result[] = [
+                            'status'     => 1,
+                            'message'    => 'updated',
+                            "request_id" => $elem->getRequestId()->getValue(),
+                        ];
+                    }
                 } else {
                     $elem = $this->addElem($datum);
                     $elem = $this->updateElem($elem->getId(), $datum);
-                    $result[] = 'add -> ' . $elem->getId() . ' / ' . $elem->getName();
+                    $result[] = [
+                        'status'     => 1,
+                        'message'    => 'added',
+                        "request_id" => $elem->getRequestId()->getValue(),
+                    ];
                 }
             }
-            $result = ['status' => '1'];
+        } else {
+            $result = ['status' => 0];
         }
 
-        return $result; //  ['status' => '0', 'errors' => "Request to update is blocked by supplier" ]
-//        return ['update ' . count($result) . ' requests']; //  return ['result' => $result];
-//        return $result; //  return ['result' => $result];
+        return ['result' => $result];
     }
 
     public function getAll($query, $n, \CRestServer $server)
@@ -125,15 +155,6 @@ class Request
         );
     }
 
-    public function test($query, $n, \CRestServer $server)
-    {
-        if ($query['error']) {
-            throw new \Bitrix\Rest\RestException('Message', 'ERROR_CODE', \CRestServer::STATUS_PAYMENT_REQUIRED);
-        }
-
-        return ['yourquery' => $query, 'myresponse' => 'My own response', 'n' => $n];
-    }
-
     public function getQuery($query, $n, \CRestServer $server)
     {
         $result = [];
@@ -155,26 +176,29 @@ class Request
             ->fetchCollection();
 
         foreach ($requests as $request) {
-            //            $result[$request->getId()] = [
-            $result[] = [
-                'id'            => $request->getRequestId()->getValue(),
-                'internal_id'   => $request->getId(),
-                'payment_order' => $request->getPaymentOrder()->getValue(),
-                'delivery_time' => $request->getDeliveryTime()->getValue(),
-                'incoterms'     => $request->getIncoterms()->getValue(),
-                'currency'      => $request->getCurrency()->getValue(),
-                'status'        => $request->getStatus()->getValue(),
-                'comment'       => $request->getComment()->getValue(),
-                //                "email"         => $request->getEmail()->getValue(),
-                "event"         => $request->getEvent()->getValue(),
-                "comment_s"     => $request->getSupplierComment()->getValue(),
-                "contact"       => $this->getContactById($request->getContact()->getValue()),
-                "supplier"      => $this->getSupplier($request),
-                "specification" => $this->getSpecification($request),
-            ];
+            //            $result[$request->getId()] =
+            $result[] = $this->getRequestValues($request);
         }
 
         return $result;
+    }
+
+    public function getRequest($query)
+    {
+        $arSelect = $this->arSelect;
+        $arFilter = $this->arFilter;
+
+        $arFilter['REQUEST_ID.VALUE'] = $query['id'];
+
+        /** @var \Bitrix\Iblock\Elements\EO_ElementRequest $request */
+        $request = ElementRequestTable::query()
+            ->setSelect($arSelect)
+            ->setFilter($arFilter)
+            ->fetchObject();
+
+//        $result = $this->getRequestValues($request);
+
+        return $request;
     }
 
     public function getQueryOld($query, $n, \CRestServer $server)
@@ -614,5 +638,25 @@ class Request
         }
 
         return $supplier;
+    }
+
+    private function getRequestValues(EO_ElementRequest $request)
+    {
+        return [
+            'id'            => $request->getRequestId()->getValue(),
+            'internal_id'   => $request->getId(),
+            'payment_order' => $request->getPaymentOrder()->getValue(),
+            'delivery_time' => $request->getDeliveryTime()->getValue(),
+            'incoterms'     => $request->getIncoterms()->getValue(),
+            'currency'      => $request->getCurrency()->getValue(),
+            'status'        => $request->getStatus()->getValue(),
+            'comment'       => $request->getComment()->getValue(),
+            //                "email"         => $request->getEmail()->getValue(),
+            "event"         => $request->getEvent()->getValue(),
+            "comment_s"     => $request->getSupplierComment()->getValue(),
+            "contact"       => $this->getContactById($request->getContact()->getValue()),
+            "supplier"      => $this->getSupplier($request),
+            "specification" => $this->getSpecification($request),
+        ];
     }
 }
