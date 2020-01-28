@@ -16,3 +16,5 @@ sitemap*.xml
 /local/vendor/
 /test/
 !/local/test/
+/local/modules/orm_annotations.php
+/local/test.php
