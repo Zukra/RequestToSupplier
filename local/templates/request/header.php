@@ -13,8 +13,9 @@ use Bitrix\Main\Page\Asset;
     <?
     Asset::getInstance()->addCss("/bitrix/css/main/bootstrap.min.css");
 
-    CJSCore::Init(['jquery3']);
+    CJSCore::Init(['jquery3', "fx", 'ajax']);
     Asset::getInstance()->addJs("/local/assets/js/custom.js");
+    Asset::getInstance()->addJs("/local/assets/js/bootstrap.min.js");
     ?>
 
     <? $APPLICATION->ShowHead() ?>

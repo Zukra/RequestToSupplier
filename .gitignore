@@ -8,13 +8,16 @@ Thumbs.db
 *.tar
 *.zip
 *.psd
+*.rar
 
 log.*
 yandex_*.html
 google*.html
 sitemap*.xml
 /local/vendor/
+/vendor/
 /test/
-!/local/test/
+/local/test/
 /local/modules/orm_annotations.php
 /local/test.php
+/local/assets/js/bootstrap.min.js
