@@ -38,6 +38,7 @@ use Bitrix\Main\Page\Asset;
         </div>
 
         <div id="menu">
+            <span>+48 (22) 307-20-44</span>
             <? $APPLICATION->IncludeComponent(
                 "bitrix:menu",
                 "tabs",
@@ -52,6 +53,7 @@ use Bitrix\Main\Page\Asset;
                 ]
             ); ?>
         </div>
+
     </div>
 
     <div id="content">
@@ -107,4 +109,4 @@ use Bitrix\Main\Page\Asset;
                 </div>
 */ ?>
 
-        <h1 id="pagetitle"><? $APPLICATION->ShowTitle(false) ?></h1>
+        <?/*<h1 id="pagetitle"><? $APPLICATION->ShowTitle(false) ?></h1>*/?>

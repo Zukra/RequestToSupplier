@@ -15,8 +15,8 @@ body {
 /*Font*/
 body {
     font-family : Tahoma, Verdana, Helvetica, sans-serif;
-    color       : #454545;
-    background  : #3E4F60;
+    /*color       : #454545;*/
+    /*background  : #3E4F60;*/
     text-align  : center;
 }
 
@@ -64,7 +64,7 @@ hr {
     margin-left:-390px;*/
     margin     : 0 auto;
     text-align : left;
-    background : #95ACCA url(images/header_bg.gif) repeat-x;
+    /*background : #95ACCA url(images/header_bg.gif) repeat-x;*/
 }
 
 #header {
@@ -72,7 +72,7 @@ hr {
     height          : 127px;
     box-sizing      : border-box;
     -moz-box-sizing : border-box;
-    background      : url(images/header_logo.jpg);
+    /*background      : url(images/header_logo.jpg);*/
 }
 
 #header_logo {
