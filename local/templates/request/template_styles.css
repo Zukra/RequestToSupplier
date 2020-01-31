@@ -80,11 +80,11 @@ hr {
 }
 
 #company_logo {
-    width      : 100px;
-    height     : 90px;
-    background : url(images/logo.gif) center right no-repeat;
+    /*width      : 100px;*/
+    /*height     : 90px;*/
+    /*background : url(images/logo.gif) center right no-repeat;*/
     position   : absolute;
-    left       : 6px;
+    left       : 15px;
 }
 
 #header_text {

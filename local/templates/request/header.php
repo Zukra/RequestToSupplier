@@ -29,15 +29,13 @@ use Bitrix\Main\Page\Asset;
 <div id="container">
 
     <div id="header">
-        <div id="header_text">
+        <div id="company_logo">
             <? $APPLICATION->IncludeFile(
-                $APPLICATION->GetTemplatePath("include_areas/company_name.php"),
+                $APPLICATION->GetTemplatePath("include_areas/company_logo.php"),
                 [],
                 ["MODE" => "html"]
             ); ?>
         </div>
-
-        <div id="company_logo"></div>
 
         <div id="menu">
             <? $APPLICATION->IncludeComponent(
