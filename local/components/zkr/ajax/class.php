@@ -7,16 +7,22 @@ if (! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+use Bitrix\Iblock\Elements\ElementSupplierContactTable;
 use Bitrix\Iblock\Elements\EO_ElementSupplier;
+use Bitrix\Iblock\Elements\EO_ElementSupplierContact;
 use Bitrix\Main\Engine\ActionFilter;
 use Bitrix\Main\Engine\Contract\Controllerable;
+use Bitrix\Main\Loader;
 use Bitrix\Main\Type\DateTime;
 use CBitrixComponent;
+use CIBlockElement;
 
 class CustomAjax extends CBitrixComponent implements Controllerable
 {
     public function configureActions()
     {
+        Loader::includeModule('iblock');
+
         // Предустановленные фильтры находятся в папке /bitrix/modules/main/lib/engine/actionfilter/
         return [
             // Ajax-метод
@@ -47,6 +53,15 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                     //                    new ActionFilter\Csrf(),
                     //                    new ActionFilter\Authentication(),
+                ],
+                '-prefilters' => [
+                    ActionFilter\Authentication::class
+                ],
+                'postfilters' => [],
+            ],
+            'updateRequest'     => [
+                'prefilters'  => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
                     ActionFilter\Authentication::class
@@ -113,6 +128,23 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         }
 
         return $data;
+    }
+
+    public function updateRequestAction($params)
+    {
+        $props = [
+            $params['prop']['code'] => $params['prop']['value'],
+            'IS_BLOCKED'            => REQUEST_IS_BLOCKED_ID
+        ];
+        if ($params['prop']['code'] == 'CONTACT') {
+            /** @var EO_ElementSupplierContact $contact */
+            $contact = ElementSupplierContactTable::getByPrimary(
+                $params['prop']['value'],
+                ['select' => ['ID', 'NAME', 'EMAIL']]
+            )->fetchObject();
+            $props['EMAIL'] = $contact->getEmail()->getValue();
+        }
+        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
     }
 
     public function getNewSupplierKeyAction($params)

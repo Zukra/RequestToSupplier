@@ -21,3 +21,5 @@ sitemap*.xml
 /local/modules/orm_annotations.php
 /local/test.php
 /local/assets/js/bootstrap.min.js
+/local/assets/css/bootstrap.min.css
+/local/assets/css/bootstrap-grid.min.css

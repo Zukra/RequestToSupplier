@@ -11,7 +11,8 @@ use Bitrix\Main\Page\Asset;
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <?
-    Asset::getInstance()->addCss("/bitrix/css/main/bootstrap.min.css");
+//    Asset::getInstance()->addCss("/bitrix/css/main/bootstrap_v4/bootstrap.min.css");
+    Asset::getInstance()->addCss("/local/assets/css/bootstrap.min.css");
 
     CJSCore::Init(['jquery3', "fx", 'ajax']);
     Asset::getInstance()->addJs("/local/assets/js/custom.js");
