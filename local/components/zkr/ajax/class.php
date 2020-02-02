@@ -26,7 +26,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         // Предустановленные фильтры находятся в папке /bitrix/modules/main/lib/engine/actionfilter/
         return [
             // Ajax-метод
-            'getKey'            => [
+            'getKey'              => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                     //                    new ActionFilter\Csrf(),
@@ -37,7 +37,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'updateSupplierKey' => [
+            'updateSupplierKey'   => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                     //                    new ActionFilter\Csrf(),
@@ -48,7 +48,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'getNewSupplierKey' => [
+            'getNewSupplierKey'   => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                     //                    new ActionFilter\Csrf(),
@@ -59,7 +59,16 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'updateRequest'     => [
+            'updateRequest'       => [
+                'prefilters'  => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
+                ],
+                '-prefilters' => [
+                    ActionFilter\Authentication::class
+                ],
+                'postfilters' => [],
+            ],
+            'updateSpecification' => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
@@ -143,8 +152,27 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ['select' => ['ID', 'NAME', 'EMAIL']]
             )->fetchObject();
             $props['EMAIL'] = $contact->getEmail()->getValue();
-        }
+        } /*elseif ($params['prop']['code'] == 'SUPPLIER_COMMENT') {
+            $props[$params['prop']['code']] = [
+                ['TYPE' => 'HTML', 'TEXT' => $params['prop']['value']]
+            ];
+        }*/
+
         CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
+    }
+
+    public function updateSpecificationAction($params)
+    {
+        $props = [
+            $params['prop']['code'] => $params['prop']['value'],
+        ];
+
+        if ($params['prop']['code'] == 'REPLACEMENT' && $params['prop']['value']) {
+            $props['REPLACEMENT'] = REQUEST_SPECIFICATION_IS_REPLACEMENT;
+        }
+
+        CIBlockElement::SetPropertyValuesEx($params['spec_id'], false, $props);
+        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, ['IS_BLOCKED' => REQUEST_IS_BLOCKED_ID]);
     }
 
     public function getNewSupplierKeyAction($params)

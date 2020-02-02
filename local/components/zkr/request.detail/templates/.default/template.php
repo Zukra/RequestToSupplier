@@ -20,9 +20,9 @@ $supplier = $arResult['SUPPLIER'];
 $supplierContacts = $arResult['SUPPLIER_CONTACTS'];
 $specification = $arResult['SPECIFICATION'];
 $currencies = \Bitrix\Currency\CurrencyManager::getCurrencyList();
+$measures = ['T', 't', 'm'];
 
 $this->setFrameMode(true);
-
 ?>
 <div class="request-detail">
 
@@ -136,43 +136,55 @@ $this->setFrameMode(true);
                     <tbody>
                     <? /** @var \Bitrix\Iblock\Elements\EO_ElementRequestSpecification $item */
                     foreach ($specification as $item) { ?>
-                        <tr class="request-item" id="item_<?= $item->getId(); ?>">
+                        <tr class="specification-item" id="<?= $item->getId(); ?>">
                             <td><? echo $item->getName() ?></td>
                             <td><?= $item->getComment()->getValue() ?></td>
                             <td><?= $item->getQuantityR()->getValue() ?></td>
                             <td><?= $item->getUnitMeasure()->getValue() ?></td>
                             <td>
-                                <input type="text" name="quantity_s" value="<?= $item->getSupplierQuantity()->getValue() ?>">
+                                <input type="text" class="recalc" name="quantity_s"
+                                       data-code="SUPPLIER_QUANTITY"
+                                       value="<?= $item->getSupplierQuantity()->getValue() ?>">
                             </td>
                             <td>
-                                <input type="text" name="unit_s"
-                                       value="<?= $item->getSupplierUnit()->getValue() ?>">
+                                <select class="custom-select" id="inputGroupSelectMeasure" name="unit_s"
+                                        data-code="SUPPLIER_UNIT">
+                                    <? foreach ($measures as $measure) { ?>
+                                        <option <?= $item->getSupplierUnit()->getValue() == $measure ? "selected" : "" ?>
+                                                value="<?= $measure ?>">
+                                            <?= $measure ?>
+                                        </option>
+                                    <? } ?>
+                                </select>
                             </td>
                             <td>
-                                <input type="text" name="price_s"
+                                <input type="text" class="recalc" name="price_s" data-code="SUPPLIER_PRICE_UNIT"
                                        value="<?= $item->getSupplierPriceUnit()->getValue() ?>">
                             </td>
-                            <td></td>
+                            <td class="total">
+                                <?= $item->getSupplierQuantity()->getValue() * $item->getSupplierPriceUnit()->getValue() ?>
+                            </td>
                             <td>
-                                <input type="text" name="delivery_time"
+                                <input type="text" name="delivery_time" data-code="DELIVERY_TIME"
                                        value="<?= $item->getDeliveryTime()->getValue() ?>">
                             </td>
                             <td>
-                                <input type="text" name="incoterms"
+                                <input type="text" name="incoterms" data-code="INCOTERMS"
                                        value="<?= $item->getIncoterms()->getValue() ?>">
                             </td>
                             <td>
                                 <div class="input-group mb-3">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
-                                            <input type="checkbox" name="replacement"
-                                                   value="<?= $item->getReplacement()->getValue() ?>">
+                                            <input type="checkbox" name="replacement" data-code="REPLACEMENT"
+                                                   value="<?= $item->getReplacement()->getValue() ?>"
+                                                <?= $item->getReplacement()->getValue() ? "checked" : "" ?>>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="text" name="comment_s"
+                                <input type="text" name="comment_s" data-code="SUPPLIER_COMMENT"
                                        value="<?= $item->getSupplierComment()->getValue() ?>">
                             </td>
                         </tr>
@@ -188,12 +200,9 @@ $this->setFrameMode(true);
                     <div class="input-group-prepend">
                         <span class="input-group-text">Comment</span>
                     </div>
-                    <textarea class="form-control" aria-label="With textarea"
-                              name="supplier_comment"
+                    <textarea class="form-control" name="supplier_comment"
                               data-id="<?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["ID"] ?>"
-                              data-code="<?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["CODE"] ?>">
-                    <?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["VALUE"] ?>
-                </textarea>
+                              data-code="<?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["CODE"] ?>"><?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["VALUE"] ?></textarea>
                 </div>
             </div>
         </div>
