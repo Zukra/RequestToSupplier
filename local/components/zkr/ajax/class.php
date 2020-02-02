@@ -152,11 +152,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ['select' => ['ID', 'NAME', 'EMAIL']]
             )->fetchObject();
             $props['EMAIL'] = $contact->getEmail()->getValue();
-        } /*elseif ($params['prop']['code'] == 'SUPPLIER_COMMENT') {
-            $props[$params['prop']['code']] = [
-                ['TYPE' => 'HTML', 'TEXT' => $params['prop']['value']]
-            ];
-        }*/
+        }
 
         CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
     }
@@ -173,6 +169,12 @@ class CustomAjax extends CBitrixComponent implements Controllerable
 
         CIBlockElement::SetPropertyValuesEx($params['spec_id'], false, $props);
         CIBlockElement::SetPropertyValuesEx($params['request_id'], false, ['IS_BLOCKED' => REQUEST_IS_BLOCKED_ID]);
+    }
+
+    public function sendRequestDataAction($params)
+    {
+
+        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, ['IS_BLOCKED' => false]);
     }
 
     public function getNewSupplierKeyAction($params)

@@ -41,6 +41,8 @@ $this->setFrameMode(true);
 
     <form name="request" method="post">
         <input type="hidden" name="request-id" value="<?= $arResult['ID'] ?>">
+        <input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>">
+        <input type="hidden" name="request-1c" value="<?= $arResult['PROPERTIES']['REQUEST_ID']['VALUE'] ?>">
 
         <div class="general-term">
             <div class="form-group">

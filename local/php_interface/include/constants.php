@@ -7,3 +7,5 @@
 
  define('REQUEST_IS_BLOCKED_ID', 2);
  define('REQUEST_SPECIFICATION_IS_REPLACEMENT', 1);
+
+ define('REQUEST_TOKEN', '2feoiiqokh5cpppl');

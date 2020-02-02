@@ -67,10 +67,44 @@ $(function () {
 
     $('form[name="request"]').submit(function (event) {
         event.preventDefault();
-        console.log('submit');
-        /*if (event.keyCode === 13) {
+
+        if (event.keyCode === 13) {
             event.preventDefault();
-        }*/
+        }
+
+        var id    = $('form[name="request"] input[name="request-1c"]').val(),
+            token = $('form[name="request"] input[name="request-token"]').val();
+
+        $.ajax({
+            method: "POST",
+            url: "/api/v2/request.get",
+            data: {id: id, token: token}
+        }).done(function (data) {
+            var params = {data: data.result};
+            console.log(params);
+            $.ajax({
+                method: "POST",
+                url: "/1c/api/v2/request.get",
+                data: params
+                // dataType: "json",
+                // contentType: 'application/json'
+            }).done(function (data) {
+                // console.log("data");
+            });
+        });
+
+        /*var params = {request_id: requestId};
+
+        BX.ajax.runComponentAction('zkr:ajax',
+            'sendRequestData', {mode: 'class', data: {params: params}}
+        ).then(function (response) {
+            if (response.status === 'success') {
+                // console.log('specification updated!');
+            }
+        }).catch(function (reason) {
+            console.log(reason);
+        });*/
+
         // location.href = "/";
         // location.href = location.href.split('?')[0];
         // location.reload();
