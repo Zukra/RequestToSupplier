@@ -198,6 +198,16 @@ $this->setFrameMode(true);
 
         <div class="general-term">
             <div class="form-group">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Total price of request</span>
+                    </div>
+                    <input type="text" class="form-control total-price" value="0" readonly>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text total-currency"></span>
+                    </div>
+                </div>
+
                 <div class="input-group">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Comment</span>
@@ -210,7 +220,10 @@ $this->setFrameMode(true);
         </div>
 
         <button type="submit" class="btn btn-primary">Send reply</button>
-        <a class="btn btn-link" href="/personal/requests/">Show raw rows</a>
+        <a class="btn btn-link" href="/personal/requests/">
+            Show raw rows
+            <span class="badge badge-light"><?= $specification->count() ?></span>
+        </a>
     </form>
 
 </div>

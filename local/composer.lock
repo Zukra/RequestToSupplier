@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36e6ec752a397062e7c71e52be1df504",
+    "content-hash": "ad540f1f1d49ebe11dc21beb627b6b1b",
     "packages": [
         {
             "name": "wikimedia/composer-merge-plugin",
@@ -189,16 +189,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v3.4.36",
+            "version": "v3.4.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "569e261461600810845a8305ca3f64abd3e712c0"
+                "reference": "51ecb139114c38080801145a212f10210ea99ea3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/569e261461600810845a8305ca3f64abd3e712c0",
-                "reference": "569e261461600810845a8305ca3f64abd3e712c0",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/51ecb139114c38080801145a212f10210ea99ea3",
+                "reference": "51ecb139114c38080801145a212f10210ea99ea3",
                 "shasum": ""
             },
             "require": {
@@ -254,7 +254,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2019-10-10T11:03:19+00:00"
+            "time": "2020-01-01T11:03:25+00:00"
         }
     ],
     "aliases": [],
@@ -264,6 +264,8 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*"
+    },
     "platform-dev": []
 }
