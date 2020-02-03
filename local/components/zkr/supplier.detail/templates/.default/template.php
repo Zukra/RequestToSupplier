@@ -18,33 +18,39 @@ $this->setFrameMode(true);
 $contacts = $arResult['CONTACTS'];
 ?>
 <div class="supplier-detail">
-    <h3><?= $arResult["NAME"] ?></h3>
+    <?/*<h3><?= $arResult["NAME"] ?></h3>*/?>
 
-    <br/>
     <?
-    echo $arResult["DISPLAY_PROPERTIES"]["ID_ONE_C"]['NAME'] . ': ' . $arResult["DISPLAY_PROPERTIES"]["ID_ONE_C"]["DISPLAY_VALUE"] . "<br>";
-    echo $arResult["DISPLAY_PROPERTIES"]["KEY"]['NAME'] . ': ' . $arResult["DISPLAY_PROPERTIES"]["KEY"]["DISPLAY_VALUE"] . "<br>";
-    echo $arResult["DISPLAY_PROPERTIES"]["EXPIRY_DATE"]['NAME'] . ': ' . $arResult["DISPLAY_PROPERTIES"]["EXPIRY_DATE"]["DISPLAY_VALUE"] . "<br>";
+    //    echo $arResult["DISPLAY_PROPERTIES"]["ID_ONE_C"]['NAME'] . ': ' . $arResult["DISPLAY_PROPERTIES"]["ID_ONE_C"]["DISPLAY_VALUE"] . "<br>";
+    //    echo $arResult["DISPLAY_PROPERTIES"]["KEY"]['NAME'] . ': ' . $arResult["DISPLAY_PROPERTIES"]["KEY"]["DISPLAY_VALUE"] . "<br>";
+    //    echo $arResult["DISPLAY_PROPERTIES"]["EXPIRY_DATE"]['NAME'] . ': ' . $arResult["DISPLAY_PROPERTIES"]["EXPIRY_DATE"]["DISPLAY_VALUE"] . "<br>";
     ?>
 
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-        </tr>
-        </thead>
-        <tbody>
-        <? /** @var \Bitrix\Iblock\Elements\EO_ElementSupplierContact $contact */
-        $i = 0;
-        foreach ($contacts as $contact) { ?>
-            <tr>
-                <th scope="row"><?= ++$i ?></th>
-                <td><?= $contact->getName() ?></td>
-                <td><?= $contact->getEmail()->getValue() ?></td>
-            </tr>
-        <? } ?>
-        </tbody>
-    </table>
+    <section class="manager">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h3>List of managers of
+                        <b>Stalprofil</b> who can respond to requests. To add new
+                        <a href="#">сontact</a> the purchasing manager.</h3>
+                </div>
+                <div class="col-xs-12 col-sm-6 manager_list hidden-xs">
+                    <p><b>Name</b></p>
+                </div>
+                <div class="col-xs-12 col-sm-6 manager_list hidden-xs">
+                    <p><b>email</b></p>
+                </div>
+
+                <? /** @var \Bitrix\Iblock\Elements\EO_ElementSupplierContact $contact */
+                foreach ($contacts as $contact) { ?>
+                    <div class="col-xs-12 col-sm-6 manager_list">
+                        <p><b><?= $contact->getName() ?></b></p>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 manager_list">
+                        <p><?= $contact->getEmail()->getValue() ?></p>
+                    </div>
+                <? } ?>
+            </div>
+        </div>
+    </section>
 </div>

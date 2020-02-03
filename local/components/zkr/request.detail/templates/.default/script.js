@@ -71,15 +71,15 @@ function setTotalCurrency() {
 }
 
 function recalcTotal() {
-    var form            = $('form[name="request"]'),
-        total           = form.find('.total-price'),
-        items           = form.find('.specification-item'),
-        summ            = 0;
+    var form  = $('form[name="request"]'),
+        total = form.find('.total-price'),
+        items = form.find('.specification-item'),
+        summ  = 0;
     items.each(function (index, item) {
         summ += parseFloat($(item).find('input[name=quantity_s]').val())
             * parseFloat($(item).find('input[name=price_s]').val());
     });
-    total.val(summ);
+    total.html(summ >= 0 ? summ : 'NaN');
     setTotalCurrency();
 }
 
@@ -135,7 +135,7 @@ $(function () {
 
     $('form[name="request"] .general-term select').change(function (event) {
         // setTimeout(function () {
-        if(this.name === 'currency'){
+        if (this.name === 'currency') {
             setTotalCurrency();
         }
         updateGeneralTerm(this);

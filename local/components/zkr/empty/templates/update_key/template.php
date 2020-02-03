@@ -6,19 +6,32 @@
 /** @var \Bitrix\Iblock\Elements\EO_ElementSupplier $supplier */
 $supplier = $arResult['SUPPLIER'];
 ?>
+<section class="login">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h1>EMK for suppliers</h1>
+                <form class="form-horizontal" role="form" name="update-supplier-key" action="#">
+                    <input type="hidden" name="supplier-key" value="<?= $supplier->getKey()->getValue() ?>">
+                    <input type="hidden" name="supplier-name" value="<?= $supplier->getName() ?>">
+                    <input type="hidden" name="request-id" value="<?= $arParams['REQUEST_ID'] ?: '' ?>">
+                    <input type="hidden" name="supplier-id" value="<?= $supplier->getIdOneC()->getValue() ?>">
 
-<form name="update-supplier-key" action="#">
-    <input type="hidden" name="supplier-key" value="<?= $supplier->getKey()->getValue() ?>">
-    <input type="hidden" name="supplier-name" value="<?= $supplier->getName() ?>">
-    <input type="hidden" name="request-id" value="<?= $arParams['REQUEST_ID'] ?: '' ?>">
-    <input type="hidden" name="supplier-id" value="<?= $supplier->getIdOneC()->getValue() ?>">
-    <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
-        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input type="email" class="form-control" id="" name="email" placeholder="Email" required>
+                        </div>
+                    </div>
+                    <div class="form-group text_cent">
+                        <div class="col-xs-12">
+                            <button type="submit" class="green_but">Get a login link</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+</section>
 
 <!-- Modal -->
 <div class="modal fade" id="successUpdateKey" tabindex="-1" role="dialog" aria-labelledby="successUpdateKeyTitle" aria-hidden="true">

@@ -20,7 +20,7 @@ if ($accessKey) {
         ->fetchObject();
 
     if (! $supplier) {
-        echo 'Используемый ключ недействителен или неверен, используйте новый ключ';
+        echo 'Используемый действительный ключ';
     }
 
     $elementId = $supplier ? $supplier->getId() : null;

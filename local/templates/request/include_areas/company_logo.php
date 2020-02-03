@@ -1,3 +1,3 @@
-<a class="header-logo" href="/">
-    <img alt="ЕМК: Европейская металлургическая компания" src="/images/logo.svg" title="ЕМК: Европейская металлургическая компания">
+<a class="navbar-brand" href="/">
+    <img alt="ЕМК: Европейская металлургическая компания" src="<?= SITE_TEMPLATE_PATH ?>/images/logo.png" title="ЕМК: Европейская металлургическая компания">
 </a>
