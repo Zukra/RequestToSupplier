@@ -76,6 +76,15 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     ActionFilter\Authentication::class
                 ],
                 'postfilters' => [],
+            ],
+            'sendRequestData'     => [
+                'prefilters'  => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
+                ],
+                '-prefilters' => [
+                    ActionFilter\Authentication::class
+                ],
+                'postfilters' => [],
             ]
         ];
     }
@@ -83,7 +92,6 @@ class CustomAjax extends CBitrixComponent implements Controllerable
     function executeComponent()
     {
     }
-
 
     /**
      * @return array
@@ -143,7 +151,9 @@ class CustomAjax extends CBitrixComponent implements Controllerable
     {
         $props = [
             $params['prop']['code'] => $params['prop']['value'],
-            'IS_BLOCKED'            => REQUEST_IS_BLOCKED_ID
+            'IS_BLOCKED'            => REQUEST_IS_BLOCKED_ID,
+            'STATUS'                => 'Edit',
+            'EVENT'                 => 'Edit'
         ];
         if ($params['prop']['code'] == 'CONTACT') {
             /** @var EO_ElementSupplierContact $contact */
@@ -173,8 +183,12 @@ class CustomAjax extends CBitrixComponent implements Controllerable
 
     public function sendRequestDataAction($params)
     {
-
-        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, ['IS_BLOCKED' => false]);
+        $props = [
+            'IS_BLOCKED' => false,
+            'STATUS'     => 'Sent',
+            'EVENT'      => 'Sent'
+        ];
+        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
     }
 
     public function getNewSupplierKeyAction($params)

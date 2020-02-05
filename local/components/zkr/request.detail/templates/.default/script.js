@@ -63,7 +63,29 @@ function updateSpecification(that) {
     }
 }
 
+function setTotalCurrency() {
+    var form            = $('form[name="request"]'),
+        totalCurrency   = form.find('.total-currency'),
+        currentCurrency = form.find('[name=currency]').val();
+    totalCurrency.html(currentCurrency);
+}
+
+function recalcTotal() {
+    var form  = $('form[name="request"]'),
+        total = form.find('.total-price'),
+        items = form.find('.specification-item'),
+        summ  = 0;
+    items.each(function (index, item) {
+        summ += parseFloat($(item).find('input[name=quantity_s]').val())
+            * parseFloat($(item).find('input[name=price_s]').val());
+    });
+    total.html(summ >= 0 ? summ : 'NaN');
+    setTotalCurrency();
+}
+
 $(function () {
+
+    recalcTotal();
 
     $('form[name="request"]').submit(function (event) {
         event.preventDefault();
@@ -72,38 +94,39 @@ $(function () {
             event.preventDefault();
         }
 
-        var id    = $('form[name="request"] input[name="request-1c"]').val(),
-            token = $('form[name="request"] input[name="request-token"]').val();
+        var request1cId = $('form[name="request"] input[name="request-1c"]').val(),
+            id          = $('form[name="request"] input[name="request-id"]').val(),
+            token       = $('form[name="request"] input[name="request-token"]').val();
 
-        $.ajax({
-            method: "POST",
-            url: "/api/v2/request.get",
-            data: {id: id, token: token}
-        }).done(function (data) {
-            var params = {data: data.result};
-            console.log(params);
-            $.ajax({
-                method: "POST",
-                url: "/1c/api/v2/request.get",
-                data: params
-                // dataType: "json",
-                // contentType: 'application/json'
-            }).done(function (data) {
-                // console.log("data");
-            });
-        });
-
-        /*var params = {request_id: requestId};
+        var params = {request_id: id};
 
         BX.ajax.runComponentAction('zkr:ajax',
             'sendRequestData', {mode: 'class', data: {params: params}}
         ).then(function (response) {
             if (response.status === 'success') {
-                // console.log('specification updated!');
+                // get request
+                $.ajax({
+                    method: "POST",
+                    url: "/api/v2/request.get",
+                    data: {id: request1cId, token: token}
+                }).done(function (data) {
+                    var params = {data: data.result};
+                    console.log(params);
+                    // send request data to 1C
+                    $.ajax({
+                        method: "POST",
+                        url: "/1c/api/v2/request.get",
+                        data: params
+                        // dataType: "json",
+                        // contentType: 'application/json'
+                    }).done(function (data) {
+                        // console.log("data");
+                    });
+                });
             }
         }).catch(function (reason) {
             console.log(reason);
-        });*/
+        });
 
         // location.href = "/";
         // location.href = location.href.split('?')[0];
@@ -112,6 +135,9 @@ $(function () {
 
     $('form[name="request"] .general-term select').change(function (event) {
         // setTimeout(function () {
+        if (this.name === 'currency') {
+            setTotalCurrency();
+        }
         updateGeneralTerm(this);
         // }, 100);
     });
@@ -136,6 +162,8 @@ $(function () {
             total    = count1 * count2;
 
         specItem.find('.total').html(total > 0 ? total : 'NaN');
+
+        recalcTotal();
 
         return true;
     });
