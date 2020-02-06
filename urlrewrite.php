@@ -1,19 +1,42 @@
 <?php
 $arUrlRewrite = [
-    0  =>
+    0  => [
+        'CONDITION' => '#^/personal/error-key/(/?)([^/]*)#',
+        'RULE'      => '',
+        'ID'        => null,
+        'PATH'      => '/personal/error_key.php',
+        'SORT'      => 100,
+    ],
+    1  =>
         [
-            'CONDITION' => '#^\\/?\\/mobileapp/jn\\/(.*)\\/.*#',
-            'RULE'      => 'componentName=$1',
+            'CONDITION' => '#^/personal/update-key/(/?)([^/]*)#',
+            'RULE'      => '',
             'ID'        => null,
-            'PATH'      => '/bitrix/services/mobileapp/jn.php',
+            'PATH'      => '/personal/update_key.php',
             'SORT'      => 100,
         ],
-    4  =>
+    39 =>
         [
-            'CONDITION' => '#^/e-store/books/reviews/#',
+            'CONDITION' => '#^/personal/requests/(/?)([^/]*)#',
             'RULE'      => '',
-            'ID'        => 'bitrix:news',
-            'PATH'      => '/e-store/books/reviews/index.php',
+            'ID'        => null,
+            'PATH'      => '/personal/requests/index.php',
+            'SORT'      => 100,
+        ],
+    38 =>
+        [
+            'CONDITION' => '#^/personal/request/(/?)([^/]*)#',
+            'RULE'      => '',
+            'ID'        => null,
+            'PATH'      => '/personal/requests/detail.php',
+            'SORT'      => 100,
+        ],
+    41 =>
+        [
+            'CONDITION' => '#^/personal/(/?)([^/]*)#',
+            'RULE'      => '',
+            'ID'        => null,
+            'PATH'      => '/personal/index.php',
             'SORT'      => 100,
         ],
     34 =>
@@ -40,22 +63,6 @@ $arUrlRewrite = [
             'PATH'      => '/marketplace/app/index.php',
             'SORT'      => 100,
         ],
-    3  =>
-        [
-            'CONDITION' => '#^/e-store/books/#',
-            'RULE'      => '',
-            'ID'        => 'bitrix:catalog',
-            'PATH'      => '/e-store/books/index.php',
-            'SORT'      => 100,
-        ],
-    2  =>
-        [
-            'CONDITION' => '#^/content/news/#',
-            'RULE'      => '',
-            'ID'        => 'bitrix:news',
-            'PATH'      => '/content/news/index.php',
-            'SORT'      => 100,
-        ],
     35 =>
         [
             'CONDITION' => '#^/marketplace/#',
@@ -72,7 +79,7 @@ $arUrlRewrite = [
             'PATH'      => '/api/v2/index.php',
             'SORT'      => 100,
         ],
-    1  =>
+    10 =>
         [
             'CONDITION' => '#^/rest/#',
             'RULE'      => '',
@@ -80,32 +87,4 @@ $arUrlRewrite = [
             'PATH'      => '/bitrix/services/rest/index.php',
             'SORT'      => 100,
         ],
-    [
-        'CONDITION' => '#^/personal/request/(/?)([^/]*)#',
-        'RULE'      => '',
-        'ID'        => null,
-        'PATH'      => '/personal/requests/detail.php',
-        'SORT'      => 100,
-    ],
-    [
-        'CONDITION' => '#^/personal/requests/(/?)([^/]*)#',
-        'RULE'      => '',
-        'ID'        => null,
-        'PATH'      => '/personal/requests/index.php',
-        'SORT'      => 100,
-    ],
-    [
-        'CONDITION' => '#^/personal/update-key/(/?)([^/]*)#',
-        'RULE'      => '',
-        'ID'        => null,
-        'PATH'      => '/personal/update_key.php',
-        'SORT'      => 100,
-    ],
-    [
-        'CONDITION' => '#^/personal/(/?)([^/]*)#',
-        'RULE'      => '',
-        'ID'        => null,
-        'PATH'      => '/personal/index.php',
-        'SORT'      => 100,
-    ],
 ];
