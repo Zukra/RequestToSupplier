@@ -807,7 +807,7 @@ header .col-xs-12 {
         padding-top : 6px;
     }
 
-    .navbar-nav > li.login_linck {
+    .navbar-nav > li.login_linck, .navbar-nav > li.supplier-menu {
         background : none;
         float      : right !important;
     }
