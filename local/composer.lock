@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "36e6ec752a397062e7c71e52be1df504",
+    "content-hash": "d75a1b12eb39a9b0cdd87c5893cf5878",
     "packages": [
         {
             "name": "wikimedia/composer-merge-plugin",
-            "version": "dev-master",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/composer-merge-plugin.git",
-                "reference": "73e4ed4fa66167823cb9bfc65fdd5fd6019722b6"
+                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/composer-merge-plugin/zipball/73e4ed4fa66167823cb9bfc65fdd5fd6019722b6",
-                "reference": "73e4ed4fa66167823cb9bfc65fdd5fd6019722b6",
+                "url": "https://api.github.com/repos/wikimedia/composer-merge-plugin/zipball/81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
+                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
                 }
             ],
             "description": "Composer plugin to merge multiple composer.json files",
-            "time": "2018-01-10T05:07:51+00:00"
+            "time": "2017-04-25T02:31:25+00:00"
         }
     ],
     "packages-dev": [
@@ -189,16 +189,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v3.4.36",
+            "version": "v3.4.37",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "569e261461600810845a8305ca3f64abd3e712c0"
+                "reference": "51ecb139114c38080801145a212f10210ea99ea3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/569e261461600810845a8305ca3f64abd3e712c0",
-                "reference": "569e261461600810845a8305ca3f64abd3e712c0",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/51ecb139114c38080801145a212f10210ea99ea3",
+                "reference": "51ecb139114c38080801145a212f10210ea99ea3",
                 "shasum": ""
             },
             "require": {
@@ -254,16 +254,16 @@
                 "debug",
                 "dump"
             ],
-            "time": "2019-10-10T11:03:19+00:00"
+            "time": "2020-01-01T11:03:25+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "wikimedia/composer-merge-plugin": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*"
+    },
     "platform-dev": []
 }
