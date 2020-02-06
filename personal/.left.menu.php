@@ -14,7 +14,7 @@ $aMenuLinks = Array(
 		// Array(), 
 		// "" 
 	// ),
-	Array(
+/*	Array(
 		"Update key", 
 		"/personal/update-key/", 
 		Array(), 
@@ -27,6 +27,6 @@ $aMenuLinks = Array(
 		Array(), 
 		Array(), 
 		"" 
-	)
+	)*/
 );
 ?>

@@ -123,22 +123,6 @@ $supplier = $arResult['SUPPLIER'];
             </div>
         </div>
 
-        <div class="wrap_pag">
-            <ul class="pagination">
-                <li class="navigation_pag">
-                    <a href="#"><img src="<?= $APPLICATION->GetTemplatePath('images/lef.svg') ?>" alt=""></a>
-                </li>
-                <li><a href="#" class="active">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li class="navigation_pag">
-                    <a href="#"><img src="<?= $APPLICATION->GetTemplatePath('images/rig.svg') ?>" alt=""></a>
-                </li>
-            </ul>
-        </div>
-
         <? if ($arParams["DISPLAY_BOTTOM_PAGER"]): ?>
             <br/><?= $arResult["NAV_STRING"] ?>
         <? endif; ?>
