@@ -9,15 +9,13 @@ $context = Context::getCurrent();
 $request = $context->getRequest();
 
 $accessKey = $request->get('key') ?? $_SESSION['access_key'];
-$_SESSION['access_key'] = $accessKey;
+$requestId = $request->get('request_id') ?: '';
 
+$elementId = \Zkr\Helper::checkAccess(false);
+
+/*$_SESSION['access_key'] = $accessKey;
 if ($accessKey) {
-    \Bitrix\Main\Loader::includeModule('iblock');
-    /** @var \Bitrix\Iblock\Elements\EO_ElementSupplier $supplier */
-    $supplier = \Bitrix\Iblock\Elements\ElementSupplierTable::query()
-        ->setSelect(['ID', 'EXPIRY_DATE'])
-        ->setFilter(['KEY.VALUE' => $accessKey])
-        ->fetchObject();
+    $supplier = \Zkr\Helper::getSupplierByAccessKey($accessKey);
 
     if (! $supplier) {
         echo 'Используемый ключ недействителен или неверен, используйте новый ключ';
@@ -26,7 +24,7 @@ if ($accessKey) {
     $elementId = $supplier ? $supplier->getId() : null;
 } else {
     LocalRedirect('/');
-} ?>
+} */ ?>
 
 <?php if ($elementId) { ?>
     <? $APPLICATION->IncludeComponent(
@@ -35,7 +33,7 @@ if ($accessKey) {
         [
             "ACCESS_KEY" => $accessKey,
             "ELEMENT_ID" => $elementId,
-            "REQUEST_ID" => $request->get('request_id') ?: '',
+            "REQUEST_ID" => $requestId,
             "CACHE_TIME" => "3600",
             "CACHE_TYPE" => "A"
         ]

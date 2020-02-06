@@ -4,39 +4,17 @@ require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 use Bitrix\Main\Context;
 
 
-$APPLICATION->SetTitle("Request");
+$APPLICATION->SetTitle("Request detail");
 
+$supplierId = \Zkr\Helper::checkAccess();
+?>
+
+<?php
 $context = Context::getCurrent();
 $request = $context->getRequest();
 
-$accessKey = $request->get('key') ?? $_SESSION['access_key'];
 $requestId = $request->get('id') ?? null;
-$_SESSION['access_key'] = $accessKey;
-
-if ($accessKey && $requestId) {
-    \Bitrix\Main\Loader::includeModule('iblock');
-    /** @var \Bitrix\Iblock\Elements\EO_ElementSupplier $supplier */
-    $supplier = \Bitrix\Iblock\Elements\ElementSupplierTable::query()
-        ->setSelect(['ID', 'EXPIRY_DATE'])
-        ->setFilter(['KEY.VALUE' => $accessKey])
-        ->fetchObject();
-
-    if (! $supplier) {
-        echo 'Используемый ключ недействителен или неверен, используйте новый ключ';
-    }
-    $elementId = $supplier ? $supplier->getId() : null;
-    if ($elementId) {
-        $oDateTimeExpiry = new \Bitrix\Main\Type\DateTime($supplier->getExpiryDate()->getValue(), "Y-m-d");
-        $oDateTimeCurrent = new \Bitrix\Main\Type\DateTime("", "Y-m-d");
-        if ($oDateTimeCurrent->getTimestamp() > $oDateTimeExpiry->getTimestamp()) {
-            LocalRedirect('/personal/update-key/');
-        }
-    }
-} else {
-    LocalRedirect('/');
-} ?>
-
-<?php if ($requestId) { ?>
+if ($requestId) { ?>
     <? $APPLICATION->IncludeComponent(
         "zkr:request.detail",
         "",
