@@ -6,3 +6,11 @@ $supplier = \Bitrix\Iblock\Elements\ElementSupplierTable::getByPrimary($arResult
 ])->fetchObject();
 
 $arResult['SUPPLIER'] = $supplier ?: [];
+
+foreach ($arResult["ITEMS"] as $key => $item) {
+    /** @var \Bitrix\Iblock\Elements\EO_ElementSupplierContact $contact */
+    $contact = \Bitrix\Iblock\Elements\ElementSupplierContactTable::getByPrimary($item["DISPLAY_PROPERTIES"]['CONTACT']['VALUE'], [
+        'select' => ['ID', 'NAME', 'EMAIL']
+    ])->fetchObject();
+    $arResult["ITEMS"][$key]['CONTACT'] = $contact;
+}

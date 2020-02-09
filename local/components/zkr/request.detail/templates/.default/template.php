@@ -19,8 +19,20 @@
 $supplier = $arResult['SUPPLIER'];
 $supplierContacts = $arResult['SUPPLIER_CONTACTS'];
 $specification = $arResult['SPECIFICATION'];
-$currencies = \Bitrix\Currency\CurrencyManager::getCurrencyList();
-$measures = ['T', 't', 'm'];
+$currencies = [
+    "USD" => "USD (US Dollar)",
+    "EUR" => "EUR (Euro)",
+    "RUB" => "RUB (Russian Ruble)",
+    "PLN" => "PLN",
+];
+//$currencies = \Bitrix\Currency\CurrencyManager::getCurrencyList();
+//$measures = ['T', 't', 'm'];
+
+$classColors = [
+    \Zkr\Api\Request::WAIT_REPLY     => 'color_new_waiting',
+    \Zkr\Api\Request::BLOCKED_UPDATE => 'color_updated_waiting',
+    \Zkr\Api\Request::SENT           => 'color_sent',
+];
 
 $this->setFrameMode(true);
 ?>
@@ -54,12 +66,12 @@ $this->setFrameMode(true);
                         <h1><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] . ' to ' . $supplier->getName() ?></h1>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-4">
-                    <div class="gen_ststus status_new_waiting">
-                        <p>New, waiting for a reply</p>
+                <? /*<div class="col-xs-12 col-sm-4">
+                    <div class="gen_ststus status_new_waiting <?= $classColors[$arResult["PROPERTIES"]['STATUS']["VALUE"]] ?>">
+                        <p><?=$arResult["PROPERTIES"]['STATUS']["VALUE"] ?></p>
                         <p><span>Changes is saving...</span></p>
                     </div>
-                </div>
+                </div>*/ ?>
             </div>
         </div>
         <div class="container comment_gen_it">
@@ -85,8 +97,11 @@ $this->setFrameMode(true);
                                 <input type="hidden" name="request-id" value="<?= $arResult['ID'] ?>">
                                 <input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>">
                                 <input type="hidden" name="request-1c" value="<?= $arResult['PROPERTIES']['REQUEST_ID']['VALUE'] ?>">
+                                <input type="hidden" name="supplier-id" value="<?= $supplier->getId() ?>">
+                                <input type="hidden" name="key" value="<?= $_SESSION["access_key"] ?>">
 
-                                <div class="form-group has-error">
+                                <? /*<div class="form-group has-error">*/ ?>
+                                <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Payment conditions
                                         <span class="example_help" data-container="body" data-toggle="popover" data-placement="top" data-content="Delay of payments or prepayment" data-original-title="" title="">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
@@ -94,11 +109,12 @@ $this->setFrameMode(true);
                                     </label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="payment_order"
+                                               required
                                                placeholder="Payment conditions" aria-label="PaymentOrder" aria-describedby="payment_order"
                                                value="<?= $arResult["PROPERTIES"]['PAYMENT_ORDER']["VALUE"] ?>"
                                                data-id="<?= $arResult["PROPERTIES"]['PAYMENT_ORDER']["ID"] ?>"
                                                data-code="<?= $arResult["PROPERTIES"]['PAYMENT_ORDER']["CODE"] ?>">
-                                        <label class="error-label" for="inputError">Input with error</label>
+                                        <? /*<label class="error-label" for="inputError">Input with error</label>*/ ?>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -109,6 +125,7 @@ $this->setFrameMode(true);
                                     </label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="delivery_time"
+                                               required
                                                placeholder="Delivery time" aria-label="DeliveryTime"
                                                aria-describedby="basic-delivery_time"
                                                value="<?= $arResult["PROPERTIES"]['DELIVERY_TIME']["VALUE"] ?>"
@@ -126,6 +143,7 @@ $this->setFrameMode(true);
                                         <input type="text" class="form-control" name="incoterms"
                                                placeholder="INCOTERMS" aria-label="INCOTERMS"
                                                aria-describedby="basic-incoterms"
+                                               required
                                                value="<?= $arResult["PROPERTIES"]['INCOTERMS']["VALUE"] ?>"
                                                data-id="<?= $arResult["PROPERTIES"]['INCOTERMS']["ID"] ?>"
                                                data-code="<?= $arResult["PROPERTIES"]['INCOTERMS']["CODE"] ?>">
@@ -171,29 +189,54 @@ $this->setFrameMode(true);
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form_usb">
+                                <? /*<div class="form_usb">
                                     <button type="submit" class="btn btn-gen_it title_help" data-title="If you want to change general conditions for the whole offer please click here and resend it">Go to specification</button>
+                                </div>*/ ?>
+                            </div>
+
+                            <div class="new-contact" style="display: none">
+                                <div class="form-group">
+                                    <label for="" class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" name="new_name"
+                                               placeholder="Name" aria-label="new_name"
+                                               aria-describedby="basic-new_name" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-3">
+                                        <input type="email" class="form-control" name="new_email"
+                                               placeholder="Email" aria-label="new_email"
+                                               aria-describedby="basic-new_email" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-3">
+                                        <button type="button" class="js-add-new-contact btn btn-primary">Add</button>
+                                        <button type="button" class="js-cancel-new-contact btn btn-danger">Cancel</button>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="container specif_wrap">
                                 <!--                            <div class="container specif_wrap no_active">-->
                                 <div class="row">
-
                                     <div class="col-xs-12">
                                         <div class="specif_search_box">
                                             <div class="specif_search_name">
                                                 Specification
                                             </div>
                                             <div class="specif_search">
-                                                <input type="text" class="form-control" id="" placeholder="Quick search by table">
+                                                <input type="text" class="form-control"
+                                                       id="" placeholder="Quick search by table"
+                                                onkeyup="filterSearch(this)">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xs-12">
                                         <div class="table-responsive specification">
-
-
                                             <table class="table table-bordered specif_table">
                                                 <colgroup>
                                                     <col span="4" style="background:#f6f5f1;">
@@ -240,22 +283,27 @@ $this->setFrameMode(true);
                                                 <? /** @var \Bitrix\Iblock\Elements\EO_ElementRequestSpecification $item */
                                                 foreach ($specification as $item) { ?>
                                                     <tr class="specification-item" id="<?= $item->getId(); ?>">
-                                                        <td><?= $item->getName() ?></td>
-                                                        <td><?= $item->getComment()->getValue() ?></td>
+                                                        <td class="spec_name"><?= $item->getName() ?></td>
+                                                        <td class="spec_comment"><?= $item->getComment()->getValue() ?: "=" ?></td>
                                                         <td><?= $item->getQuantityR()->getValue() ?></td>
                                                         <td><?= $item->getUnitMeasure()->getValue() ?></td>
-                                                        <td class="error">
-                                                            <input type="text" class="recalc redact_area" name="quantity_s"
+                                                        <td class="r">
+                                                            <input type="text" class="recalc redact_area"
+                                                                   name="quantity_s"
                                                                    data-code="SUPPLIER_QUANTITY"
-                                                                   value="<?= $item->getSupplierQuantity()->getValue() ?>">
-                                                            <div class="error_box">
+                                                                   value="<?= $item->getSupplierQuantity()->getValue() ?>"
+                                                                   onkeypress="return isNumberKey(event);">
+                                                            <? /*<div class="error_box">
                                                                 <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
                                                                     <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
                                                                 </span>
-                                                            </div>
+                                                            </div>*/ ?>
                                                         </td>
                                                         <td>
-                                                            <select class="custom-select" id="inputGroupSelectMeasure" name="unit_s"
+                                                            <input type="text" class="redact_area" name="unit_s"
+                                                                   data-code="SUPPLIER_UNIT"
+                                                                   value="<?= $item->getSupplierUnit()->getValue() ?>">
+                                                            <? /* <select class="custom-select" id="inputGroupSelectMeasure" name="unit_s"
                                                                     data-code="SUPPLIER_UNIT">
                                                                 <? foreach ($measures as $measure) { ?>
                                                                     <option <?= $item->getSupplierUnit()->getValue() == $measure ? "selected" : "" ?>
@@ -263,7 +311,7 @@ $this->setFrameMode(true);
                                                                         <?= $measure ?>
                                                                     </option>
                                                                 <? } ?>
-                                                            </select>
+                                                            </select>*/ ?>
                                                             <? /*<input type="text" class="redact_area" id="" placeholder="T">
                                                             <div class="error_box">
                                                                 <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
@@ -272,8 +320,11 @@ $this->setFrameMode(true);
                                                             </div>*/ ?>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="recalc" name="price_s" data-code="SUPPLIER_PRICE_UNIT"
-                                                                   value="<?= $item->getSupplierPriceUnit()->getValue() ?>">
+                                                            <input type="text" class="recalc redact_area"
+                                                                   name="price_s"
+                                                                   data-code="SUPPLIER_PRICE_UNIT"
+                                                                   value="<?= $item->getSupplierPriceUnit()->getValue() ?>"
+                                                                   onkeypress="return isNumberKey(event);">
                                                         </td>
                                                         <td class="total">
                                                             <?= $item->getSupplierQuantity()->getValue() * $item->getSupplierPriceUnit()->getValue() ?>
@@ -321,111 +372,6 @@ $this->setFrameMode(true);
                                                         </td>
                                                     </tr>
                                                 <? } ?>
-                                                <tr>
-                                                    <td>Seamless pipe 12" SCH 140 (323,85х28,58) ASTM A312 (Gr. TP347)</td>
-                                                    <td>-</td>
-                                                    <td>10,61</td>
-                                                    <td>T</td>
-                                                    <td>
-                                                        <input type="text" class="redact_area error" id="" placeholder="12,60">
-                                                        <div class="error_box">
- 				 											<span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
- 				 												<img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
- 				 											</span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="T">
-                                                    </td>
-                                                    <td>100,61</td>
-                                                    <td>100,61</td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" value="2 weeks">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="FSA Dombrova">
-                                                    </td>
-                                                    <td>
-                                                        <label class="checkbox-transform">
-                                                            <input type="checkbox" class="checkbox__input">
-                                                            <span class="checkbox__label"></span>
-                                                        </label>
-
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Seamless pipe 14" SCH 140 (355,6х31,75) ASTM A312 (Gr. TP347)</td>
-                                                    <td>-</td>
-                                                    <td>8,40</td>
-                                                    <td>T</td>
-                                                    <td>
-                                                        <input type="text" class="redact_area error" id="" value="1,7">
-                                                        <div class="error_box">
- 				 								 			<span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
- 				 								 				<img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
- 				 								 			</span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" value="m">
-                                                    </td>
-                                                    <td>800,40</td>
-                                                    <td>800,40</td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="4 weeks">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="FSA Dombrova">
-                                                    </td>
-                                                    <td>
-                                                        <label class="checkbox-transform">
-                                                            <input type="checkbox" class="checkbox__input" checked="checked">
-                                                            <span class="checkbox__label"></span>
-                                                        </label>
-
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" value="Gr. TP3448">
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Seamless pipe 20" SCH 160 (508х50,01) ASTM A312 (Gr. TP347)</td>
-                                                    <td>-</td>
-                                                    <td>1,70</td>
-                                                    <td>T</td>
-                                                    <td>
-                                                        <input type="text" class="redact_area error" id="" placeholder="12,60">
-                                                        <div class="error_box">
- 				 								  			<span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
- 				 								  				<img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
- 				 								  			</span>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="T">
-                                                    </td>
-                                                    <td>100,70</td>
-                                                    <td>100,70</td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="4 weeks">
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="FSA Dombrova">
-                                                    </td>
-                                                    <td>
-                                                        <label class="checkbox-transform">
-                                                            <input type="checkbox" class="checkbox__input">
-                                                            <span class="checkbox__label"></span>
-                                                        </label>
-
-                                                    </td>
-                                                    <td>
-                                                        <input type="text" class="redact_area" id="" placeholder="">
-                                                    </td>
-                                                </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -465,7 +411,8 @@ $this->setFrameMode(true);
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="form_specific_sub">
-                                            <button type="submit" class="btn btn-spec_it">Send reply</button>
+                                            <button type="submit" class="btn btn-spec_it js_form_submit">Send reply</button>
+                                            <? /*<button type="submit" class="btn btn-spec_it-no_active">Send reply</button>*/ ?>
                                             <a class="btn btn-link" href="/personal/requests/">
                                                 Show raw rows
                                                 <span class="badge badge-light"><?= $specification->count() ?></span>
