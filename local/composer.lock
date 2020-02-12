@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ad540f1f1d49ebe11dc21beb627b6b1b",
+    "content-hash": "d75a1b12eb39a9b0cdd87c5893cf5878",
     "packages": [
         {
             "name": "wikimedia/composer-merge-plugin",
-            "version": "dev-master",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/composer-merge-plugin.git",
-                "reference": "73e4ed4fa66167823cb9bfc65fdd5fd6019722b6"
+                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/composer-merge-plugin/zipball/73e4ed4fa66167823cb9bfc65fdd5fd6019722b6",
-                "reference": "73e4ed4fa66167823cb9bfc65fdd5fd6019722b6",
+                "url": "https://api.github.com/repos/wikimedia/composer-merge-plugin/zipball/81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
+                "reference": "81c6ac72a24a67383419c7eb9aa2b3437f2ab100",
                 "shasum": ""
             },
             "require": {
@@ -53,7 +53,7 @@
                 }
             ],
             "description": "Composer plugin to merge multiple composer.json files",
-            "time": "2018-01-10T05:07:51+00:00"
+            "time": "2017-04-25T02:31:25+00:00"
         }
     ],
     "packages-dev": [
@@ -259,9 +259,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "wikimedia/composer-merge-plugin": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

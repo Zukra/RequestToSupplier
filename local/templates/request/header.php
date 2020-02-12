@@ -14,7 +14,6 @@ use Bitrix\Main\Page\Asset;
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <?
-    //    Asset::getInstance()->addCss("/bitrix/css/main/bootstrap_v4/bootstrap.min.css");
     //    Asset::getInstance()->addCss("/local/assets/css/bootstrap.min.css");
     Asset::getInstance()->addCss("/local/assets/css/bootstrap-3.0.3.min.css");
     Asset::getInstance()->addCss("/local/assets/css/bootstrap.offcanvas.min.css");
@@ -23,8 +22,11 @@ use Bitrix\Main\Page\Asset;
     Asset::getInstance()->addCss("/local/assets/css/custom.css");
 
     CJSCore::Init(["fx", 'ajax']);
-        CJSCore::Init(['jquery3', "fx", 'ajax']);
-//    Asset::getInstance()->addJs("/local/assets/js/jquery-3.4.1.min.js");
+    //        CJSCore::Init(['jquery3', "fx", 'ajax']);
+    Asset::getInstance()->addJs("/local/assets/js/jquery-3.4.1.min.js");
+    Asset::getInstance()->addJs("/local/assets/js/popper.min.js");
+    //    Asset::getInstance()->addJs("/local/assets/js/popper-1.14.7.min.js");
+    //        Asset::getInstance()->addJs("/local/assets/js/bootstrap-3.0.3.min.js");
     Asset::getInstance()->addJs("/local/assets/js/bootstrap.min.js");
     Asset::getInstance()->addJs("/local/assets/js/bootstrap.offcanvas.min.js");
     Asset::getInstance()->addJs("/local/assets/js/slick.js");
@@ -63,39 +65,14 @@ use Bitrix\Main\Page\Asset;
                                     ); ?>
                                 </div>
                                 <div class="navbar-offcanvas navbar-offcanvas-touch" id="js-bootstrap-offcanvas">
-                                    <ul id="menu" class="nav navbar-nav">
-                                        <li class="hidden-sm hidden-md hidden-lg mebu_name">
-                                            <p>MENU</p>
-                                        </li>
-                                        <li class="login_linck">
-                                            <a href="/personal/">requests:<span>Stalprofil</span></a>
-                                        </li>
-                                        <li>
-                                            <a href="tel:+48223072044">+48 (22) 307-20-44</a>
-                                        </li>
-                                        <li class="active">
-                                            <a href="/">Contacts</a>
-                                        </li>
-                                        <? global $USER ?>
-                                        <? if ($USER->IsAdmin()) { ?>
-                                            <li>
-                                                <a href="/marketplace/">Marketplace</a>
-                                            </li>
-                                        <? } ?>
-                                    </ul>
-                                    <? /*$APPLICATION->IncludeComponent(
-                                        "bitrix:menu",
-                                        "tabs",
+                                    <? $APPLICATION->IncludeComponent(
+                                        "zkr:empty",
+                                        "header_menu",
                                         [
-                                            "ROOT_MENU_TYPE"        => "top",
-                                            "MAX_LEVEL"             => "1",
-                                            "USE_EXT"               => "N",
-                                            "MENU_CACHE_TYPE"       => "A",
-                                            "MENU_CACHE_TIME"       => "3600",
-                                            "MENU_CACHE_USE_GROUPS" => "N",
-                                            "MENU_CACHE_GET_VARS"   => []
+                                            "CACHE_TIME" => "3600",
+                                            "CACHE_TYPE" => "N"
                                         ]
-                                    ); */?>
+                                    ); ?>
                                 </div>
                             </div>
                         </nav>
@@ -140,86 +117,5 @@ use Bitrix\Main\Page\Asset;
                 "EDIT_TEMPLATE"       => "page_inc.php"
             ]
         ); ?>
-
-
-        <? /* <div id="container">
-            <div id="header">
-                <div id="company_logo">
-                    <? $APPLICATION->IncludeFile(
-                        $APPLICATION->GetTemplatePath("include_areas/company_logo.php"),
-                        [],
-                        ["MODE" => "html"]
-                    ); ?>
-                </div>
-
-                <div id="menu">
-                    <span>+48 (22) 307-20-44</span>
-                    <? $APPLICATION->IncludeComponent(
-                        "bitrix:menu",
-                        "tabs",
-                        [
-                            "ROOT_MENU_TYPE"        => "top",
-                            "MAX_LEVEL"             => "1",
-                            "USE_EXT"               => "N",
-                            "MENU_CACHE_TYPE"       => "A",
-                            "MENU_CACHE_TIME"       => "3600",
-                            "MENU_CACHE_USE_GROUPS" => "N",
-                            "MENU_CACHE_GET_VARS"   => []
-                        ]
-                    ); ?>
-                </div>
-            </div>
-
-            <div id="content">
-                <? $APPLICATION->IncludeComponent("bitrix:menu", "left", [
-                        "ROOT_MENU_TYPE"        => "left",
-                        "MAX_LEVEL"             => "1",
-                        "CHILD_MENU_TYPE"       => "left",
-                        "USE_EXT"               => "Y",
-                        "MENU_CACHE_TYPE"       => "A",
-                        "MENU_CACHE_TIME"       => "3600",
-                        "MENU_CACHE_USE_GROUPS" => "Y",
-                        "MENU_CACHE_GET_VARS"   => [
-                            0 => "SECTION_ID",
-                            1 => "page",
-                        ],
-                    ]
-                ); ?>
-                <? $APPLICATION->IncludeComponent(
-                    "bitrix:main.include",
-                    "",
-                    [
-                        "AREA_FILE_SHOW"      => "sect",
-                        "AREA_FILE_SUFFIX"    => "inc",
-                        "AREA_FILE_RECURSIVE" => "N",
-                        "EDIT_MODE"           => "html",
-                        "EDIT_TEMPLATE"       => "sect_inc.php"
-                    ]
-                ); ?>
-                <? $APPLICATION->IncludeComponent(
-                    "bitrix:main.include",
-                    "",
-                    [
-                        "AREA_FILE_SHOW"      => "page",
-                        "AREA_FILE_SUFFIX"    => "inc",
-                        "AREA_FILE_RECURSIVE" => "N",
-                        "EDIT_MODE"           => "html",
-                        "EDIT_TEMPLATE"       => "page_inc.php"
-                    ]
-                ); ?>
-*/ ?>
-        <? /*
-                <div id="navigation">
-                    <? $APPLICATION->IncludeComponent(
-                        "bitrix:breadcrumb",
-                        ".default",
-                        [
-                            "START_FROM" => "0",
-                            "PATH"       => "",
-                            "SITE_ID"    => ""
-                        ]
-                    ); ?>
-                </div>
-*/ ?>
 
         <? /*<h1 id="pagetitle"><? $APPLICATION->ShowTitle(false) ?></h1>*/ ?>

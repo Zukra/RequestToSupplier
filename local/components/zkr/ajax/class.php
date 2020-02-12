@@ -8,6 +8,7 @@ if (! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 }
 
 use Bitrix\Iblock\Elements\ElementSupplierContactTable;
+use Bitrix\Iblock\Elements\ElementSupplierTable;
 use Bitrix\Iblock\Elements\EO_ElementSupplier;
 use Bitrix\Iblock\Elements\EO_ElementSupplierContact;
 use Bitrix\Main\Engine\ActionFilter;
@@ -16,6 +17,7 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\Type\DateTime;
 use CBitrixComponent;
 use CIBlockElement;
+use Zkr\Api\Request;
 
 class CustomAjax extends CBitrixComponent implements Controllerable
 {
@@ -85,7 +87,16 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     ActionFilter\Authentication::class
                 ],
                 'postfilters' => [],
-            ]
+            ],
+            'addRequestContact'   => [
+                'prefilters'  => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
+                ],
+                '-prefilters' => [
+                    ActionFilter\Authentication::class
+                ],
+                'postfilters' => [],
+            ],
         ];
     }
 
@@ -152,8 +163,8 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         $props = [
             $params['prop']['code'] => $params['prop']['value'],
             'IS_BLOCKED'            => REQUEST_IS_BLOCKED_ID,
-            'STATUS'                => 'Edit',
-            'EVENT'                 => 'Edit'
+            'STATUS'                => Request::BLOCKED_UPDATE,
+            'EVENT'                 => Request::BLOCKED_UPDATE
         ];
         if ($params['prop']['code'] == 'CONTACT') {
             /** @var EO_ElementSupplierContact $contact */
@@ -178,15 +189,54 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         }
 
         CIBlockElement::SetPropertyValuesEx($params['spec_id'], false, $props);
-        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, ['IS_BLOCKED' => REQUEST_IS_BLOCKED_ID]);
+        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, [
+            'IS_BLOCKED' => REQUEST_IS_BLOCKED_ID,
+            'STATUS'     => Request::BLOCKED_UPDATE,
+            'EVENT'      => Request::BLOCKED_UPDATE
+        ]);
+    }
+
+    public function addRequestContactAction($params)
+    {
+        $contact = Request::getSupplierContact($params, $params['supplier_id']);
+        $parameters = [
+            'request_id' => $params['request_id'],
+            'prop'       => [
+                'code'  => 'CONTACT',
+                'value' => $contact->getId(),
+            ]
+        ];
+        $this->updateRequestAction($parameters);
+
+//        $params['request_id']
+//        $params['supplier_id']
+
+        $contactProps = [];
+        /** @var EO_ElementSupplier $supplier */
+        $supplier = ElementSupplierTable::query()
+            ->setSelect(['ID', 'NAME', 'CONTACTS'])
+            ->setFilter(['ID' => $params['supplier_id']])
+            ->fetchObject();
+
+        foreach ($supplier->getContacts() as $item) {
+            $contactProps[] = ["VALUE" => $item->getValue()];
+        }
+        $contactProps[] = ["VALUE" => $contact->getId()];
+
+        CIBlockElement::SetPropertyValuesEx($params['supplier_id'], REQUEST_SUPPLIER_IBLOCK, ["CONTACTS" => $contactProps]);
+
+        return [
+            "status"     => 1,
+            "contact_id" => $contact->getId(),    // id поставщика в 1С
+        ];
     }
 
     public function sendRequestDataAction($params)
     {
         $props = [
             'IS_BLOCKED' => false,
-            'STATUS'     => 'Sent',
-            'EVENT'      => 'Sent'
+            'STATUS'     => Request::SENT,
+            'EVENT'      => Request::SENT
         ];
         CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
     }

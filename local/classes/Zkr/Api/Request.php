@@ -18,10 +18,14 @@ use DateTime;
 
 class Request
 {
+    public const WAIT_REPLY     = 'Waiting for a reply';
+    public const BLOCKED_UPDATE = 'Blocked for update';
+    public const SENT           = 'Sent';
+
     public const SCOPE = 'request';
 
     protected $arSelect = [
-        "ID", "NAME", 'REQUEST_ID', 'PAYMENT_ORDER', 'DELIVERY_TIME', 'INCOTERMS',
+        "ID", "NAME", 'TIMESTAMP_X', 'REQUEST_ID', 'PAYMENT_ORDER', 'DELIVERY_TIME', 'INCOTERMS',
         "EMAIL", 'COMMENT', "CONTACT", 'CURRENCY', 'STATUS', 'EVENT', 'SUPPLIER_COMMENT',
         'IS_BLOCKED',
         "SPECIFICATION", "SUPPLIER",
@@ -371,10 +375,10 @@ class Request
                 ->setDeliveryTime($data['delivery_time'])
                 ->setIncoterms($data['incoterms'])
                 ->setCurrency($data['currency'])
-                ->setStatus($data['status'])
+//                ->setStatus($data['status'])
                 ->setComment($data['comment'])
                 ->setEmail($data['contact']['email'])
-                ->setContact($this->getSupplierContact($data['contact'])->getId())
+                ->setContact(static::getSupplierContact($data['contact'])->getId())
                 ->setSupplier($supplier->getId());
 
 //            $this->setSpecification($elem);
@@ -415,20 +419,20 @@ class Request
     }
 
     /**
-     * @param            $contact
+     * @param  array     $contact
      * @param  int|bool  $supplierId
      * @return EO_ElementSupplierContact
      * @throws \Bitrix\Main\ArgumentException
      * @throws \Bitrix\Main\ObjectPropertyException
      * @throws \Bitrix\Main\SystemException
      */
-    public function getSupplierContact($contact, $supplierId = false)
+    public static function getSupplierContact($contact, $supplierId = false)
     {
         $elem = null;
 
         /** @var EO_ElementSupplierContact $elem */
         $elem = ElementSupplierContactTable::query()
-            ->setSelect(['ID', 'NAME'])
+            ->setSelect(['ID', 'NAME', 'EMAIL'])
             ->setFilter(['EMAIL.VALUE' => $contact['email']])
             ->fetchObject();
 
@@ -479,6 +483,7 @@ class Request
             }
         }
         $supplier
+            ->setTimestampX(new \Bitrix\Main\Type\DateTime())
             ->setName($data['name'])
             ->setKey($data['key'])
             ->setExpiryDate(date('Y-m-d', $data['key_expiry']))
@@ -487,7 +492,7 @@ class Request
         $contactProps = [];
         $contactIds = [];
         foreach ($data['contacts'] as $contact) {
-            $item = $this->getSupplierContact($contact, $supplier->getId());
+            $item = static::getSupplierContact($contact, $supplier->getId());
             $contactProps[] = ["VALUE" => $item->getId()];
             $contactIds[] = $item->getId();
         }
@@ -522,16 +527,17 @@ class Request
 
             $elem
                 ->setRequestId($data['id'])
-                ->setEvent($data['event'])
+                ->setTimestampX(new \Bitrix\Main\Type\DateTime())
+                ->setEvent(static::WAIT_REPLY)   // $data['event']
+                ->setStatus(static::WAIT_REPLY) // $data['status']
                 ->setPaymentOrder($data['payment_order'])
                 ->setDeliveryTime($data['delivery_time'])
                 ->setIncoterms($data['incoterms'])
                 ->setCurrency($data['currency'])
-                ->setStatus($data['status'])
                 ->setComment($data['comment'])
                 ->setSupplierComment($data['comment_s'])
                 ->setEmail($data['contact']['email'])
-                ->setContact($this->getSupplierContact($data['contact'])->getId())
+                ->setContact(static::getSupplierContact($data['contact'])->getId())
                 ->setSupplier($supplier->getId());
 
             $res = $elem->save();
@@ -572,6 +578,7 @@ class Request
                 }
             }
             $specification
+                ->setTimestampX(new \Bitrix\Main\Type\DateTime())
                 ->setRequest($requestId)
                 ->setSku($datum['sku'])
                 ->setName($datum['name'])
@@ -640,7 +647,7 @@ class Request
         return $supplier;
     }
 
-    private function getRequestValues(EO_ElementRequest $request)
+    public function getRequestValues(EO_ElementRequest $request)
     {
         return [
             'id'            => $request->getRequestId()->getValue(),

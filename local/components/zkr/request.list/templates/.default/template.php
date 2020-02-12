@@ -16,6 +16,11 @@ $this->setFrameMode(true);
 
 /** @var \Bitrix\Iblock\Elements\EO_ElementSupplier $supplier */
 $supplier = $arResult['SUPPLIER'];
+$classColors = [
+    \Zkr\Api\Request::WAIT_REPLY     => 'color_new_waiting',
+    \Zkr\Api\Request::BLOCKED_UPDATE => 'color_updated_waiting',
+    \Zkr\Api\Request::SENT           => 'color_sent',
+];
 ?>
 <div class="request-list">
 
@@ -42,9 +47,13 @@ $supplier = $arResult['SUPPLIER'];
                             </thead>
                             <tbody>
                             <? foreach ($arResult["ITEMS"] as $arItem) { ?>
+                                <?
+                                /** @var \Bitrix\Iblock\Elements\EO_ElementSupplierContact $contact */
+                                $contact = $arItem['CONTACT'];
+                                ?>
                                 <tr class="request-item" id="request_<?= $arItem['ID']; ?>">
                                     <td>
-                                        <span class="table_color color_new_waiting"></span>
+                                        <span class="table_color <?= $classColors[$arItem["DISPLAY_PROPERTIES"]["STATUS"]["DISPLAY_VALUE"]] ?>"></span>
                                     </td>
                                     <td>
                                         <? if (! $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"])): ?>
@@ -58,9 +67,14 @@ $supplier = $arResult['SUPPLIER'];
                                     <td><?= $arItem["FIELDS"]['TIMESTAMP_X'] ?></td>
                                     <td>
                                         <?= $arItem["DISPLAY_PROPERTIES"]['EVENT']['DISPLAY_VALUE'] ?> / <?= $arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] ?>
+                                        <? if ($arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] != \Zkr\Api\Request::WAIT_REPLY) { ?>
+                                            by
+                                            <a href="mailto:<?= $contact->getEmail()->getValue() ?>"><?= $contact->getName() ?></a>
+                                        <? } ?>
                                     </td>
                                 </tr>
                             <? } ?>
+                            <? /*
                             <tr>
                                 <td>
                                     <span class="table_color color_new_waiting"></span>
@@ -116,27 +130,12 @@ $supplier = $arResult['SUPPLIER'];
                                     <a href="mailto:j.smith@company.com">j.smith@company.com</a>
                                 </td>
                             </tr>
+*/ ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="wrap_pag">
-            <ul class="pagination">
-                <li class="navigation_pag">
-                    <a href="#"><img src="<?= $APPLICATION->GetTemplatePath('images/lef.svg') ?>" alt=""></a>
-                </li>
-                <li><a href="#" class="active">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li class="navigation_pag">
-                    <a href="#"><img src="<?= $APPLICATION->GetTemplatePath('images/rig.svg') ?>" alt=""></a>
-                </li>
-            </ul>
         </div>
 
         <? if ($arParams["DISPLAY_BOTTOM_PAGER"]): ?>
@@ -156,6 +155,24 @@ $supplier = $arResult['SUPPLIER'];
                             </thead>
                             <tbody>
                             <tr>
+                                <td>
+                                    <span class="table_color color_new_waiting"></span>
+                                </td>
+                                <td>Waiting for a reply</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="table_color color_updated_waiting"></span>
+                                </td>
+                                <td>Blocked for update</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span class="table_color color_sent"></span>
+                                </td>
+                                <td>Sent</td>
+                            </tr>
+                            <? /*<tr>
                                 <td>
                                     <span class="table_color color_new_waiting"></span>
                                 </td>
@@ -197,7 +214,7 @@ $supplier = $arResult['SUPPLIER'];
                                 <td>Reply sent 23.12.2019 09:18:01, blocked for update by
                                     <a href="mailto:j.smith@company.com">j.smith@company.com</a>
                                 </td>
-                            </tr>
+                            </tr>*/ ?>
                             </tbody>
                         </table>
                     </div>

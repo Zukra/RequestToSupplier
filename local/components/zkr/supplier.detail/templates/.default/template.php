@@ -18,7 +18,7 @@ $this->setFrameMode(true);
 $contacts = $arResult['CONTACTS'];
 ?>
 <div class="supplier-detail">
-    <?/*<h3><?= $arResult["NAME"] ?></h3>*/?>
+    <? /*<h3><?= $arResult["NAME"] ?></h3>*/ ?>
 
     <?
     //    echo $arResult["DISPLAY_PROPERTIES"]["ID_ONE_C"]['NAME'] . ': ' . $arResult["DISPLAY_PROPERTIES"]["ID_ONE_C"]["DISPLAY_VALUE"] . "<br>";
@@ -31,8 +31,8 @@ $contacts = $arResult['CONTACTS'];
             <div class="row">
                 <div class="col-xs-12">
                     <h3>List of managers of
-                        <b>Stalprofil</b> who can respond to requests. To add new
-                        <a href="#">сontact</a> the purchasing manager.</h3>
+                        <b><?= $arResult['NAME'] ?></b> who can respond to requests. To add new
+                        сontact the purchasing manager.</h3>
                 </div>
                 <div class="col-xs-12 col-sm-6 manager_list hidden-xs">
                     <p><b>Name</b></p>

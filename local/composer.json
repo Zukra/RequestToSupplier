@@ -1,25 +1,30 @@
 {
-    "require": {
-        "wikimedia/composer-merge-plugin": "dev-master",
-      "ext-json": "*"
-    },
-    "extra": {
-        "merge-plugin": {
-            "require": [
-                "../bitrix/composer-bx.json"
-            ]
-        }
-    },
-    "autoload": {    
-        "classmap": [
-            "classes/"
-        ],
-        "psr-4": {
-            "Emk\\": "classes/Emk/",
-            "Zkr\\": "classes/Zkr/"
-        }
+    "name": "zkr/request-to-suppliers",
+    "description": "Requesting suppliers prices",
+  "license": [
+    "MIT"
+  ],
+  "require": {
+    "wikimedia/composer-merge-plugin": "^1.4",
+    "ext-json": "*"
   },
-    "require-dev": {
-        "symfony/var-dumper": "^3.4"
+  "extra": {
+    "merge-plugin": {
+      "require": [
+        "../bitrix/composer-bx.json"
+      ]
     }
+  },
+  "autoload": {
+    "classmap": [
+      "classes/"
+    ],
+    "psr-4": {
+      "Emk\\": "classes/Emk/",
+      "Zkr\\": "classes/Zkr/"
+    }
+  },
+  "require-dev": {
+    "symfony/var-dumper": "^3.4"
+  }
 }
