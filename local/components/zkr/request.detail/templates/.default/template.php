@@ -50,28 +50,29 @@ $this->setFrameMode(true);
                             </span>
                             Back to Requests
                         </a>
-                    </div>
+                    </div> 
                 </div>
             </div>
         </div>
     </section>
 
-    <h3><b><?= $arResult["NAME"] ?></b></h3>
+    
 
     <section class="general_terms">
         <div class="container title_gen_it">
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <div class="gen_title">
+                        <h3><b><?= substr($arResult["NAME"], 0,11) ?></b></h3>
                         <h1><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] . ' to ' . $supplier->getName() ?></h1>
                     </div>
                 </div>
-                <? /*<div class="col-xs-12 col-sm-4">
+                <div class="col-xs-12 col-sm-4">
                     <div class="gen_ststus status_new_waiting <?= $classColors[$arResult["PROPERTIES"]['STATUS']["VALUE"]] ?>">
                         <p><?=$arResult["PROPERTIES"]['STATUS']["VALUE"] ?></p>
                         <p><span>Changes is saving...</span></p>
                     </div>
-                </div>*/ ?>
+                </div>
             </div>
         </div>
         <div class="container comment_gen_it">
@@ -103,7 +104,7 @@ $this->setFrameMode(true);
                                 <? /*<div class="form-group has-error">*/ ?>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Payment conditions
-                                        <span class="example_help" data-container="body" data-toggle="popover" data-placement="top" data-content="Delay of payments or prepayment" data-original-title="" title="">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae est sint veritatis minima, odio quos dolorem ipsam facilis repellendus harum nesciunt debitis perferendis sequi. Voluptatem perferendis consequatur quod culpa neque.">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
                                     </label>
@@ -119,7 +120,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Delivery time
-                                        <span class="example_help" data-container="body" data-toggle="popover" data-placement="top" data-content="Delay of payments or prepayment" data-original-title="" title="">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
                                     </label>
@@ -135,7 +136,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Delivery conditions INCOTERMS 2010
-                                        <span class="example_help" data-container="body" data-toggle="popover" data-placement="top" data-content="Delay of payments or prepayment" data-original-title="" title="">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus"  data-content="And here's some amazing content. It's very engaging. Right?">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
                                     </label>
@@ -150,13 +151,13 @@ $this->setFrameMode(true);
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputGroupSelectSupplierContact" class="col-sm-4 control-label">Currency
-                                        <span class="example_help" data-container="body" data-toggle="popover" data-placement="top" data-content="Delay of payments or prepayment" data-original-title="" title="">
+                                    <label for="" class="col-sm-4 control-label">Currency
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus"  data-content="And here's some amazing content. It's very engaging. Right?">
                                         <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
                                     <div class="col-sm-8">
-                                        <select class="browser-default custom-select form-control" id="inputGroupSelectSupplierContact" name="currency"
+                                        <select class="browser-default custom-select form-control" id="" name="currency"
                                                 data-id="<?= $arResult["PROPERTIES"]['CURRENCY']["ID"] ?>"
                                                 data-code="<?= $arResult["PROPERTIES"]['CURRENCY']["CODE"] ?>">
                                             <? foreach ($currencies as $key => $currency) { ?>
@@ -169,14 +170,14 @@ $this->setFrameMode(true);
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputGroupSelectSupplierContact" class="col-sm-4 control-label">Contact
-                                        <span class="example_help" data-container="body" data-toggle="popover" data-placement="top" data-content="Delay of payments or prepayment" data-original-title="" title="">
+                                    <label for="" class="col-sm-4 control-label">Contact
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus"  data-content="And here's some amazing content. It's very engaging. Right?">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
                                     <div class="col-sm-8">
                                         <select class="custom-browser-default custom-select form-control"
-                                                id="inputGroupSelectSupplierContact" name="contact"
+                                                id="" name="contact"
                                                 data-id="<?= $arResult["PROPERTIES"]['CONTACT']["ID"] ?>"
                                                 data-code="<?= $arResult["PROPERTIES"]['CONTACT']["CODE"] ?>">
                                             <? foreach ($supplierContacts as $contact) { ?>
@@ -447,3 +448,5 @@ $this->setFrameMode(true);
     </section>
 
 </div>
+
+

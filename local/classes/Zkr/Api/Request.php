@@ -13,6 +13,7 @@ use Bitrix\Iblock\Elements\EO_ElementRequestSpecification;
 use Bitrix\Iblock\Elements\EO_ElementSupplier;
 use Bitrix\Iblock\Elements\EO_ElementSupplierContact;
 use Bitrix\Iblock\Iblock;
+use Bitrix\Main\Diag\Debug;
 use CIBlockElement;
 use DateTime;
 
@@ -37,8 +38,9 @@ class Request
     {
         $result = [];
         if (! empty($query['id'])) {
-            $request = $this->getRequest($query);
-            $result = $this->getRequestValues($request);
+            if ($request = $this->getRequest($query)) {
+                $result = $this->getRequestValues($request);
+            };
         } else {
 //            $result = $this->getQuery($query, $n, $server);
         }

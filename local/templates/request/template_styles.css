@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap&subset=cyrillic');
 
 * {
-    transition : all 200ms ease;
+    /*transition : all 200ms ease;*/
 }
-
+:focus {
+    outline: none;
+}
 body {
     font-family : 'Montserrat', sans-serif;
 }
@@ -347,6 +349,7 @@ header .col-xs-12 {
     position : absolute;
     left     : 0;
     top      : 0;
+    transition : all 200ms ease;
 }
 
 .table > tbody > tr > td {
@@ -377,28 +380,34 @@ header .col-xs-12 {
     background : #00A15E;
 }
 
-.status_new_waiting {
+.color_new_waiting.gen_ststus {
     border-right : 8px solid #0DC2EE;
+    background: #f09e6800;
 }
 
-.status_new_blocked {
+.color_new_blocked.gen_ststus {
     border-right : 8px solid #2969C0;
+    background: #f09e6800;
 }
 
-.status_updated_waiting {
+.status_new_waiting.gen_ststus {
     border-right : 8px solid #F09E68;
+    background: #f09e6800;
 }
 
-.status_updated_blocked {
+.color_updated_blocked.gen_ststus {
     border-right : 8px solid #FFDA59;
+    background: #f09e6800;
 }
 
-.status_sent {
+.color_sent.gen_ststus {
     border-right : 8px solid #7BCD5C;
+    background: #f09e6800;
 }
 
-.status_sent_blocked {
+.color_sent_blocked.gen_ststus {
     border-right : 8px solid #00A15E;
+    background: #f09e6800;
 }
 
 .pagination > li > a, .pagination > li > span {
@@ -439,9 +448,14 @@ header .col-xs-12 {
 
 .table tr:hover .table_color {
     width : 16px;
-
+    transition : all 200ms ease;
 }
-
+.request-list {
+    margin-top: 30px;
+}
+.request-list h1{
+    margin-bottom: 30px;
+}
 .pagination li a.active {
     color : #aaaaaa;
 }
@@ -460,7 +474,7 @@ header .col-xs-12 {
     font-weight     : 600;
     text-decoration : none;
     color           : #000;
-    text-decoration : underline;
+    /*text-decoration : underline;*/
 }
 
 .bread_crumbs a span {
@@ -806,7 +820,9 @@ header .col-xs-12 {
 }
 
 @media (max-width : 450px) {
-
+    .popover{
+        max-width: 350px;
+    }
 }
 
 @media (min-width : 768px) {
@@ -905,4 +921,50 @@ header .col-xs-12 {
 
 @media (min-width : 2560px) {
 
+}
+.popover .arrow::after, .popover .arrow::before {
+    position: absolute;
+    display: block;
+    content: "";
+    border-color: transparent;
+    border-style: solid;
+}
+.bs-popover-auto[x-placement^=right]>.arrow::before, .bs-popover-right>.arrow::before {
+    left: 0;
+    border-width: .5rem .5rem .5rem 0;
+    border-right-color: rgba(0,0,0,.25);
+}
+
+.bs-popover-auto[x-placement^=right]>.arrow::after, .bs-popover-right>.arrow::after {
+    left: 1px;
+    border-width: .5rem .5rem .5rem 0;
+    border-right-color: #fff;
+}
+.popover.fade {
+    opacity: 1;
+    -webkit-transition: opacity .15s linear;
+    transition: opacity .15s linear;
+}
+.bs-popover-auto[x-placement^=right], .bs-popover-right {
+    margin-left: .5rem;
+}
+.popover .arrow {
+    border-width: 0;
+    left: -6px;
+    top: 41% !important;
+}
+h3.popover-header {
+    display: none;
+}
+.popover-body {
+    padding: 5px;
+}
+@media (min-width: 1200px){
+    .general-term{
+         width: 990px; 
+        margin: 0 auto;
+    }
+    .gen_form{
+        width: auto;
+    }
 }

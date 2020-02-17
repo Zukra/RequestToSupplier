@@ -58,10 +58,10 @@ $classColors = [
                                     <td>
                                         <? if (! $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"])): ?>
                                             <a href="<? echo $arItem["DETAIL_PAGE_URL"] ?>">
-                                                <? echo $arItem["NAME"] ?>
+                                                <? echo substr($arItem["NAME"], 0,11) ?>
                                             </a>
                                         <? else: ?>
-                                            <? echo $arItem["NAME"] ?>
+                                            <? echo substr($arItem["NAME"], 0,11) ?>
                                         <? endif; ?>
                                     </td>
                                     <td><?= $arItem["FIELDS"]['TIMESTAMP_X'] ?></td>

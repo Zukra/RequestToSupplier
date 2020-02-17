@@ -15,7 +15,27 @@ $(function () {
             id: supplierId
         };
 
-        BX.ajax.runComponentAction('zkr:ajax',
+        $.ajax({
+            method: "POST",
+            url: "http://API:1111m@srv-1c.emk.loc:8080/testnew2/hs/1%D1%81/api/v1/request/getKey",
+            dataType: 'json',
+            processData: false,
+            contentType: 'application/json',
+            accept: 'application/json',
+            data: {
+                // supplier_id: params.supplier_id,
+                email: params.email,
+                request_id: params.request_id
+            }
+        }).done(function (response) {
+            console.log(response);
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            // var err = eval("(" + jqXHR.responseText + ")");
+            console.log(jqXHR.status, jqXHR.statusText, textStatus, errorThrown);
+        });
+
+
+        /*BX.ajax.runComponentAction('zkr:ajax',
             'getNewSupplierKey', {
                 mode: 'class',
                 data: {
@@ -64,7 +84,7 @@ $(function () {
             }
         }).catch(function (reason) {
             console.log(reason);
-        });
+        });*/
 
     });
 

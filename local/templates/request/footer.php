@@ -38,7 +38,9 @@ if (! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
 
 <script>"use strict";
     $(function () {
-        $('.example_help').popover();
+        $('.example_help').popover({
+          trigger: 'focus'
+        });
         $('.error_area').tooltip();
     });
 </script>
