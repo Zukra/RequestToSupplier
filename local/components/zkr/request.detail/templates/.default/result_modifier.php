@@ -20,7 +20,7 @@ if ($supplier) {
 
     $specification = \Bitrix\Iblock\Elements\ElementRequestSpecificationTable::query()
         ->setSelect(['ID', 'NAME', 'SKU', 'QUANTITY_R', 'SUPPLIER_QUANTITY',
-                     'UNIT_MEASURE', 'SUPPLIER_UNIT', 'SUPPLIER_PRICE_UNIT',
+                     'UNIT_MEASURE', 'SUPPLIER_UNIT', 'SUPPLIER_PRICE_UNIT', 'DESC_ID',
                      'DELIVERY_TIME', 'INCOTERMS', 'REPLACEMENT', 'COMMENT', 'SUPPLIER_COMMENT'])
         ->setFilter(['ID' => $arResult["PROPERTIES"]["SPECIFICATION"]['VALUE']])
         ->fetchCollection();

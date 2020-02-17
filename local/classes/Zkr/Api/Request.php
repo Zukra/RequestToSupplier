@@ -13,7 +13,6 @@ use Bitrix\Iblock\Elements\EO_ElementRequestSpecification;
 use Bitrix\Iblock\Elements\EO_ElementSupplier;
 use Bitrix\Iblock\Elements\EO_ElementSupplierContact;
 use Bitrix\Iblock\Iblock;
-use Bitrix\Main\Diag\Debug;
 use CIBlockElement;
 use DateTime;
 
@@ -256,7 +255,7 @@ class Request
         $specification = ElementRequestSpecificationTable::getList([
             'select' => [
                 'ID', 'NAME', 'SKU', 'QUANTITY_R', 'SUPPLIER_QUANTITY',
-                'UNIT_MEASURE', 'SUPPLIER_UNIT', 'SUPPLIER_PRICE_UNIT',
+                'UNIT_MEASURE', 'SUPPLIER_UNIT', 'SUPPLIER_PRICE_UNIT', 'DESC_ID',
                 'DELIVERY_TIME', 'INCOTERMS', 'REPLACEMENT', 'COMMENT', 'SUPPLIER_COMMENT'
             ],
             'filter' => ['ID' => $request->getSpecification()->getValueList()]
@@ -268,6 +267,7 @@ class Request
                 'sku'           => $item->getSku()->getValue(),
                 'internal_id'   => $item->getId(),
                 'name'          => $item->getName(),
+                'desc_id'       => $item->getDescId()->getValue(),
                 'comment'       => $item->getComment()->getValue(),
                 'quantity_r'    => $item->getQuantityR()->getValue(),
                 'unit_measure'  => $item->getUnitMeasure()->getValue(),
@@ -581,6 +581,7 @@ class Request
             }
             $specification
                 ->setTimestampX(new \Bitrix\Main\Type\DateTime())
+                ->setDescId($datum['desc_id'] ?? '')
                 ->setRequest($requestId)
                 ->setSku($datum['sku'])
                 ->setName($datum['name'])

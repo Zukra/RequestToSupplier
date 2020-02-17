@@ -42,7 +42,7 @@ if ($requestId) { ?>
             "ELEMENT_CODE"              => "",
             "ELEMENT_ID"                => $requestId,
             "FIELD_CODE"                => ["NAME", ""],
-            "IBLOCK_ID"                 => "7",
+            "IBLOCK_ID"                 => REQUEST_IBLOCK,
             "IBLOCK_TYPE"               => "requests",
             "IBLOCK_URL"                => "",
             "INCLUDE_IBLOCK_INTO_CHAIN" => "N",

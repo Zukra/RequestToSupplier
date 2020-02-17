@@ -38,7 +38,7 @@ $supplierId = \Zkr\Helper::checkAccess();
         ],
         "FILTER_NAME"                     => "arrFilter",
         "HIDE_LINK_WHEN_NO_DETAIL"        => "N",
-        "IBLOCK_ID"                       => "7",
+        "IBLOCK_ID"                       => REQUEST_IBLOCK,
         "IBLOCK_TYPE"                     => "requests",
         "INCLUDE_IBLOCK_INTO_CHAIN"       => "Y",
         "INCLUDE_SUBSECTIONS"             => "Y",

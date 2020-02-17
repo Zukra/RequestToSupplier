@@ -28,7 +28,7 @@ $classColors = [
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1><?= 'List of requests to ' . $supplier->getName() ?></h1>
+                    <h1><?= 'List of requests to ' . ($supplier ? $supplier->getName() : '') ?></h1>
                 </div>
             </div>
         </div>
@@ -58,10 +58,10 @@ $classColors = [
                                     <td>
                                         <? if (! $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"])): ?>
                                             <a href="<? echo $arItem["DETAIL_PAGE_URL"] ?>">
-                                                <? echo substr($arItem["NAME"], 0,11) ?>
+                                                <? echo substr($arItem["NAME"], 0, 11) ?>
                                             </a>
                                         <? else: ?>
-                                            <? echo substr($arItem["NAME"], 0,11) ?>
+                                            <? echo substr($arItem["NAME"], 0, 11) ?>
                                         <? endif; ?>
                                     </td>
                                     <td><?= $arItem["FIELDS"]['TIMESTAMP_X'] ?></td>
