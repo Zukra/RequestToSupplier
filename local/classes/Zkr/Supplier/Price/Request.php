@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Zkr\Api;
+namespace Zkr\Supplier\Price;
 
 
 use Bitrix\Iblock\Elements\ElementRequestSpecificationTable;
@@ -18,17 +18,16 @@ use DateTime;
 
 class Request
 {
+    public const SCOPE = 'request';
+
     public const WAIT_REPLY     = 'Waiting for a reply';
     public const BLOCKED_UPDATE = 'Blocked for update';
     public const SENT           = 'Sent';
 
-    public const SCOPE = 'request';
-
     protected $arSelect = [
         "ID", "NAME", 'TIMESTAMP_X', 'REQUEST_ID', 'PAYMENT_ORDER', 'DELIVERY_TIME', 'INCOTERMS',
         "EMAIL", 'COMMENT', "CONTACT", 'CURRENCY', 'STATUS', 'EVENT', 'SUPPLIER_COMMENT',
-        'IS_BLOCKED',
-        "SPECIFICATION", "SUPPLIER",
+        'IS_BLOCKED', "SPECIFICATION", "SUPPLIER",
     ];
     protected $arFilter = ["ACTIVE" => "Y"];
     protected $arOrder  = ['ID'];

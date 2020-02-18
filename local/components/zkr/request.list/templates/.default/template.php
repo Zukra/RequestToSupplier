@@ -17,9 +17,9 @@ $this->setFrameMode(true);
 /** @var \Bitrix\Iblock\Elements\EO_ElementSupplier $supplier */
 $supplier = $arResult['SUPPLIER'];
 $classColors = [
-    \Zkr\Api\Request::WAIT_REPLY     => 'color_new_waiting',
-    \Zkr\Api\Request::BLOCKED_UPDATE => 'color_updated_waiting',
-    \Zkr\Api\Request::SENT           => 'color_sent',
+    \Zkr\Supplier\Price\Request::WAIT_REPLY     => 'color_new_waiting',
+    \Zkr\Supplier\Price\Request::BLOCKED_UPDATE => 'color_updated_waiting',
+    \Zkr\Supplier\Price\Request::SENT           => 'color_sent',
 ];
 ?>
 <div class="request-list">
@@ -67,7 +67,7 @@ $classColors = [
                                     <td><?= $arItem["FIELDS"]['TIMESTAMP_X'] ?></td>
                                     <td>
                                         <?= $arItem["DISPLAY_PROPERTIES"]['EVENT']['DISPLAY_VALUE'] ?> / <?= $arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] ?>
-                                        <? if ($arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] != \Zkr\Api\Request::WAIT_REPLY) { ?>
+                                        <? if ($arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] != \Zkr\Supplier\Price\Request::WAIT_REPLY) { ?>
                                             by
                                             <a href="mailto:<?= $contact->getEmail()->getValue() ?>"><?= $contact->getName() ?></a>
                                         <? } ?>

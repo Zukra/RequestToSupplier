@@ -29,9 +29,9 @@ $currencies = [
 //$measures = ['T', 't', 'm'];
 
 $classColors = [
-    \Zkr\Api\Request::WAIT_REPLY     => 'color_new_waiting',
-    \Zkr\Api\Request::BLOCKED_UPDATE => 'color_updated_waiting',
-    \Zkr\Api\Request::SENT           => 'color_sent',
+    \Zkr\Supplier\Price\Request::WAIT_REPLY     => 'color_new_waiting',
+    \Zkr\Supplier\Price\Request::BLOCKED_UPDATE => 'color_updated_waiting',
+    \Zkr\Supplier\Price\Request::SENT           => 'color_sent',
 ];
 
 $this->setFrameMode(true);
