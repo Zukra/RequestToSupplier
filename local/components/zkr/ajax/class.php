@@ -164,7 +164,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             $params['prop']['code'] => $params['prop']['value'],
             'IS_BLOCKED'            => REQUEST_IS_BLOCKED_ID,
             'STATUS'                => Request::BLOCKED_UPDATE,
-            'EVENT'                 => Request::BLOCKED_UPDATE
+            'EVENT'                 => Request::BLOCKED_UPDATE,
         ];
         if ($params['prop']['code'] == 'CONTACT') {
             /** @var EO_ElementSupplierContact $contact */
@@ -174,7 +174,9 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             )->fetchObject();
             $props['EMAIL'] = $contact->getEmail()->getValue();
         }
-
+        $arLoadProductArray = ['TIMESTAMP_X' => new \Bitrix\Main\Type\DateTime(),];
+        $el = new CIBlockElement;
+        $el->Update($params['request_id'], $arLoadProductArray);
         CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
     }
 
@@ -188,6 +190,10 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             $props['REPLACEMENT'] = REQUEST_SPECIFICATION_IS_REPLACEMENT;
         }
 
+        $arLoadProductArray = ['TIMESTAMP_X' => new \Bitrix\Main\Type\DateTime(),];
+        $el = new CIBlockElement;
+        $el->Update($params['spec_id'], $arLoadProductArray);
+        $el->Update($params['request_id'], $arLoadProductArray);
         CIBlockElement::SetPropertyValuesEx($params['spec_id'], false, $props);
         CIBlockElement::SetPropertyValuesEx($params['request_id'], false, [
             'IS_BLOCKED' => REQUEST_IS_BLOCKED_ID,
@@ -238,6 +244,9 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             'STATUS'     => Request::SENT,
             'EVENT'      => Request::SENT
         ];
+
+        $el = new CIBlockElement;
+        $el->Update($params['request_id'], ['TIMESTAMP_X' => new \Bitrix\Main\Type\DateTime()]);
         CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
     }
 
