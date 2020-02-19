@@ -7,6 +7,7 @@ if (! defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) {
     die();
 }
 
+use Bitrix\Iblock\Elements\ElementRequestTable;
 use Bitrix\Iblock\Elements\ElementSupplierContactTable;
 use Bitrix\Iblock\Elements\ElementSupplierTable;
 use Bitrix\Iblock\Elements\EO_ElementSupplier;
@@ -28,7 +29,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         // Предустановленные фильтры находятся в папке /bitrix/modules/main/lib/engine/actionfilter/
         return [
             // Ajax-метод
-            'getKey'              => [
+            'getKey'                   => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                     //                    new ActionFilter\Csrf(),
@@ -39,7 +40,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'updateSupplierKey'   => [
+            'updateSupplierKey'        => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                     //                    new ActionFilter\Csrf(),
@@ -50,7 +51,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'getNewSupplierKey'   => [
+            'getNewSupplierKey'        => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                     //                    new ActionFilter\Csrf(),
@@ -61,7 +62,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'updateRequest'       => [
+            'updateRequest'            => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
@@ -70,7 +71,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'updateSpecification' => [
+            'updateSpecification'      => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
@@ -79,7 +80,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'sendRequestData'     => [
+            'sendRequestData'          => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
@@ -88,7 +89,16 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'addRequestContact'   => [
+            'addRequestContact'        => [
+                'prefilters'  => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
+                ],
+                '-prefilters' => [
+                    ActionFilter\Authentication::class
+                ],
+                'postfilters' => [],
+            ],
+            'setRequestBlockingStatus' => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
@@ -262,5 +272,21 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         ];
 
         return $data;
+    }
+
+    public function setRequestBlockingStatusAction($params)
+    {
+        if ($params['request_id']) {
+            $props = [
+                'IS_BLOCKED' => $params['value'] > 0 ? REQUEST_IS_BLOCKED_ID : false,
+                'STATUS'     => $params['value'] > 0 ? Request::BLOCKED_UPDATE : Request::WAIT_REPLY,
+                'EVENT'      => $params['value'] > 0 ? Request::BLOCKED_UPDATE : Request::WAIT_REPLY,
+            ];
+
+            $arLoadProductArray = ['TIMESTAMP_X' => new \Bitrix\Main\Type\DateTime(),];
+            $el = new CIBlockElement;
+            $el->Update($params['request_id'], $arLoadProductArray);
+            CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
+        }
     }
 }

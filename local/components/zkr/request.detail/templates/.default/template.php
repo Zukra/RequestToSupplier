@@ -68,7 +68,8 @@ $this->setFrameMode(true);
                 <div class="col-xs-12 col-sm-4">
                     <div class="gen_ststus <?= $classColors[$arResult["PROPERTIES"]['STATUS']["VALUE"]] ?>">
                         <p class="status"><?= $arResult["PROPERTIES"]['STATUS']["VALUE"] ?></p>
-                        <? /*<p><span>Changes is saving...</span></p>*/ ?>
+                        <p><span class="saving_data">Changes is saving...</span>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -450,6 +451,7 @@ $this->setFrameMode(true);
 <script>
     BX.message({
         classColors: '<?= json_encode($classColors); ?>',
-        BLOCKED_UPDATE: '<?=\Zkr\Supplier\Price\Request::BLOCKED_UPDATE?>'
+        BLOCKED_UPDATE: '<?=\Zkr\Supplier\Price\Request::BLOCKED_UPDATE?>',
+        WAIT_REPLY: '<?=\Zkr\Supplier\Price\Request::WAIT_REPLY?>'
     });
 </script>

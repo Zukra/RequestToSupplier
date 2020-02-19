@@ -59,13 +59,6 @@ class Helper
             }
         } else {
             LocalRedirect('/personal/error-key/');
-//            LocalRedirect('/error_key.php');
-            /*            \Bitrix\Iblock\Component\Tools::process404(
-                            'Access denied' ?: GetMessage("T_NEWS_DETAIL_NF")
-                            , true
-                            , true
-                            , true
-                        );*/
         }
 
         return $elementId;

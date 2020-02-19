@@ -239,8 +239,8 @@ class Request
                 'currency'      => $request->getCurrency()->getValue(),
                 'status'        => $request->getStatus()->getValue(),
                 'comment'       => $request->getComment()->getValue(),
-                "supplier"      => $this->getSupplier($request, $obSupplier),
-                "specification" => $this->getSpecification($request, $obSpecification),
+                "supplier"      => $this->getSupplier($request),
+                "specification" => $this->getSpecification($request),
                 "contact"       => $this->getContact($request, $obContact),
             ];
         }
@@ -275,7 +275,7 @@ class Request
                 'price_s'       => $item->getSupplierPriceUnit()->getValue(),
                 'delivery_time' => $item->getDeliveryTime()->getValue(),
                 'incoterms'     => $item->getIncoterms()->getValue(),
-                'replacement'   => $item->getReplacement()->getValue(),
+                'replacement'   => $item->getReplacement()->getValue() > 0 ? 1 : 0,
                 'comment_s'     => $item->getSupplierComment()->getValue()
             ];
         }, $specification->getAll());
@@ -349,7 +349,7 @@ class Request
         ];
         if ($elemId = $el->Add($arLoadProductArray)) {
             /** @var EO_ElementRequest $elem */
-            $elem = EO_ElementRequest::wakeUp($elemId);
+            $elem = ElementRequestTable::wakeUpObject($elemId);
         }
 
         return $elem;
@@ -369,7 +369,7 @@ class Request
             $supplier = $this->checkSupplier($data['supplier']);
 
             /** @var EO_ElementRequest $elem */
-            $elem = EO_ElementRequest::wakeUp($elemId);
+            $elem = ElementRequestTable::wakeUpObject($elemId);
             $elem
                 ->setRequestId($data['id'])
                 ->setPaymentOrder($data['payment_order'])
@@ -446,7 +446,7 @@ class Request
                 "ACTIVE"    => "Y",            // активен
             ];
             if ($elemId = $el->Add($arLoadProductArray)) {
-                $elem = EO_ElementSupplierContact::wakeUp($elemId);
+                $elem = ElementSupplierContactTable::wakeUpObject($elemId);
             }
         }
         $elem
@@ -480,7 +480,7 @@ class Request
             ];
             if ($supplierId = $el->Add($arLoadProductArray)) {
                 //                $supplierId = $supplierId ?: $supplier->getId();
-                $supplier = EO_ElementSupplier::wakeUp($supplierId);
+                $supplier = ElementSupplierTable::wakeUpObject($supplierId);
             }
         }
         $supplier
@@ -520,7 +520,7 @@ class Request
         $elem = null;
         if ($elemId && $data) {
             /** @var EO_ElementRequest $elem */
-            $elem = EO_ElementRequest::wakeUp($elemId);
+            $elem = ElementRequestTable::wakeUpObject($elemId);
             $elem->fillName();
 
             $supplier = $this->checkSupplier($data['supplier']);
@@ -575,7 +575,7 @@ class Request
                     "ACTIVE"    => "Y",            // активен
                 ];
                 if ($id = $el->Add($arLoadProductArray)) {
-                    $specification = EO_ElementRequestSpecification::wakeUp($id);
+                    $specification = ElementRequestSpecificationTable::wakeUpObject($id);
                 }
             }
             $specification

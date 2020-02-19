@@ -1,11 +1,40 @@
 "use strict";
 
 $(function () {
+    $('.gen_ststus .saving_data').hide();
 
     var requestForm     = $('form[name="request"]'),
         blockNewContact = requestForm.find('.new-contact'),
         blockContact    = requestForm.find('.general-term select[name=contact]'),
-        oldValueContact = blockContact.val();
+        oldValueContact = blockContact.val(),
+        count           = 0,
+        max             = 20,
+        delay           = 50,
+        timer           = 0;
+
+    /*var checkUserActivity = function () {
+        var requestId = requestForm.find('input[name="request-id"]').val();
+        if (requestId) {
+            var params = {
+                request_id: requestId,
+                value: 0
+            };
+            BX.ajax.runComponentAction('zkr:ajax',
+                'setRequestBlockingStatus', {
+                    mode: 'class',
+                    data: {params: params}
+                }
+            ).then(function (response) {
+                if (response.status === 'success') {
+                    location.reload();
+                    // changeStatus(BX.message('WAIT_REPLY'));
+                }
+            }).catch(function (reason) {
+                console.log(reason);
+            });
+        }
+    };*/
+
 
     recalcTotal();
 
@@ -14,7 +43,7 @@ $(function () {
     });
 
     requestForm.on('keydown', function (event) {
-        if (event.keyCode === 13) {
+        if (event.keyCode === 13 && event.target.type !== 'textarea') {
             event.preventDefault();
         }
     });
@@ -90,6 +119,8 @@ $(function () {
     });
 
     $('form[name="request"] .general-term input, form[name="request"] .general-term textarea').keyup(function (event) {
+        clearTimeout(timer);
+        count = 0;
         updateGeneralTerm(this);
     });
 
@@ -98,6 +129,8 @@ $(function () {
     });
 
     $('form[name="request"] .specification input').keyup(function (event) {
+        clearTimeout(timer);
+        count = 0;
         updateSpecification(this);
     });
 
@@ -149,66 +182,83 @@ $(function () {
     });
 
     function updateGeneralTerm(that) {
-        var elem      = $(that),
-            requestId = $('form[name="request"] input[name="request-id"]').val(),
-            propName  = elem.attr('name'),
-            propValue = elem.val(),
-            propId    = elem.data('id'),
-            propCode  = elem.data('code');
+        if (++count > max) {
+            clearTimeout(timer);
+            count = 0;
 
-        if (propCode && requestId) {
-            var params = {
-                request_id: requestId,
-                prop: {
-                    id: propId,
-                    name: propName,
-                    code: propCode,
-                    value: propValue
-                }
-            };
-            BX.ajax.runComponentAction('zkr:ajax',
-                'updateRequest', {
-                    mode: 'class',
-                    data: {params: params}
-                }
-            ).then(function (response) {
-                if (response.status === 'success') {
-                    changeStatus();
-                }
-            }).catch(function (reason) {
-                console.log(reason);
-            });
+            var elem      = $(that),
+                requestId = $('form[name="request"] input[name="request-id"]').val(),
+                propName  = elem.attr('name'),
+                propValue = elem.val(),
+                propId    = elem.data('id'),
+                propCode  = elem.data('code');
+
+            if (propCode && requestId) {
+                var params = {
+                    request_id: requestId,
+                    prop: {
+                        id: propId,
+                        name: propName,
+                        code: propCode,
+                        value: propValue
+                    }
+                };
+                BX.ajax.runComponentAction('zkr:ajax',
+                    'updateRequest', {
+                        mode: 'class',
+                        data: {params: params}
+                    }
+                ).then(function (response) {
+                    if (response.status === 'success') {
+                        changeStatus(BX.message('BLOCKED_UPDATE'));
+                    }
+                }).catch(function (reason) {
+                    console.log(reason);
+                });
+            }
+        } else {
+            timer = setTimeout(updateGeneralTerm, delay, that);
         }
     }
 
     function updateSpecification(that) {
-        var requestId = $('form[name="request"] input[name="request-id"]').val(),
-            prop      = $(that),
-            specId    = prop.parents('.specification-item').attr('id'),
-            propValue = prop.val(),
-            propCode  = prop.data('code');
+        if (++count > max) {
+            clearTimeout(timer);
+            count = 0;
 
-        if (propCode === 'REPLACEMENT') {
-            propValue = prop.is(':checked') ? "1" : "0";
-        }
+            var requestId = $('form[name="request"] input[name="request-id"]').val(),
+                prop      = $(that),
+                specId    = prop.parents('.specification-item').attr('id'),
+                propValue = prop.val(),
+                propCode  = prop.data('code');
 
-        if (propCode && specId && requestId) {
-            var params = {
-                request_id: requestId,
-                spec_id: specId,
-                prop: {code: propCode, value: propValue}
-            };
+            if (propCode === 'REPLACEMENT') {
+                propValue = prop.is(':checked') ? "1" : "0";
+            }
 
-            BX.ajax.runComponentAction('zkr:ajax',
-                'updateSpecification', {mode: 'class', data: {params: params}}
-            ).then(function (response) {
-                if (response.status === 'success') {
-                    // console.log('specification updated!');
-                    changeStatus()
-                }
-            }).catch(function (reason) {
-                console.log(reason);
-            });
+            if (propCode && specId && requestId) {
+                var params = {
+                    request_id: requestId,
+                    spec_id: specId,
+                    prop: {code: propCode, value: propValue}
+                };
+
+                BX.ajax.runComponentAction('zkr:ajax',
+                    'updateSpecification', {
+                        mode: 'class',
+                        data: {params: params}
+                    }
+                ).then(function (response) {
+                    if (response.status === 'success') {
+                        // console.log('specification updated!');
+                        changeStatus(BX.message('BLOCKED_UPDATE'))
+                    }
+                }).catch(function (reason) {
+                    console.log(reason);
+                });
+            }
+        } else {
+            timer = setTimeout(updateSpecification, delay, that);
         }
     }
 
@@ -284,14 +334,14 @@ function filterSearch(that) {
     }
 }
 
-function changeStatus() {
-    var classColors   = JSON.parse(BX.message('classColors')),
-        blockedUpdate = BX.message('BLOCKED_UPDATE'),
-        block         = $('.general_terms .gen_ststus');
+function changeStatus(status) {
+    var classColors = JSON.parse(BX.message('classColors')),
+        block       = $('.general_terms .gen_ststus');
     for (var prop in classColors) {
         block.removeClass(classColors[prop]);
         // console.log(prop, classColors[prop]);
     }
-    block.addClass(classColors[blockedUpdate]);
-    block.find('.status').html(blockedUpdate);
+    block.addClass(classColors[status]);
+    block.find('.status').html(status);
+    $('.gen_ststus .saving_data').show();
 }

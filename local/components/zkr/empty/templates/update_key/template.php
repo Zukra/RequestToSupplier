@@ -12,10 +12,12 @@ $supplier = $arResult['SUPPLIER'];
             <div class="col-xs-12">
                 <h1>EMK for suppliers</h1>
                 <form class="form-horizontal" role="form" name="update-supplier-key" action="#">
+                    <input type="hidden" name="request-id" value="<?= $arParams['REQUEST_ID'] ?: '' ?>">
+                    <? /*
                     <input type="hidden" name="supplier-key" value="<?= $supplier->getKey()->getValue() ?>">
                     <input type="hidden" name="supplier-name" value="<?= $supplier->getName() ?>">
-                    <input type="hidden" name="request-id" value="<?= $arParams['REQUEST_ID'] ?: '' ?>">
                     <input type="hidden" name="supplier-id" value="<?= $supplier->getIdOneC()->getValue() ?>">
+*/ ?>
 
                     <div class="form-group">
                         <div class="col-xs-12">
@@ -52,4 +54,3 @@ $supplier = $arResult['SUPPLIER'];
         </div>
     </div>
 </div>
-

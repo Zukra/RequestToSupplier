@@ -3,18 +3,17 @@ $(function () {
 
     $('form[name="update-supplier-key"]').submit(function (event) {
         event.preventDefault();
-        var email       = $(this).find('input[name="email"]').val(),
-            supplierKey = $(this).find('input[name="supplier-key"]').val(),
-            requestId   = $(this).find('input[name="request-id"]').val(),
-            supplierId  = $(this).find('input[name="supplier-id"]').val();
+        var email     = $(this).find('input[name="email"]').val(),
+            requestId = $(this).find('input[name="request-id"]').val();
+        // supplierKey = $(this).find('input[name="supplier-key"]').val(),
+        // supplierId  = $(this).find('input[name="supplier-id"]').val();
 
         var params = {
             email: email,
-            request_id: requestId,
-            key: supplierKey,
-            id: supplierId
+            request_id: requestId
+            // key: supplierKey,
+            // id: supplierId
         };
-
         $.ajax({
             method: "POST",
             url: "http://API:1111m@srv-1c.emk.loc:8080/testnew2/hs/1%D1%81/api/v1/request/getKey",
