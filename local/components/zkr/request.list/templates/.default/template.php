@@ -32,6 +32,7 @@ $classColors = [
                 </div>
             </div>
         </div>
+
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
@@ -66,71 +67,14 @@ $classColors = [
                                     </td>
                                     <td><?= $arItem["FIELDS"]['TIMESTAMP_X'] ?></td>
                                     <td>
-                                        <?= $arItem["DISPLAY_PROPERTIES"]['EVENT']['DISPLAY_VALUE'] ?> / <?= $arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] ?>
-                                        <? if ($arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] != \Zkr\Supplier\Price\Request::WAIT_REPLY) { ?>
+                                        <?= $arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] ?>
+                                        <? if ($arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] != \Zkr\Supplier\Price\Request::WAIT_REPLY && $contact) { ?>
                                             by
                                             <a href="mailto:<?= $contact->getEmail()->getValue() ?>"><?= $contact->getName() ?></a>
                                         <? } ?>
                                     </td>
                                 </tr>
                             <? } ?>
-                            <? /*
-                            <tr>
-                                <td>
-                                    <span class="table_color color_new_waiting"></span>
-                                </td>
-                                <td>0001/006</td>
-                                <td>2019-12-23</td>
-                                <td>New, waiting for a reply</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="table_color color_new_blocked"></span>
-                                </td>
-                                <td>0001/005</td>
-                                <td>2019-12-22</td>
-                                <td>Request updated by EMK, waiting for reply</td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="table_color color_updated_waiting"></span>
-                                </td>
-                                <td>0001/004</td>
-                                <td>2019-12-21</td>
-                                <td>New, blocked for update by
-                                    <a href="mailto:j.smith@company.com">j.smith@company.com</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="table_color color_updated_blocked"></span>
-                                </td>
-                                <td>0001/003</td>
-                                <td>2019-12-20</td>
-                                <td>Reply sent 23.12.2019 09:18:01, blocked for update by
-                                    <a href="mailto:j.smith@company.com">j.smith@company.com</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><span class="table_color color_sent"></span>
-                                </td>
-                                <td>0001/002</td>
-                                <td>2019-12-19</td>
-                                <td>Reply sent 22.12.2019 17:21:19 by
-                                    <a href="mailto:j.smith@company.com">j.smith@company.com</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span class="table_color color_sent_blocked"></span>
-                                </td>
-                                <td>0001/001</td>
-                                <td>2019-12-18</td>
-                                <td>Reply sent 23.12.2019 09:18:01, blocked for update by
-                                    <a href="mailto:j.smith@company.com">j.smith@company.com</a>
-                                </td>
-                            </tr>
-*/ ?>
                             </tbody>
                         </table>
                     </div>
