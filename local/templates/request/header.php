@@ -14,19 +14,19 @@ use Bitrix\Main\Page\Asset;
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <?
-    //    Asset::getInstance()->addCss("/local/assets/css/bootstrap.min.css");
+//        Asset::getInstance()->addCss("/local/assets/css/bootstrap.min.css");
     Asset::getInstance()->addCss("/local/assets/css/bootstrap-3.0.3.min.css");
     Asset::getInstance()->addCss("/local/assets/css/bootstrap.offcanvas.min.css");
     Asset::getInstance()->addCss("/local/assets/css/slick.css");
     Asset::getInstance()->addCss("/local/assets/css/slick-theme.css");
     Asset::getInstance()->addCss("/local/assets/css/custom.css");
 
-    CJSCore::Init(["fx", 'ajax']);
-    //        CJSCore::Init(['jquery3', "fx", 'ajax']);
-    Asset::getInstance()->addJs("/local/assets/js/jquery-3.4.1.min.js");
-    Asset::getInstance()->addJs("/local/assets/js/popper.min.js");
-    //    Asset::getInstance()->addJs("/local/assets/js/popper-1.14.7.min.js");
-    //        Asset::getInstance()->addJs("/local/assets/js/bootstrap-3.0.3.min.js");
+//    CJSCore::Init(["fx", 'ajax']);
+    CJSCore::Init(['jquery3', "fx", 'ajax']);
+    //    Asset::getInstance()->addJs("/local/assets/js/jquery-3.4.1.min.js");
+    //    Asset::getInstance()->addJs("/local/assets/js/popper.min.js");
+    Asset::getInstance()->addJs("/local/assets/js/popper-1.14.7.min.js");
+//            Asset::getInstance()->addJs("/local/assets/js/bootstrap-3.0.3.min.js");
     Asset::getInstance()->addJs("/local/assets/js/bootstrap.min.js");
     Asset::getInstance()->addJs("/local/assets/js/bootstrap.offcanvas.min.js");
     Asset::getInstance()->addJs("/local/assets/js/slick.js");

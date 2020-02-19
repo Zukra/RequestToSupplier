@@ -17,9 +17,9 @@ $this->setFrameMode(true);
 /** @var \Bitrix\Iblock\Elements\EO_ElementSupplier $supplier */
 $supplier = $arResult['SUPPLIER'];
 $classColors = [
-    \Zkr\Api\Request::WAIT_REPLY     => 'color_new_waiting',
-    \Zkr\Api\Request::BLOCKED_UPDATE => 'color_updated_waiting',
-    \Zkr\Api\Request::SENT           => 'color_sent',
+    \Zkr\Supplier\Price\Request::WAIT_REPLY     => 'color_new_waiting',
+    \Zkr\Supplier\Price\Request::BLOCKED_UPDATE => 'color_updated_waiting',
+    \Zkr\Supplier\Price\Request::SENT           => 'color_sent',
 ];
 ?>
 <div class="request-list">
@@ -28,7 +28,7 @@ $classColors = [
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1><?= 'List of requests to ' . $supplier->getName() ?></h1>
+                    <h1><?= 'List of requests to ' . ($supplier ? $supplier->getName() : '') ?></h1>
                 </div>
             </div>
         </div>
@@ -58,16 +58,16 @@ $classColors = [
                                     <td>
                                         <? if (! $arParams["HIDE_LINK_WHEN_NO_DETAIL"] || ($arItem["DETAIL_TEXT"] && $arResult["USER_HAVE_ACCESS"])): ?>
                                             <a href="<? echo $arItem["DETAIL_PAGE_URL"] ?>">
-                                                <? echo $arItem["NAME"] ?>
+                                                <? echo substr($arItem["NAME"], 0, 11) ?>
                                             </a>
                                         <? else: ?>
-                                            <? echo $arItem["NAME"] ?>
+                                            <? echo substr($arItem["NAME"], 0, 11) ?>
                                         <? endif; ?>
                                     </td>
                                     <td><?= $arItem["FIELDS"]['TIMESTAMP_X'] ?></td>
                                     <td>
                                         <?= $arItem["DISPLAY_PROPERTIES"]['EVENT']['DISPLAY_VALUE'] ?> / <?= $arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] ?>
-                                        <? if ($arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] != \Zkr\Api\Request::WAIT_REPLY) { ?>
+                                        <? if ($arItem["DISPLAY_PROPERTIES"]['STATUS']['DISPLAY_VALUE'] != \Zkr\Supplier\Price\Request::WAIT_REPLY) { ?>
                                             by
                                             <a href="mailto:<?= $contact->getEmail()->getValue() ?>"><?= $contact->getName() ?></a>
                                         <? } ?>

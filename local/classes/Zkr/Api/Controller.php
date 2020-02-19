@@ -3,6 +3,8 @@
 
 namespace Zkr\Api;
 
+use Zkr\Supplier\Price\Request;
+
 class Controller
 {
     public static function OnRestServiceBuildDescription()
@@ -22,15 +24,15 @@ class Controller
                     'options'  => [],
                 ],
                 Request::SCOPE . '.getAll'  => [
-                    'callback' => [new \Zkr\Api\Request(), 'getAll'],
+                    'callback' => [new Request(), 'getAll'],
                     'options'  => [],
                 ],
                 Request::SCOPE . '.get'     => [
-                    'callback' => [new \Zkr\Api\Request(), 'get'],
+                    'callback' => [new Request(), 'get'],
                     'options'  => [],
                 ],
-                Request::SCOPE . '.update'     => [
-                    'callback' => [new \Zkr\Api\Request(), 'update'],
+                Request::SCOPE . '.update'  => [
+                    'callback' => [new Request(), 'update'],
                     'options'  => [],
                 ],
             ],

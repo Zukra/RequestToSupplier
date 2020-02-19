@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Zkr\Api;
+namespace Zkr\Supplier\Price;
 
 
 use Bitrix\Iblock\Elements\ElementRequestSpecificationTable;
@@ -18,17 +18,16 @@ use DateTime;
 
 class Request
 {
+    public const SCOPE = 'request';
+
     public const WAIT_REPLY     = 'Waiting for a reply';
     public const BLOCKED_UPDATE = 'Blocked for update';
     public const SENT           = 'Sent';
 
-    public const SCOPE = 'request';
-
     protected $arSelect = [
         "ID", "NAME", 'TIMESTAMP_X', 'REQUEST_ID', 'PAYMENT_ORDER', 'DELIVERY_TIME', 'INCOTERMS',
         "EMAIL", 'COMMENT', "CONTACT", 'CURRENCY', 'STATUS', 'EVENT', 'SUPPLIER_COMMENT',
-        'IS_BLOCKED',
-        "SPECIFICATION", "SUPPLIER",
+        'IS_BLOCKED', "SPECIFICATION", "SUPPLIER",
     ];
     protected $arFilter = ["ACTIVE" => "Y"];
     protected $arOrder  = ['ID'];
@@ -37,8 +36,9 @@ class Request
     {
         $result = [];
         if (! empty($query['id'])) {
-            $request = $this->getRequest($query);
-            $result = $this->getRequestValues($request);
+            if ($request = $this->getRequest($query)) {
+                $result = $this->getRequestValues($request);
+            };
         } else {
 //            $result = $this->getQuery($query, $n, $server);
         }
@@ -254,7 +254,7 @@ class Request
         $specification = ElementRequestSpecificationTable::getList([
             'select' => [
                 'ID', 'NAME', 'SKU', 'QUANTITY_R', 'SUPPLIER_QUANTITY',
-                'UNIT_MEASURE', 'SUPPLIER_UNIT', 'SUPPLIER_PRICE_UNIT',
+                'UNIT_MEASURE', 'SUPPLIER_UNIT', 'SUPPLIER_PRICE_UNIT', 'DESC_ID',
                 'DELIVERY_TIME', 'INCOTERMS', 'REPLACEMENT', 'COMMENT', 'SUPPLIER_COMMENT'
             ],
             'filter' => ['ID' => $request->getSpecification()->getValueList()]
@@ -266,6 +266,7 @@ class Request
                 'sku'           => $item->getSku()->getValue(),
                 'internal_id'   => $item->getId(),
                 'name'          => $item->getName(),
+                'desc_id'       => $item->getDescId()->getValue(),
                 'comment'       => $item->getComment()->getValue(),
                 'quantity_r'    => $item->getQuantityR()->getValue(),
                 'unit_measure'  => $item->getUnitMeasure()->getValue(),
@@ -579,6 +580,7 @@ class Request
             }
             $specification
                 ->setTimestampX(new \Bitrix\Main\Type\DateTime())
+                ->setDescId($datum['desc_id'] ?? '')
                 ->setRequest($requestId)
                 ->setSku($datum['sku'])
                 ->setName($datum['name'])

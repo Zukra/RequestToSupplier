@@ -17,7 +17,7 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\Type\DateTime;
 use CBitrixComponent;
 use CIBlockElement;
-use Zkr\Api\Request;
+use Zkr\Supplier\Price\Request;
 
 class CustomAjax extends CBitrixComponent implements Controllerable
 {
@@ -118,7 +118,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             'request_id'  => "00001-0002"
         ];
 
-        $request = new \Zkr\Api\Request();
+        $request = new \Zkr\Supplier\Price\Request();
         /** @var EO_ElementSupplier $supplier */
         $supplier = $request->updateSupplierKey($params);
         if ($supplier) {
@@ -141,7 +141,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
 
         $data = ['status' => 0, 'errors' => 'error!'];
 
-        $request = new \Zkr\Api\Request();
+        $request = new \Zkr\Supplier\Price\Request();
         /** @var EO_ElementSupplier $supplier */
         $supplier = $request->updateSupplierKey($params);
         if ($supplier) {
