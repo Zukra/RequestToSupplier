@@ -50,27 +50,25 @@ $this->setFrameMode(true);
                             </span>
                             Back to Requests
                         </a>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-
-    
 
     <section class="general_terms">
         <div class="container title_gen_it">
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <div class="gen_title">
-                        <h3><b><?= substr($arResult["NAME"], 0,11) ?></b></h3>
+                        <h3><b><?= substr($arResult["NAME"], 0, 11) ?></b></h3>
                         <h1><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] . ' to ' . $supplier->getName() ?></h1>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">
-                    <div class="gen_ststus status_new_waiting <?= $classColors[$arResult["PROPERTIES"]['STATUS']["VALUE"]] ?>">
-                        <p><?=$arResult["PROPERTIES"]['STATUS']["VALUE"] ?></p>
-                        <p><span>Changes is saving...</span></p>
+                    <div class="gen_ststus <?= $classColors[$arResult["PROPERTIES"]['STATUS']["VALUE"]] ?>">
+                        <p class="status"><?= $arResult["PROPERTIES"]['STATUS']["VALUE"] ?></p>
+                        <? /*<p><span>Changes is saving...</span></p>*/ ?>
                     </div>
                 </div>
             </div>
@@ -136,7 +134,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Delivery conditions INCOTERMS 2010
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus"  data-content="And here's some amazing content. It's very engaging. Right?">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
                                     </label>
@@ -152,7 +150,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Currency
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus"  data-content="And here's some amazing content. It's very engaging. Right?">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
                                         <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
@@ -171,7 +169,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Contact
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus"  data-content="And here's some amazing content. It's very engaging. Right?">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
@@ -232,7 +230,7 @@ $this->setFrameMode(true);
                                             <div class="specif_search">
                                                 <input type="text" class="form-control"
                                                        id="" placeholder="Quick search by table"
-                                                onkeyup="filterSearch(this)">
+                                                       onkeyup="filterSearch(this)">
                                             </div>
                                         </div>
                                     </div>
@@ -449,4 +447,9 @@ $this->setFrameMode(true);
 
 </div>
 
-
+<script>
+    BX.message({
+        classColors: '<?= json_encode($classColors); ?>',
+        BLOCKED_UPDATE: '<?=\Zkr\Supplier\Price\Request::BLOCKED_UPDATE?>'
+    });
+</script>

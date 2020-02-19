@@ -148,7 +148,6 @@ $(function () {
         $(this).parent().removeClass('has-error');
     });
 
-
     function updateGeneralTerm(that) {
         var elem      = $(that),
             requestId = $('form[name="request"] input[name="request-id"]').val(),
@@ -174,7 +173,7 @@ $(function () {
                 }
             ).then(function (response) {
                 if (response.status === 'success') {
-                    // console.log('update general terms!');
+                    changeStatus();
                 }
             }).catch(function (reason) {
                 console.log(reason);
@@ -205,6 +204,7 @@ $(function () {
             ).then(function (response) {
                 if (response.status === 'success') {
                     // console.log('specification updated!');
+                    changeStatus()
                 }
             }).catch(function (reason) {
                 console.log(reason);
@@ -263,7 +263,6 @@ $(function () {
     }
 });
 
-
 function filterSearch(that) {
     var specification = $('.specification'),
         items         = specification.find('.specification-item'),
@@ -283,4 +282,16 @@ function filterSearch(that) {
         items.show();
         return true;
     }
+}
+
+function changeStatus() {
+    var classColors   = JSON.parse(BX.message('classColors')),
+        blockedUpdate = BX.message('BLOCKED_UPDATE'),
+        block         = $('.general_terms .gen_ststus');
+    for (var prop in classColors) {
+        block.removeClass(classColors[prop]);
+        // console.log(prop, classColors[prop]);
+    }
+    block.addClass(classColors[blockedUpdate]);
+    block.find('.status').html(blockedUpdate);
 }
