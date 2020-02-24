@@ -39,8 +39,6 @@ $currentContact = $arResult["PROPERTIES"]["CONTACT"]['VALUE']
 
 $isBlocked = $arResult["PROPERTIES"]["IS_BLOCKED"]['VALUE'];
 
-dump($isBlocked, bitrix_sessid(), $arResult["PROPERTIES"]["SESSION_ID"]['VALUE']);
-
 $this->setFrameMode(true);
 ?>
 <div class="request-detail">
