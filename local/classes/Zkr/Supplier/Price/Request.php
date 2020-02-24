@@ -27,7 +27,7 @@ class Request
     protected $arSelect = [
         "ID", "NAME", 'TIMESTAMP_X', 'REQUEST_ID', 'PAYMENT_ORDER', 'DELIVERY_TIME', 'INCOTERMS',
         "EMAIL", 'COMMENT', "CONTACT", 'CURRENCY', 'STATUS', 'EVENT', 'SUPPLIER_COMMENT',
-        'IS_BLOCKED', "SPECIFICATION", "SUPPLIER",
+        'IS_BLOCKED', "SPECIFICATION", "SUPPLIER", 'SESSION_ID'
     ];
     protected $arFilter = ["ACTIVE" => "Y"];
     protected $arOrder  = ['ID'];

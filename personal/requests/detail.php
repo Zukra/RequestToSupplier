@@ -53,7 +53,7 @@ if ($requestId) { ?>
             "PAGER_SHOW_ALL"            => "N",
             "PAGER_TEMPLATE"            => ".default",
             "PAGER_TITLE"               => "Страница",
-            "PROPERTY_CODE"             => ["EMAIL", "REQUEST_ID", "INCOTERMS", "CURRENCY", "IS_BLOCKED", "COMMENT", "SUPPLIER_COMMENT", "EVENT", "DELIVERY_TIME", "PAYMENT_ORDER", "STATUS", "SUPPLIER", "SPECIFICATION", ""],
+            "PROPERTY_CODE"             => ["EMAIL", "REQUEST_ID", "INCOTERMS", "CURRENCY", "IS_BLOCKED", "COMMENT", "SUPPLIER_COMMENT", "EVENT", "DELIVERY_TIME", "PAYMENT_ORDER", "STATUS", "SUPPLIER", "SPECIFICATION", "SESSION_ID",""],
             "SET_BROWSER_TITLE"         => "Y",
             "SET_CANONICAL_URL"         => "N",
             "SET_LAST_MODIFIED"         => "N",

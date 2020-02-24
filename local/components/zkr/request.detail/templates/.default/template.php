@@ -33,10 +33,22 @@ $classColors = [
     \Zkr\Supplier\Price\Request::BLOCKED_UPDATE => 'color_updated_waiting',
     \Zkr\Supplier\Price\Request::SENT           => 'color_sent',
 ];
+$currentContact = $arResult["PROPERTIES"]["CONTACT"]['VALUE']
+    ? $supplierContacts->getByPrimary($arResult["PROPERTIES"]["CONTACT"]['VALUE'])
+    : null;
+
+$isBlocked = $arResult["PROPERTIES"]["IS_BLOCKED"]['VALUE'];
+
+dump($isBlocked, bitrix_sessid(), $arResult["PROPERTIES"]["SESSION_ID"]['VALUE']);
 
 $this->setFrameMode(true);
 ?>
 <div class="request-detail">
+    <input type="hidden" id="bitrix_session_id"
+           name="bitrix_session_id"
+           value="<?= bitrix_sessid() ?>"
+           data-id="<?= $arResult["PROPERTIES"]['SESSION_ID']["ID"] ?>"
+           data-code="<?= $arResult["PROPERTIES"]['SESSION_ID']["CODE"] ?>">
 
     <section class="bread_crumbs_sect">
         <div class="container">
@@ -62,15 +74,42 @@ $this->setFrameMode(true);
                 <div class="col-xs-12 col-sm-8">
                     <div class="gen_title">
                         <h3><b><?= substr($arResult["NAME"], 0, 11) ?></b></h3>
-                        <h1><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] . ' to ' . $supplier->getName() ?></h1>
+                        <h1>
+                            <span class="request-event"><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] ?></span>
+                            <span class="request-by_blocked">
+                                <? if ($arResult["PROPERTIES"]["IS_BLOCKED"]['VALUE']) { ?>
+                                    by
+                                    <span class="blocked-contact">
+                                        <?= $currentContact->state
+                                            ? $currentContact->getName() . ' (' . $currentContact->getEmail()->getValue() . ')'
+                                            : '' ?>
+                                    </span>
+                                <? } ?>
+                            </span>
+                            <span class="request-supplier"><?= ' to ' . $supplier->getName() ?></span>
+                        </h1>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">
                     <div class="gen_ststus <?= $classColors[$arResult["PROPERTIES"]['STATUS']["VALUE"]] ?>">
                         <p class="status"><?= $arResult["PROPERTIES"]['STATUS']["VALUE"] ?></p>
-                        <p><span class="saving_data">Changes is saving...</span>
+                        <p>
+                            <span class="saving_data">Changes is saving...</span>
                         </p>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <? if ($isBlocked && bitrix_sessid() != $arResult["PROPERTIES"]["SESSION_ID"]['VALUE']) { ?>
+                        <div class="form_usb">
+                            <button type="button" class="js-take_request_control btn btn-gen_it title_help" data-title="If you want to take general control of the request">
+                                Take control of the request
+                            </button>
+                        </div>
+                    <? } ?>
                 </div>
             </div>
         </div>
@@ -85,7 +124,7 @@ $this->setFrameMode(true);
                 </div>
             </div>
         </div>
-        <div class="container form_gen_it">
+        <div class="container form_gen_it <?= $isBlocked && bitrix_sessid() != $arResult["PROPERTIES"]["SESSION_ID"]['VALUE'] ? 'no_active' : '' ?>">
             <div class="row">
                 <div class="col-xs-12">
                     <div class="gen_name"><p>General terms</p></div>
@@ -134,7 +173,7 @@ $this->setFrameMode(true);
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-4 control-label">Delivery conditions INCOTERMS 2010
+                                    <label class="col-sm-4 control-label">Delivery conditions INCOTERMS 2010
                                         <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
@@ -150,13 +189,13 @@ $this->setFrameMode(true);
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-4 control-label">Currency
+                                    <label class="col-sm-4 control-label">Currency
                                         <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
                                         <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
                                     <div class="col-sm-8">
-                                        <select class="browser-default custom-select form-control" id="" name="currency"
+                                        <select class="browser-default custom-select form-control" name="currency"
                                                 data-id="<?= $arResult["PROPERTIES"]['CURRENCY']["ID"] ?>"
                                                 data-code="<?= $arResult["PROPERTIES"]['CURRENCY']["CODE"] ?>">
                                             <? foreach ($currencies as $key => $currency) { ?>
@@ -169,14 +208,14 @@ $this->setFrameMode(true);
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-4 control-label">Contact
+                                    <label class="col-sm-4 control-label">Contact
                                         <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
                                     <div class="col-sm-8">
                                         <select class="custom-browser-default custom-select form-control"
-                                                id="" name="contact"
+                                                name="contact"
                                                 data-id="<?= $arResult["PROPERTIES"]['CONTACT']["ID"] ?>"
                                                 data-code="<?= $arResult["PROPERTIES"]['CONTACT']["CODE"] ?>">
                                             <? foreach ($supplierContacts as $contact) { ?>
@@ -389,7 +428,7 @@ $this->setFrameMode(true);
                                                 </p>
                                             </div>
                                             <div class="col-xs-12 col-sm-9 col-md-9">
-                                                <span class="total-price">0</span>
+                                                <span class="total-price">0.00</span>
                                                 <span class="total-currency"></span>
                                             </div>
                                         </div>

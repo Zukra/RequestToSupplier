@@ -6,7 +6,8 @@
   ],
   "require": {
     "wikimedia/composer-merge-plugin": "^1.4",
-    "ext-json": "*"
+    "ext-json": "*",
+    "ext-curl": "*"
   },
   "extra": {
     "merge-plugin": {

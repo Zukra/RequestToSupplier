@@ -107,12 +107,12 @@ $(function () {
 
     $('form[name="request"] .general-term select').change(function (event) {
         if ($(this).val() !== "0") {
-            // setTimeout(function () {
             if (this.name === 'currency') {
                 setTotalCurrency();
+            } else if (this.name === 'contact') {
+                $('.general_terms .request-by_blocked .blocked-contact').html($(this).find(':selected').html());
             }
             updateGeneralTerm(this);
-            // }, 100);
         } else {
             blockNewContact.show();
         }
@@ -153,6 +153,14 @@ $(function () {
         blockContact.val(oldValueContact);
     });
 
+    $('.request-detail .js-take_request_control').click(function (event) {
+        var prop = document.getElementById('bitrix_session_id');
+        updateGeneralTerm(prop, function () {
+            console.log(prop);
+            location.reload();
+        });
+    });
+
     $('form[name="request"] .js-add-new-contact').click(function (event) {
         var name    = blockNewContact.find('input[name=new_name]'),
             email   = blockNewContact.find('input[name=new_email]'),
@@ -181,7 +189,7 @@ $(function () {
         $(this).parent().removeClass('has-error');
     });
 
-    function updateGeneralTerm(that) {
+    function updateGeneralTerm(that, callback) {
         if (++count > max) {
             clearTimeout(timer);
             count = 0;
@@ -210,6 +218,9 @@ $(function () {
                     }
                 ).then(function (response) {
                     if (response.status === 'success') {
+                        if (callback && typeof callback === 'function') {
+                            callback();
+                        }
                         changeStatus(BX.message('BLOCKED_UPDATE'));
                     }
                 }).catch(function (reason) {
@@ -217,7 +228,7 @@ $(function () {
                 });
             }
         } else {
-            timer = setTimeout(updateGeneralTerm, delay, that);
+            timer = setTimeout(updateGeneralTerm, delay, that, callback);
         }
     }
 
@@ -278,7 +289,7 @@ $(function () {
             summ += parseFloat($(item).find('input[name=quantity_s]').val())
                 * parseFloat($(item).find('input[name=price_s]').val());
         });
-        total.html(summ >= 0 ? summ : 'NaN');
+        total.html(summ >= 0 ? parseFloat(summ.toFixed(2)) : 'NaN');
         setTotalCurrency();
     }
 
@@ -343,5 +354,7 @@ function changeStatus(status) {
     }
     block.addClass(classColors[status]);
     block.find('.status').html(status);
+    $('.general_terms .request-event').html(status);
     $('.gen_ststus .saving_data').show();
+    setTimeout("$('.gen_ststus .saving_data').hide()", 1000);
 }
