@@ -132,10 +132,10 @@ $this->setFrameMode(true);
                         <form class="form-horizontal" role="form" name="request" method="post">
                             <div class="general-term">
                                 <input type="hidden" name="request-id" value="<?= $arResult['ID'] ?>">
-                                <input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>">
                                 <input type="hidden" name="request-1c" value="<?= $arResult['PROPERTIES']['REQUEST_ID']['VALUE'] ?>">
                                 <input type="hidden" name="supplier-id" value="<?= $supplier->getId() ?>">
-                                <input type="hidden" name="key" value="<?= $_SESSION["access_key"] ?>">
+                                <?/*<input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>">
+                                <input type="hidden" name="key" value="<?= $_SESSION["access_key"] ?>">*/?>
 
                                 <? /*<div class="form-group has-error">*/ ?>
                                 <div class="form-group">

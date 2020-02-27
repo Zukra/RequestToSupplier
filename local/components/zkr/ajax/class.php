@@ -16,9 +16,10 @@ use Bitrix\Iblock\Elements\EO_ElementSupplierContact;
 use Bitrix\Main\Engine\ActionFilter;
 use Bitrix\Main\Engine\Contract\Controllerable;
 use Bitrix\Main\Loader;
-use Bitrix\Main\Type\DateTime;
 use CBitrixComponent;
 use CIBlockElement;
+use Zkr\Helper;
+use Zkr\Supplier\Price\Models\Supplier;
 use Zkr\Supplier\Price\Request;
 
 class CustomAjax extends CBitrixComponent implements Controllerable
@@ -30,17 +31,6 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         // Предустановленные фильтры находятся в папке /bitrix/modules/main/lib/engine/actionfilter/
         return [
             // Ajax-метод
-            'getKey'                   => [
-                'prefilters'  => [
-                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
-                    //                    new ActionFilter\Csrf(),
-                    //                    new ActionFilter\Authentication(),
-                ],
-                '-prefilters' => [
-                    ActionFilter\Authentication::class
-                ],
-                'postfilters' => [],
-            ],
             'updateSupplierKey'        => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
@@ -52,11 +42,9 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                 ],
                 'postfilters' => [],
             ],
-            'getNewSupplierKey'        => [
+            'newKeyEmail'              => [
                 'prefilters'  => [
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
-                    //                    new ActionFilter\Csrf(),
-                    //                    new ActionFilter\Authentication(),
                 ],
                 '-prefilters' => [
                     ActionFilter\Authentication::class
@@ -124,48 +112,52 @@ class CustomAjax extends CBitrixComponent implements Controllerable
     {
     }
 
-    /**
-     * @return array
-     */
-    public function getKeyAction($params)
-    {
-        $data = ['status' => 0, 'errors' => 'errror!'];
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $params['url']);
-        curl_setopt($ch, CURLOPT_HEADER, true);
-        curl_setopt($ch, CURLOPT_NOBODY, true); // remove body
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-//        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
-        $head = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-        curl_close($ch);
-
-        return $head;
-//        return $data;
-    }
 
     public function updateSupplierKeyAction($params)
     {
-        $params["key_expiry"] = time();
-
         $data = ['status' => 0, 'errors' => 'error!'];
 
-        $request = new \Zkr\Supplier\Price\Request();
-        /** @var EO_ElementSupplier $supplier */
-        $supplier = $request->updateSupplierKey($params);
-        if ($supplier) {
-            $data = [
-                "status"      => 1,
-                "supplier_id" => $supplier->getIdOneC()->getValue(),    // id поставщика в 1С
-                "key"         => $supplier->getKey()->getValue(),   // сгенерированный ключ
-                "key_expiry"  => $supplier->getExpiryDate()->getValue(), // дата окончания действия ключа Unix-формат
-                "email"       => $params['email'],             // contact email (email ответственного лица) или ID сформированного к отправке письма
-                'request_id'  => $params['request_id']
+//        $url = 'http://API:1111m@138.201.231.186:8080/testnew2/hs/1c/api/v1/request/getKey';
+        $baseUrl = BASE_URL_1C_API;
+        $uri = 'request/getKey';
+
+        $result = Helper::sendHttp($baseUrl, $uri, $params);
+        if ($result["status"] < 1) {
+            $data['errors'] = $result['errors'];
+        } else {
+            $params = [
+                "supplier_id" => $result['data']["supplier_id"],
+                "key"         => $result['data']["key"],
+                "email"       => $result['data']["email"],
+                "key_expiry"  => $result['data']["key_expiry"],
+                "request_id"  => $result['data']["request_id"] ?? '',
             ];
+            $supplier = Supplier::updateSupplierKey($params);
+            if ($supplier) {
+                $data = [
+                    "status"      => 1,
+                    "supplier_id" => $supplier->getIdOneC()->getValue(),    // id поставщика в 1С
+                    "key"         => $supplier->getKey()->getValue(),   // сгенерированный ключ
+                    "key_expiry"  => $supplier->getExpiryDate()->getValue(), // дата окончания действия ключа Unix-формат
+                    "email"       => $params['email'],             // contact email (email ответственного лица) или ID сформированного к отправке письма
+                    'request_id'  => $params['request_id'] ?? ''
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    public function newKeyEmailAction($params)
+    {
+        $data = ["status" => 1];
+        $baseUrl = BASE_URL_1C_API;
+        $uri = 'request/newKeyEmail';
+
+        $result = Helper::sendHttp($baseUrl, $uri, $params);
+
+        if ($result["status"] < 1) {
+            $data = ["status" => 0, 'errors' => $result['errors']];
         }
 
         return $data;
@@ -287,27 +279,26 @@ class CustomAjax extends CBitrixComponent implements Controllerable
 
     public function sendRequestDataAction($params)
     {
-        $props = [
-            'IS_BLOCKED' => false,
-            'STATUS'     => Request::SENT,
-            'EVENT'      => Request::SENT
-        ];
+        $data = ["status" => 1];
+        $request = \Zkr\Supplier\Price\Models\Request::getById($params['request_id']);
+        if ($request) {
+            $requestAr = \Zkr\Supplier\Price\Models\Request::toArray($request);
+            $requestAr = ['data' => $requestAr];
+            $baseUrl = BASE_URL_1C_API;
+            $uri = 'request/update';
+            $result = Helper::sendHttp($baseUrl, $uri, $requestAr);
 
-        $el = new CIBlockElement;
-        $el->Update($params['request_id'], ['TIMESTAMP_X' => new \Bitrix\Main\Type\DateTime()]);
-        CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
-    }
+            if ($result["status"] < 1) {
+                $data = ["status" => 0, 'errors' => $result['errors']];
+            } else {
+                $props = ['IS_BLOCKED' => false, 'STATUS' => Request::SENT, 'EVENT' => Request::SENT];
+                $el = new CIBlockElement;
+                $el->Update($params['request_id'], ['TIMESTAMP_X' => new \Bitrix\Main\Type\DateTime()]);
+                CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
 
-    public function getNewSupplierKeyAction($params)
-    {
-        $data = [
-            "status"      => 1,
-            "supplier_id" => $params['id'],    // id поставщика в 1С
-            "key"         => substr(md5(mt_rand()), 0, 15),// сгенерированный ключ
-            "key_expiry"  => new DateTime(null, 'Y-m-d'), // дата окончания действия ключа Unix-формат
-            "email"       => $params['email'],             // contact email (email ответственного лица) или ID сформированного к отправке письма
-            'request_id'  => $params['request_id'] ?? ''
-        ];
+                $data = ["status" => 1, 'data' => $result];
+            }
+        }
 
         return $data;
     }
@@ -327,4 +318,5 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             CIBlockElement::SetPropertyValuesEx($params['request_id'], false, $props);
         }
     }
+
 }

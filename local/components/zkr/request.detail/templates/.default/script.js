@@ -12,30 +12,6 @@ $(function () {
             delay           = 50,
             timer           = 0;
 
-        /*var checkUserActivity = function () {
-            var requestId = requestForm.find('input[name="request-id"]').val();
-            if (requestId) {
-                var params = {
-                    request_id: requestId,
-                    value: 0
-                };
-                BX.ajax.runComponentAction('zkr:ajax',
-                    'setRequestBlockingStatus', {
-                        mode: 'class',
-                        data: {params: params}
-                    }
-                ).then(function (response) {
-                    if (response.status === 'success') {
-                        location.reload();
-                        // changeStatus(BX.message('WAIT_REPLY'));
-                    }
-                }).catch(function (reason) {
-                    console.log(reason);
-                });
-            }
-        };*/
-
-
         recalcTotal();
 
         $('.js_form_submit').click(function () {
@@ -65,10 +41,10 @@ $(function () {
                 return false;
             }
 
-            var request1cId = $('form[name="request"] input[name="request-1c"]').val(),
-                id          = $('form[name="request"] input[name="request-id"]').val(),
-                token       = $('form[name="request"] input[name="request-token"]').val(),
-                key         = $('form[name="request"] input[name="key"]').val();
+            var id = $('form[name="request"] input[name="request-id"]').val();
+            // var request1cId = $('form[name="request"] input[name="request-1c"]').val(),
+            //     token       = $('form[name="request"] input[name="request-token"]').val(),
+            //     key         = $('form[name="request"] input[name="key"]').val();
 
             var params = {request_id: id};
 
@@ -76,27 +52,36 @@ $(function () {
                 'sendRequestData', {mode: 'class', data: {params: params}}
             ).then(function (response) {
                 if (response.status === 'success') {
+                    if (response.data.status === 1) {
+                        location.href = "/personal/requests/";
+                    } else {
+                        console.log(response.data.errors);
+                    }
                     // get request
-                    $.ajax({
+                    /*$.ajax({
                         method: "POST",
                         url: "/api/v2/request.get",
                         data: {id: request1cId, token: token}
                     }).done(function (data) {
-                        var params = {data: data.result};
+                        console.log(data);
+                        /!*var params = {data: data.result};
                         // console.log(params);
                         // send request data to 1C
                         $.ajax({
                             method: "POST",
                             url: "/1c/api/v2/request.get",
-                            data: params
-                            // dataType: "json",
-                            // contentType: 'application/json'
+                            data: params,
+                            dataType: "json",
+                            contentType: 'application/json'
                         }).done(function (data) {
                             // console.log("data");
                         }).fail(function () {
                         });
-                        location.href = "/personal/requests/?key=" + key;
-                    });
+                        location.href = "/personal/requests/?key=" + key;*!/
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        // var err = eval("(" + jqXHR.responseText + ")");
+                        console.dir(jqXHR.responseText, jqXHR.status, jqXHR.statusText, textStatus, errorThrown);
+                    });*/
                 }
             }).catch(function (reason) {
                 console.log(reason);
@@ -137,8 +122,8 @@ $(function () {
         $('form[name="request"] .specification .recalc').keyup(function (event) {
             var __self   = $(this),
                 specItem = __self.parents('.specification-item'),
-                count1   = parseFloat(specItem.find('.recalc').eq(0).val().replace(',','.')),
-                count2   = parseFloat(specItem.find('.recalc').eq(1).val().replace(',','.')),
+                count1   = parseFloat(specItem.find('.recalc').eq(0).val().replace(',', '.')),
+                count2   = parseFloat(specItem.find('.recalc').eq(1).val().replace(',', '.')),
                 total    = count1 * count2;
 
             specItem.find('.total').html(total >= 0 ? parseFloat(total.toFixed(2)) : 'NaN');
@@ -318,8 +303,8 @@ $(function () {
                 items = form.find('.specification-item'),
                 summ  = 0;
             items.each(function (index, item) {
-                summ += parseFloat($(item).find('input[name=quantity_s]').val().replace(',','.'))
-                    * parseFloat($(item).find('input[name=price_s]').val().replace(',','.'));
+                summ += parseFloat($(item).find('input[name=quantity_s]').val().replace(',', '.'))
+                    * parseFloat($(item).find('input[name=price_s]').val().replace(',', '.'));
             });
             total.html(summ >= 0 ? parseFloat(summ.toFixed(2)) : 'NaN');
             setTotalCurrency();
