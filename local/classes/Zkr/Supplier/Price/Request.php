@@ -238,8 +238,8 @@ class Request
                 ->setUnitMeasure($datum['unit_measure']);
             // данные, заполненные поставщиком
             $specification
-                ->setSupplierQuantity($datum['quantity_s'])
-                ->setSupplierUnit($datum['unit_s'])
+                ->setSupplierQuantity($datum['quantity_s'] ?: $datum['quantity_r'])
+                ->setSupplierUnit($datum['unit_s'] ?: $datum['unit_measure'])
                 ->setSupplierPriceUnit($datum['price_s'])
                 ->setIncoterms($datum['incoterms'])
                 ->setDeliveryTime($datum['delivery_time'])
