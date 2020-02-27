@@ -12,16 +12,16 @@ $supplier = $arResult['SUPPLIER'];
             <div class="col-xs-12">
                 <h1>EMK for suppliers</h1>
                 <form class="form-horizontal" role="form" name="update-supplier-key" action="#">
+                    <? if ($supplier) { ?>
+                        <input type="hidden" name="supplier-key" value="<?= $supplier->getKey()->getValue() ?>">
+                        <input type="hidden" name="supplier-name" value="<?= $supplier->getName() ?>">
+                        <input type="hidden" name="supplier-id" value="<?= $supplier->getIdOneC()->getValue() ?>">
+                    <? } ?>
                     <input type="hidden" name="request-id" value="<?= $arParams['REQUEST_ID'] ?: '' ?>">
-                    <? /*
-                    <input type="hidden" name="supplier-key" value="<?= $supplier->getKey()->getValue() ?>">
-                    <input type="hidden" name="supplier-name" value="<?= $supplier->getName() ?>">
-                    <input type="hidden" name="supplier-id" value="<?= $supplier->getIdOneC()->getValue() ?>">
-*/ ?>
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <input type="email" class="form-control" id="" name="email" placeholder="Email" required>
+                            <input type="email" class="form-control" name="email" placeholder="Email" required value="test@test.com">
                         </div>
                     </div>
                     <div class="form-group text_cent">
@@ -54,3 +54,9 @@ $supplier = $arResult['SUPPLIER'];
         </div>
     </div>
 </div>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#successUpdateKey">
+  Launch demo modal
+</button>
+

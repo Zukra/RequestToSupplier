@@ -7,7 +7,8 @@
   "require": {
     "wikimedia/composer-merge-plugin": "^1.4",
     "ext-json": "*",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "guzzlehttp/guzzle": "~6.0"
   },
   "extra": {
     "merge-plugin": {
@@ -21,7 +22,6 @@
       "classes/"
     ],
     "psr-4": {
-      "Emk\\": "classes/Emk/",
       "Zkr\\": "classes/Zkr/"
     }
   },

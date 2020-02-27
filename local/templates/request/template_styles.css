@@ -980,6 +980,9 @@ h3.popover-header {
     padding : 5px;
 }
 
+#successUpdateKey{
+    opacity: 1;
+}
 @media (min-width : 1200px) {
     .general-term {
         width  : 990px;
