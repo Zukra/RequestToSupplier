@@ -3,6 +3,21 @@
 $(function () {
         $('.gen_ststus .saving_data').hide();
 
+        $('.specification .specification-item [name=price_s]').each(function (index, item) {
+            var cleave = new Cleave(item, {
+                numeral: true,
+                delimiter: '',
+                numeralDecimalMark: '.',
+                numeralDecimalScale: 2,
+                numeralPositiveOnly: true,
+                // numeralThousandsGroupStyle: 'thousand'
+            });
+        })
+
+
+        // $('form[name="request"] .specification .specification-item [name=price_s]').mask("999 999 999.99", {placeholder: " "});
+
+
         var requestForm     = $('form[name="request"]'),
             blockNewContact = requestForm.find('.new-contact'),
             blockContact    = requestForm.find('.general-term select[name=contact]'),
@@ -17,6 +32,10 @@ $(function () {
         $('.js_form_submit').click(function () {
             requestForm.submit();
         });
+
+        requestForm.find('[name=price_s]').focus(function () {
+            $(this).select();
+        })
 
         requestForm.on('keydown', function (event) {
             if (event.keyCode === 13 && event.target.type !== 'textarea') {
@@ -122,8 +141,8 @@ $(function () {
         $('form[name="request"] .specification .recalc').keyup(function (event) {
             var __self   = $(this),
                 specItem = __self.parents('.specification-item'),
-                count1   = parseFloat(specItem.find('.recalc').eq(0).val().replace(',', '.')),
-                count2   = parseFloat(specItem.find('.recalc').eq(1).val().replace(',', '.')),
+                count1   = parseFloat(specItem.find('.recalc').eq(0).val().replace(',', '.').replace(/\s/g, '')),
+                count2   = parseFloat(specItem.find('.recalc').eq(1).val().replace(',', '.').replace(/\s/g, '')),
                 total    = count1 * count2;
 
             specItem.find('.total').html(total >= 0 ? parseFloat(total.toFixed(2)) : 'NaN');
@@ -203,25 +222,26 @@ $(function () {
                     ).then(function (response) {
                         if (response.status === 'success') {
                             // если заблокирована другим, то обновление страницы
-                            if (response.data.blocked > 0) {
+                            if (response.data.blocked > 0 && propName !== 'bitrix_session_id') {
                                 location.reload();
-                            }
-                            // обновление данные
-                            BX.ajax.runComponentAction('zkr:ajax',
-                                'updateRequest', {
-                                    mode: 'class',
-                                    data: {params: params}
-                                }
-                            ).then(function (response) {
-                                if (response.status === 'success') {
-                                    if (callback && typeof callback === 'function') {
-                                        callback();
+                            } else {
+                                // обновление данные
+                                BX.ajax.runComponentAction('zkr:ajax',
+                                    'updateRequest', {
+                                        mode: 'class',
+                                        data: {params: params}
                                     }
-                                    changeStatus(BX.message('BLOCKED_UPDATE'));
-                                }
-                            }).catch(function (reason) {
-                                console.log(reason);
-                            });
+                                ).then(function (response) {
+                                    if (response.status === 'success') {
+                                        if (callback && typeof callback === 'function') {
+                                            callback();
+                                        }
+                                        changeStatus(BX.message('BLOCKED_UPDATE'));
+                                    }
+                                }).catch(function (reason) {
+                                    console.log(reason);
+                                });
+                            }
                         }
                     }).catch(function (reason) {
                         console.log(reason);
@@ -304,10 +324,14 @@ $(function () {
                 summ  = 0;
             items.each(function (index, item) {
                 summ += parseFloat($(item).find('input[name=quantity_s]').val().replace(',', '.'))
-                    * parseFloat($(item).find('input[name=price_s]').val().replace(',', '.'));
+                    * parseFloat($(item).find('input[name=price_s]').val().replace(',', '.').replace(/\s/g, ''));
             });
-            total.html(summ >= 0 ? parseFloat(summ.toFixed(2)) : 'NaN');
+            total.html(summ >= 0 ? number_format(parseFloat(summ.toFixed(2)), 2, '.', ' ') : 'NaN');
             setTotalCurrency();
+
+            $('form[name="request"] .specification .specification-item .total').each(function (index, item) {
+                $(item).text(number_format(parseFloat($(item).text()), 2, '.', ' '));
+            })
         }
 
         function addNewContact() {

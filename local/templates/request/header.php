@@ -24,6 +24,7 @@ use Bitrix\Main\Page\Asset;
 //    CJSCore::Init(["fx", 'ajax']);
     CJSCore::Init(['jquery3', "fx", 'ajax']);
     //    Asset::getInstance()->addJs("/local/assets/js/jquery-3.4.1.min.js");
+        Asset::getInstance()->addJs("/local/assets/js/cleave.min.js");
     //    Asset::getInstance()->addJs("/local/assets/js/popper.min.js");
     Asset::getInstance()->addJs("/local/assets/js/popper-1.14.7.min.js");
 //            Asset::getInstance()->addJs("/local/assets/js/bootstrap-3.0.3.min.js");
