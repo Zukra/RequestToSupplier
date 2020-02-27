@@ -30,8 +30,11 @@ class Request
     {
         $result = [];
         if (! empty($query['id'])) {
-            $request = \Zkr\Supplier\Price\Models\Request::getById($query['id']);
+//            $request = \Zkr\Supplier\Price\Models\Request::getById($query['id']);
+            $request = \Zkr\Supplier\Price\Models\Request::getBy1CId($query['id']);
             if ($request) {
+                $request->setIsBlocked(false);
+                $request->save();
                 $result = \Zkr\Supplier\Price\Models\Request::toArray($request);
             }
         }
