@@ -1,6 +1,16 @@
 "use strict";
 
 $(function () {
+
+        var requestForm     = $('form[name="request"]'),
+            blockNewContact = requestForm.find('.new-contact'),
+            blockContact    = requestForm.find('.general-term select[name=contact]'),
+            oldValueContact = blockContact.val(),
+            count           = 0,
+            max             = 20,
+            delay           = 50,
+            timer           = 0;
+
         $('.gen_ststus .saving_data').hide();
 
         $('.specification .specification-item [name=price_s]').each(function (index, item) {
@@ -14,17 +24,8 @@ $(function () {
             });
         })
 
-
-        var requestForm     = $('form[name="request"]'),
-            blockNewContact = requestForm.find('.new-contact'),
-            blockContact    = requestForm.find('.general-term select[name=contact]'),
-            oldValueContact = blockContact.val(),
-            count           = 0,
-            max             = 20,
-            delay           = 50,
-            timer           = 0;
-
         recalcTotal();
+        setRawRowsCounter();
 
         $('.js_form_submit').click(function () {
             requestForm.submit();
@@ -124,6 +125,7 @@ $(function () {
             specItem.find('.total').html(total >= 0 ? number_format(total, 2, '.', ' ') : 'NaN');
 
             recalcTotal();
+            setRawRowsCounter();
 
             return true;
         });
@@ -167,6 +169,26 @@ $(function () {
         $('form[name="request"] .new-contact input[name=new_name], form[name="request"] .new-contact input[name=new_email]').keyup(function (event) {
             $(this).parent().removeClass('has-error');
         });
+
+        $('form[name="request"] .js_raw_rows_counter').click(function (event) {
+            var isActive = $(this).hasClass('active');
+
+            $('form[name="request"] .specification .specification-item').each(function (index, item) {
+                var price = $(item).find('[name=price_s]').val();
+                if (price > 0 && !isActive) {
+                    $(item).hide();
+                } else {
+                    $(item).show();
+                }
+            })
+            if(isActive){
+                $(this).find('.raw_rows_text').show();
+                $(this).find('.all_rows_text').hide();
+            }else{
+                $(this).find('.raw_rows_text').hide();
+                $(this).find('.all_rows_text').show();
+            }
+        })
 
         function updateGeneralTerm(that, callback) {
             if (++count > max) {
@@ -339,6 +361,7 @@ $(function () {
                 });
             }
         }
+
     }
 );
 
@@ -375,4 +398,14 @@ function changeStatus(status) {
     $('.general_terms .request-event').html(status);
     $('.gen_ststus .saving_data').show();
     setTimeout("$('.gen_ststus .saving_data').hide()", 1000);
+}
+
+function setRawRowsCounter() {
+    var rawRowsCounter = 0;
+    $('form[name="request"] .specification .specification-item [name=price_s]').each(function (index, item) {
+        if ($(item).val() < 0.001) {
+            rawRowsCounter++;
+        }
+    })
+    $('form[name="request"] .raw_rows_counter').html(rawRowsCounter);
 }

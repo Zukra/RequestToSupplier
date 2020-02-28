@@ -103,7 +103,8 @@ $this->setFrameMode(true);
                 <div class="col-xs-12">
                     <? if ($isBlocked && bitrix_sessid() != $arResult["PROPERTIES"]["SESSION_ID"]['VALUE']) { ?>
                         <div class="form_usb">
-                            <button type="button" class="js-take_request_control btn btn-gen_it title_help" data-title="If you want to take general control of the request">
+                            <button type="button" name='take_request_control' class="js-take_request_control btn btn-gen_it title_help"
+                                    data-title="If you want to take general control of the request">
                                 Take control of the request
                             </button>
                         </div>
@@ -134,13 +135,13 @@ $this->setFrameMode(true);
                                 <input type="hidden" name="request-id" value="<?= $arResult['ID'] ?>">
                                 <input type="hidden" name="request-1c" value="<?= $arResult['PROPERTIES']['REQUEST_ID']['VALUE'] ?>">
                                 <input type="hidden" name="supplier-id" value="<?= $supplier->getId() ?>">
-                                <?/*<input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>">
-                                <input type="hidden" name="key" value="<?= $_SESSION["access_key"] ?>">*/?>
+                                <? /*<input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>">
+                                <input type="hidden" name="key" value="<?= $_SESSION["access_key"] ?>">*/ ?>
 
                                 <? /*<div class="form-group has-error">*/ ?>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Payment conditions
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae est sint veritatis minima, odio quos dolorem ipsam facilis repellendus harum nesciunt debitis perferendis sequi. Voluptatem perferendis consequatur quod culpa neque.">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Payment conditions">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
                                     </label>
@@ -156,7 +157,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Delivery time
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Delivery time">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
                                     </label>
@@ -172,7 +173,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">Delivery conditions INCOTERMS 2010
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Delivery conditions INCOTERMS 2010">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
  	         	    	            </span>
                                     </label>
@@ -188,7 +189,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">Currency
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Currency">
                                         <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
@@ -207,7 +208,7 @@ $this->setFrameMode(true);
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-4 control-label">Contact
-                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="And here's some amazing content. It's very engaging. Right?">
+                                        <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Contact">
  	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                     </span>
                                     </label>
@@ -283,35 +284,35 @@ $this->setFrameMode(true);
                                                 </colgroup>
                                                 <thead>
                                                 <tr>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Description</th>
+                                                    <th class="">Description</th>
                                                     <th class="title_help" data-title="Commen of Manager EMK">Comment</th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Quan-tity</th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">
+                                                    <th class="title_help" data-title="Quantity of Manager EMK">Quantity</th>
+                                                    <th class="">
                                                         Unit of<br> mea-<br>sure in<br> request
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Quan-<br>tity of
+                                                    <th class="">Quan-<br>tity of
                                                         <br>supp-<br>lier's*
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Unit
+                                                    <th class="">Unit
                                                         <br>of supp-<br>lier's*
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Price by<br> Unit of<br> supplier's*,
+                                                    <th class="">Price by<br> Unit of<br> supplier's*,
                                                         <br>EUR
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Total
+                                                    <th class="">Total
                                                         <br>price
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Common or
+                                                    <th class="">Common or
                                                         <br>individual
                                                         <br>delivery time
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Common or
+                                                    <th class="">Common or
                                                         <br>individual <br>INCOTERMS
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Repla-<br>cement of
+                                                    <th class="">Repla-<br>cement of
                                                         <br>product
                                                     </th>
-                                                    <th class="title_help" data-title="Commen of Manager EMK">Comment of
+                                                    <th class="">Comment of
                                                         <br>supplier
                                                     </th>
                                                 </tr>
@@ -321,14 +322,14 @@ $this->setFrameMode(true);
                                                 foreach ($specification as $item) { ?>
                                                     <tr class="specification-item" id="<?= $item->getId(); ?>">
                                                         <td class="spec_name"><?= $item->getName() ?></td>
-                                                        <td class="spec_comment"><?= $item->getComment()->getValue() ?: "=" ?></td>
+                                                        <td class="spec_comment"><?= $item->getComment()->getValue() ?: "" ?></td>
                                                         <td><?= $item->getQuantityR()->getValue() ?></td>
                                                         <td><?= $item->getUnitMeasure()->getValue() ?></td>
                                                         <td class="r">
                                                             <input type="text" class="recalc redact_area"
                                                                    name="quantity_s"
                                                                    data-code="SUPPLIER_QUANTITY"
-                                                                   value="<?= $item->getSupplierQuantity()->getValue() ?>"
+                                                                   value="<?= $item->getSupplierQuantity()->getValue() ?: $item->getQuantityR()->getValue() ?>"
                                                                    onkeypress="return isNumberKey(event);">
                                                             <? /*<div class="error_box">
                                                                 <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
@@ -339,7 +340,7 @@ $this->setFrameMode(true);
                                                         <td>
                                                             <input type="text" class="redact_area" name="unit_s"
                                                                    data-code="SUPPLIER_UNIT"
-                                                                   value="<?= $item->getSupplierUnit()->getValue() ?>">
+                                                                   value="<?= $item->getSupplierUnit()->getValue() ?: $item->getUnitMeasure()->getValue() ?>">
                                                             <? /* <select class="custom-select" id="inputGroupSelectMeasure" name="unit_s"
                                                                     data-code="SUPPLIER_UNIT">
                                                                 <? foreach ($measures as $measure) { ?>
@@ -368,7 +369,7 @@ $this->setFrameMode(true);
                                                         </td>
                                                         <td>
                                                             <input type="text" class="redact_area"
-                                                                   placeholder="4 weeks"
+                                                                   placeholder="Common delivery time"
                                                                    name="delivery_time"
                                                                    data-code="DELIVERY_TIME"
                                                                    value="<?= $item->getDeliveryTime()->getValue() ?>">
@@ -380,7 +381,7 @@ $this->setFrameMode(true);
                                                         </td>
                                                         <td>
                                                             <input type="text" class="redact_area"
-                                                                   placeholder="FSA Dombrova"
+                                                                   placeholder="Common INCOTERMS"
                                                                    name="incoterms"
                                                                    data-code="INCOTERMS"
                                                                    value="<?= $item->getIncoterms()->getValue() ?>">
@@ -449,11 +450,12 @@ $this->setFrameMode(true);
                                     <div class="col-xs-12">
                                         <div class="form_specific_sub">
                                             <button type="submit" class="btn btn-spec_it js_form_submit">Send reply</button>
-                                            <? /*<button type="submit" class="btn btn-spec_it-no_active">Send reply</button>*/ ?>
-                                            <a class="btn btn-link" href="/personal/requests/">
-                                                Show raw rows
-                                                <span class="badge badge-light"><?= $specification->count() ?></span>
-                                            </a>
+                                            <button type="button" class="btn btn-outline-light js_raw_rows_counter" data-toggle="button" aria-pressed="false" autocomplete="off">
+                                                <span class="raw_rows_text">
+                                                    Show raw rows <span class="badge badge-light raw_rows_counter"></span>
+                                                </span>
+                                                <span class="all_rows_text" style="display: none">Show all rows</span>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
