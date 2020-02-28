@@ -69,16 +69,9 @@ class Helper
 
     public static function sendHttp($baseUrl = '', $uri = '', $params = [])
     {
-        /*        $url = 'http://API:1111m@138.201.231.186:8080/testnew2/hs/1c/api/v1/request/getKey';
-                $params = [
-                    "email"      => "test@test.com",
-                    "request_id" => "222222"
-                ];*/
-//        dump($url, json_encode($params));
-
         $client = new Client([
             'base_uri' => $baseUrl,
-            'timeout'  => 5.0,
+            'timeout'  => 10.0,
             //    'headers'  => ['Content-Type' => 'application/json', 'Accept' => 'application/json',],
         ]);
         try {

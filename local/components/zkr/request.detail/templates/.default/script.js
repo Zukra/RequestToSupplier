@@ -15,9 +15,6 @@ $(function () {
         })
 
 
-        // $('form[name="request"] .specification .specification-item [name=price_s]').mask("999 999 999.99", {placeholder: " "});
-
-
         var requestForm     = $('form[name="request"]'),
             blockNewContact = requestForm.find('.new-contact'),
             blockContact    = requestForm.find('.general-term select[name=contact]'),
@@ -67,6 +64,7 @@ $(function () {
 
             var params = {request_id: id};
 
+            BX.showWait();
             BX.ajax.runComponentAction('zkr:ajax',
                 'sendRequestData', {mode: 'class', data: {params: params}}
             ).then(function (response) {
@@ -76,33 +74,10 @@ $(function () {
                     } else {
                         console.log(response.data.errors);
                     }
-                    // get request
-                    /*$.ajax({
-                        method: "POST",
-                        url: "/api/v2/request.get",
-                        data: {id: request1cId, token: token}
-                    }).done(function (data) {
-                        console.log(data);
-                        /!*var params = {data: data.result};
-                        // console.log(params);
-                        // send request data to 1C
-                        $.ajax({
-                            method: "POST",
-                            url: "/1c/api/v2/request.get",
-                            data: params,
-                            dataType: "json",
-                            contentType: 'application/json'
-                        }).done(function (data) {
-                            // console.log("data");
-                        }).fail(function () {
-                        });
-                        location.href = "/personal/requests/?key=" + key;*!/
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        // var err = eval("(" + jqXHR.responseText + ")");
-                        console.dir(jqXHR.responseText, jqXHR.status, jqXHR.statusText, textStatus, errorThrown);
-                    });*/
                 }
+                BX.closeWait();
             }).catch(function (reason) {
+                BX.closeWait();
                 console.log(reason);
             });
             // location.href = location.href.split('?')[0];
@@ -141,11 +116,12 @@ $(function () {
         $('form[name="request"] .specification .recalc').keyup(function (event) {
             var __self   = $(this),
                 specItem = __self.parents('.specification-item'),
-                count1   = parseFloat(specItem.find('.recalc').eq(0).val().replace(',', '.').replace(/\s/g, '')),
-                count2   = parseFloat(specItem.find('.recalc').eq(1).val().replace(',', '.').replace(/\s/g, '')),
+                count1   = parseFloat(specItem.find('.recalc').eq(0).val().replace(',', '.')),
+                count2   = parseFloat(specItem.find('.recalc').eq(1).val().replace(',', '.')),
                 total    = count1 * count2;
 
-            specItem.find('.total').html(total >= 0 ? parseFloat(total.toFixed(2)) : 'NaN');
+            total = parseFloat(total.toFixed(2));
+            specItem.find('.total').html(total >= 0 ? number_format(total, 2, '.', ' ') : 'NaN');
 
             recalcTotal();
 
@@ -330,7 +306,7 @@ $(function () {
             setTotalCurrency();
 
             $('form[name="request"] .specification .specification-item .total').each(function (index, item) {
-                $(item).text(number_format(parseFloat($(item).text()), 2, '.', ' '));
+                $(item).text(number_format(parseFloat($(item).text().replace(/\s/g, '')), 2, '.', ' '));
             })
         }
 
