@@ -7,8 +7,8 @@ $(function () {
             blockContact    = requestForm.find('.general-term select[name=contact]'),
             oldValueContact = blockContact.val(),
             count           = 0,
-            max             = 20,
-            delay           = 50,
+            max             = 10,
+            delay           = 25,
             timer           = 0;
 
         $('.gen_ststus .saving_data').hide();

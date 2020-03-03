@@ -330,7 +330,8 @@ $this->setFrameMode(true);
                                                                    name="quantity_s"
                                                                    data-code="SUPPLIER_QUANTITY"
                                                                    value="<?= $item->getSupplierQuantity()->getValue() ?: $item->getQuantityR()->getValue() ?>"
-                                                                   onkeypress="return isNumberKey(event);">
+                                                                   onkeypress="return isNumberKey(event);"
+                                                                   autocomplete="off">
                                                             <? /*<div class="error_box">
                                                                 <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
                                                                     <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
@@ -362,7 +363,8 @@ $this->setFrameMode(true);
                                                                    name="price_s"
                                                                    data-code="SUPPLIER_PRICE_UNIT"
                                                                    value="<?= $item->getSupplierPriceUnit()->getValue() ?>"
-                                                                   onkeypress="return isNumberKey(event);">
+                                                                   onkeypress="return isNumberKey(event);"
+                                                                   autocomplete="off">
                                                         </td>
                                                         <td class="total">
                                                             <?= $item->getSupplierQuantity()->getValue() * $item->getSupplierPriceUnit()->getValue() ?>
@@ -406,7 +408,8 @@ $this->setFrameMode(true);
                                                                    class="redact_area"
                                                                    name="comment_s"
                                                                    data-code="SUPPLIER_COMMENT"
-                                                                   value="<?= $item->getSupplierComment()->getValue() ?>">
+                                                                   value="<?= $item->getSupplierComment()->getValue() ?>"
+                                                                   autocomplete="off">
                                                         </td>
                                                     </tr>
                                                 <? } ?>
