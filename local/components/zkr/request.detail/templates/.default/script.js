@@ -7,7 +7,7 @@ $(function () {
             blockContact    = requestForm.find('.general-term select[name=contact]'),
             oldValueContact = blockContact.val(),
             count           = 0,
-            max             = 10,
+            max             = 5,
             delay           = 25,
             timer           = 0;
 
@@ -27,10 +27,6 @@ $(function () {
         recalcTotal();
         setRawRowsCounter();
 
-        $('.js_form_submit').click(function () {
-            requestForm.submit();
-        });
-
         requestForm.find('[name=price_s]').focus(function () {
             $(this).select();
         })
@@ -43,7 +39,7 @@ $(function () {
 
         requestForm.submit(function (event) {
             event.preventDefault();
-
+            console.log('1111111');
             var requiredElements = requestForm.find('.general-term input:required'),
                 isError          = false;
 
@@ -58,6 +54,20 @@ $(function () {
                 return false;
             }
 
+            requiredElements = requestForm.find('.specification input:required');
+
+            requiredElements.each(function (index, item) {
+                console.log(item);
+                /*if (item.value.length === 0) {
+                    $(item).parent().addClass('has-error');
+                    isError = true;
+                }*/
+            });
+            if (isError) {
+                requestForm.find('.has-error').first().focus();
+                return false;
+            }
+
             var id = $('form[name="request"] input[name="request-id"]').val();
             // var request1cId = $('form[name="request"] input[name="request-1c"]').val(),
             //     token       = $('form[name="request"] input[name="request-token"]').val(),
@@ -65,6 +75,7 @@ $(function () {
 
             var params = {request_id: id};
 
+            $('.form_gen_it').addClass('no_active');
             BX.showWait();
             BX.ajax.runComponentAction('zkr:ajax',
                 'sendRequestData', {mode: 'class', data: {params: params}}
@@ -77,6 +88,7 @@ $(function () {
                     }
                 }
                 BX.closeWait();
+                $('.form_gen_it').removeClass('no_active');
             }).catch(function (reason) {
                 BX.closeWait();
                 console.log(reason);
@@ -105,10 +117,23 @@ $(function () {
         });
 
         $('form[name="request"] .specification select, form[name="request"] .specification input:checkbox').change(function (event) {
+            if (event.target.name === 'replacement') {
+                var parent = $(this).parents('.specification-item');
+                if ($(this).is(':checked')) {
+                    parent.find('[name=comment_s]').attr('required', true);
+                } else {
+                    parent.find('[name=comment_s]').attr('required', false);
+                }
+                console.log(parent.find('[name=comment_s]').val());
+            }
             updateSpecification(this);
         });
 
         $('form[name="request"] .specification input').keyup(function (event) {
+            if (event.keyCode === 13 && event.target.name === 'price_s') {
+                var parent = $(this).parents('.specification-item');
+                parent.next().find('[name=price_s]').focus();
+            }
             clearTimeout(timer);
             count = 0;
             updateSpecification(this);
@@ -181,10 +206,10 @@ $(function () {
                     $(item).show();
                 }
             })
-            if(isActive){
+            if (isActive) {
                 $(this).find('.raw_rows_text').show();
                 $(this).find('.all_rows_text').hide();
-            }else{
+            } else {
                 $(this).find('.raw_rows_text').hide();
                 $(this).find('.all_rows_text').show();
             }
@@ -321,15 +346,13 @@ $(function () {
                 items = form.find('.specification-item'),
                 summ  = 0;
             items.each(function (index, item) {
-                summ += parseFloat($(item).find('input[name=quantity_s]').val().replace(',', '.'))
+                var sm = parseFloat($(item).find('input[name=quantity_s]').val().replace(',', '.'))
                     * parseFloat($(item).find('input[name=price_s]').val().replace(',', '.').replace(/\s/g, ''));
+                $(item).find('.total').text(number_format(sm, 2, '.', ' '));
+                summ += sm;
             });
             total.html(summ >= 0 ? number_format(parseFloat(summ.toFixed(2)), 2, '.', ' ') : 'NaN');
             setTotalCurrency();
-
-            $('form[name="request"] .specification .specification-item .total').each(function (index, item) {
-                $(item).text(number_format(parseFloat($(item).text().replace(/\s/g, '')), 2, '.', ' '));
-            })
         }
 
         function addNewContact() {

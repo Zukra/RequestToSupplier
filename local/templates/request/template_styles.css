@@ -173,7 +173,7 @@ header .col-xs-12 {
     z-index  : 2;
     right    : 4px;
     bottom   : 2px;
-    display  : none;
+    /*display  : none;*/
 }
 
 .error .error_box {
@@ -806,6 +806,22 @@ header .col-xs-12 {
     min-width     : 150px;
 }
 
+.error_box .title_help:hover::after {
+    content       : attr(data-title);
+    display       : block;
+    position      : absolute;
+    right         : 0;
+    left          : auto;
+    top           : -22px;
+    z-index       : 1;
+    background    : rgba(255, 255, 230, 0.9);
+    font-size     : 11px;
+    padding       : 5px 10px;
+    border        : 1px solid #dedede;
+    border-radius : 3px;
+    min-width     : 150px;
+}
+
 .table thead tr th {
     text-align : center;
 }
@@ -980,9 +996,10 @@ h3.popover-header {
     padding : 5px;
 }
 
-#successUpdateKey{
-    opacity: 1;
+#successUpdateKey {
+    opacity : 1;
 }
+
 @media (min-width : 1200px) {
     .general-term {
         width  : 990px;

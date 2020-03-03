@@ -130,7 +130,7 @@ $this->setFrameMode(true);
                 </div>
                 <div class="col-xs-12">
                     <div class="gen_form">
-                        <form class="form-horizontal" role="form" name="request" method="post">
+                        <form class="form-horizontal" role="form" name="request" method="post" action="/">
                             <div class="general-term">
                                 <input type="hidden" name="request-id" value="<?= $arResult['ID'] ?>">
                                 <input type="hidden" name="request-1c" value="<?= $arResult['PROPERTIES']['REQUEST_ID']['VALUE'] ?>">
@@ -142,8 +142,8 @@ $this->setFrameMode(true);
                                 <div class="form-group">
                                     <label for="" class="col-sm-4 control-label">Payment conditions
                                         <span class="example_help" tabindex="0" data-toggle="popover" data-trigger="focus" data-content="Payment conditions">
- 	         	    	                <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
- 	         	    	            </span>
+ 	         	    	                    <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
+ 	         	    	                </span>
                                     </label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="payment_order"
@@ -234,23 +234,23 @@ $this->setFrameMode(true);
 
                             <div class="new-contact" style="display: none">
                                 <div class="form-group">
-                                    <label for="" class="col-sm-4 control-label"></label>
+                                    <label for="new_name" class="col-sm-4 control-label"></label>
                                     <div class="col-sm-3">
-                                        <input type="text" class="form-control" name="new_name"
+                                        <input id="new_name" type="text" class="form-control" name="new_name"
                                                placeholder="Name" aria-label="new_name"
-                                               aria-describedby="basic-new_name" required>
+                                               aria-describedby="basic-new_name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-4 control-label"></label>
+                                    <label for="new_email" class="col-sm-4 control-label"></label>
                                     <div class="col-sm-3">
-                                        <input type="email" class="form-control" name="new_email"
+                                        <input id="new_email" type="email" class="form-control" name="new_email"
                                                placeholder="Email" aria-label="new_email"
-                                               aria-describedby="basic-new_email" required>
+                                               aria-describedby="basic-new_email">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="" class="col-sm-4 control-label"></label>
+                                    <label class="col-sm-4 control-label"></label>
                                     <div class="col-sm-3">
                                         <button type="button" class="js-add-new-contact btn btn-primary">Add</button>
                                         <button type="button" class="js-cancel-new-contact btn btn-danger">Cancel</button>
@@ -314,6 +314,12 @@ $this->setFrameMode(true);
                                                     </th>
                                                     <th class="">Comment of
                                                         <br>supplier
+                                                        <span class="example_help" tabindex="0"
+                                                              data-toggle="popover"
+                                                              data-trigger="focus"
+                                                              data-content="Specify on analogue">
+                                                            <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
+                                                        </span>
                                                     </th>
                                                 </tr>
                                                 </thead>
@@ -358,7 +364,7 @@ $this->setFrameMode(true);
                                                                 </span>
                                                             </div>*/ ?>
                                                         </td>
-                                                        <td>
+                                                        <td data-col="price_s">
                                                             <input type="text" class="recalc redact_area"
                                                                    name="price_s"
                                                                    data-code="SUPPLIER_PRICE_UNIT"
@@ -375,11 +381,11 @@ $this->setFrameMode(true);
                                                                    name="delivery_time"
                                                                    data-code="DELIVERY_TIME"
                                                                    value="<?= $item->getDeliveryTime()->getValue() ?>">
-                                                            <div class="error_box">
- 				 											<span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
- 				 												<img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
- 				 											</span>
-                                                            </div>
+                                                            <? /*<div class="error_box">
+                                                                <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
+                                                                    <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
+                                                                </span>
+                                                            </div>*/ ?>
                                                         </td>
                                                         <td>
                                                             <input type="text" class="redact_area"
@@ -387,11 +393,11 @@ $this->setFrameMode(true);
                                                                    name="incoterms"
                                                                    data-code="INCOTERMS"
                                                                    value="<?= $item->getIncoterms()->getValue() ?>">
-                                                            <div class="error_box">
- 				 											<span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
- 				 												<img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
- 				 											</span>
-                                                            </div>
+                                                            <? /*<div class="error_box">
+                                                                <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
+                                                                    <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
+                                                                </span>
+                                                            </div>*/ ?>
                                                         </td>
                                                         <td>
                                                             <label class="checkbox-transform">
@@ -403,13 +409,25 @@ $this->setFrameMode(true);
                                                                 <span class="checkbox__label"></span>
                                                             </label>
                                                         </td>
-                                                        <td>
+                                                        <td class="error_">
                                                             <input type="text"
                                                                    class="redact_area"
                                                                    name="comment_s"
                                                                    data-code="SUPPLIER_COMMENT"
                                                                    value="<?= $item->getSupplierComment()->getValue() ?>"
-                                                                   autocomplete="off">
+                                                                   autocomplete="off"
+                                                                <?= $item->getReplacement()->getValue() ? "required" : "" ?>>
+                                                            <div class="error_box">
+                                                                <? /*<span class="error_area"
+                                                                      data-toggle="tooltip"
+                                                                      title="Disabled tooltip">
+                                                                        <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
+                                                                  </span>*/ ?>
+                                                                <?/*<span class="title_help"
+                                                                      data-title="test test test">
+                                                                       <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
+                                                                </span>*/?>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 <? } ?>
@@ -452,7 +470,8 @@ $this->setFrameMode(true);
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="form_specific_sub">
-                                            <button type="submit" class="btn btn-spec_it js_form_submit">Send reply</button>
+                                            <!--                                            <button type="submit" class="btn btn-spec_it js_form_submit">Send reply</button>-->
+                                            <input type="submit" class="btn btn-spec_it" value="Send reply">
                                             <button type="button" class="btn btn-outline-light js_raw_rows_counter" data-toggle="button" aria-pressed="false" autocomplete="off">
                                                 <span class="raw_rows_text">
                                                     Show raw rows <span class="badge badge-light raw_rows_counter"></span>
