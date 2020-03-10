@@ -29,13 +29,16 @@ $supplier = $arResult['SUPPLIER'];
             </a>
             <ul class="dropdown-menu pull-right">
                 <li>
+                    <a href="/personal/requests/">Inquiries</a>
+                </li>
+                <li>
                     <a href="/personal/">Personal</a>
                 </li>
                 <li>
-                    <a href="/personal/requests/">Requests</a>
+                    <a href="/personal/update-key/">Refresh access key</a>
                 </li>
                 <li>
-                    <a href="/personal/update-key/">Refresh access key</a>
+                    <a href="/">Contacts</a>
                 </li>
             </ul>
         </li>

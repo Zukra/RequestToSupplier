@@ -31,8 +31,7 @@ $contacts = $arResult['CONTACTS'];
             <div class="row">
                 <div class="col-xs-12">
                     <h3>List of managers of
-                        <b><?= $arResult['NAME'] ?></b> who can respond to requests. To add new
-                        сontact the purchasing manager.</h3>
+                        <b><?= $arResult['NAME'] ?></b> who can respond to inquiries. Please, get in touch with EMK manager in order to add your contact to the list of managers.</h3>
                 </div>
                 <div class="col-xs-12 col-sm-6 manager_list hidden-xs">
                     <p><b>Name</b></p>

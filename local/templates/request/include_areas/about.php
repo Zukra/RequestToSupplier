@@ -8,7 +8,7 @@
                 <p>CN Tel. <a href="tel:+862160314581">+8 62160-31-45-81</a></p>
             </div>
             <div class="col-xs-12 col-md-6">
-                <h3>Sales offices</h3>
+                <h3>Sales offices EMK</h3>
                 <div class="cont_one">
                     <b>Belarus</b><br>
                     322/320, 42 Kal'variyskaya, Minsk, 220073<br>

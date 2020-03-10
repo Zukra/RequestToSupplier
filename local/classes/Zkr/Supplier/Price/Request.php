@@ -25,6 +25,7 @@ class Request
     public const WAIT_REPLY     = 'Waiting for a reply';
     public const BLOCKED_UPDATE = 'Blocked for update';
     public const SENT           = 'Sent';
+    public const NEW            = 'New, waiting for a reply';
 
     public function get($query, $n, \CRestServer $server)
     {
@@ -65,6 +66,7 @@ class Request
                             "supplier"    => ['id' => $supplier['id'], 'name' => $supplier['name']],
                         ];
                     } else {
+                        $datum['new'] = false;
                         $elem = $this->updateElem($elem->getId(), $datum);
                         $result[] = [
                             'status'      => 1,
@@ -75,6 +77,7 @@ class Request
                     }
                 } else {
                     $elem = $this->addElem($datum);
+                    $datum['new'] = true;
                     $elem = $this->updateElem($elem->getId(), $datum);
                     $result[] = [
                         'status'      => 1,
@@ -122,8 +125,8 @@ class Request
             $elem
                 ->setRequestId($data['id'])
                 ->setTimestampX(new \Bitrix\Main\Type\DateTime())
-                ->setEvent(static::WAIT_REPLY)   // $data['event']
-                ->setStatus(static::WAIT_REPLY) // $data['status']
+                ->setEvent($data['new'] ? static::NEW : static::WAIT_REPLY)   // $data['event']
+                ->setStatus($data['new'] ? static::NEW : static::WAIT_REPLY) // $data['status']
                 ->setPaymentOrder($data['payment_order'])
                 ->setDeliveryTime($data['delivery_time'])
                 ->setIncoterms($data['incoterms'])
@@ -264,7 +267,7 @@ class Request
         return $specifications;
     }
 
-    public function addElem($data)
+    public function addElem($data): ?EO_ElementRequest
     {
         $elem = null;
         $el = new CIBlockElement();

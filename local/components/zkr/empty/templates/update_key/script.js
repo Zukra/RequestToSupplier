@@ -23,7 +23,7 @@ $(function () {
                 data: {params: params}
             }
         ).then(function (response) {
-            if (response.status === 'success') {
+            if (response.status === 'success' && response.data.status === 1) {
                 params = {
                     status: 1,
                     email: response.data.email,
@@ -50,6 +50,8 @@ $(function () {
                 ).catch(function (reason) {
                     console.log(reason);
                 });
+            } else {
+                console.log(response.data.errors);
             }
         }).catch(function (reason) {
             console.log(reason);

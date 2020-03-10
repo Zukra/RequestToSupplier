@@ -2,7 +2,7 @@
 
 require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/header.php");
 
-$APPLICATION->SetTitle("Requests list");
+$APPLICATION->SetTitle("Inquiries");
 
 $supplierId = \Zkr\Helper::checkAccess();
 ?>
@@ -50,7 +50,7 @@ $supplierId = \Zkr\Helper::checkAccess();
         "PAGER_SHOW_ALL"                  => "N",
         "PAGER_SHOW_ALWAYS"               => "N",
         "PAGER_TEMPLATE"                  => "round",
-        "PAGER_TITLE"                     => "Заявки",
+        "PAGER_TITLE"                     => "Inquiries",
         "PARENT_SECTION"                  => "",
         "PARENT_SECTION_CODE"             => "",
         "PREVIEW_TRUNCATE_LEN"            => "",
@@ -63,12 +63,12 @@ $supplierId = \Zkr\Helper::checkAccess();
             5 => "CONTACT",
             6 => "",
         ],
-        "SET_BROWSER_TITLE"               => "Y",
+        "SET_BROWSER_TITLE"               => "N",
         "SET_LAST_MODIFIED"               => "N",
         "SET_META_DESCRIPTION"            => "Y",
-        "SET_META_KEYWORDS"               => "Y",
+        "SET_META_KEYWORDS"               => "N",
         "SET_STATUS_404"                  => "N",
-        "SET_TITLE"                       => "Y",
+        "SET_TITLE"                       => "N",
         "SHOW_404"                        => "N",
         "SORT_BY1"                        => "TIMESTAMP_X",
         "SORT_BY2"                        => "SORT",

@@ -17,6 +17,7 @@ $this->setFrameMode(true);
 /** @var \Bitrix\Iblock\Elements\EO_ElementSupplier $supplier */
 $supplier = $arResult['SUPPLIER'];
 $classColors = [
+    \Zkr\Supplier\Price\Request::NEW            => 'color_new_blocked',
     \Zkr\Supplier\Price\Request::WAIT_REPLY     => 'color_new_waiting',
     \Zkr\Supplier\Price\Request::BLOCKED_UPDATE => 'color_updated_waiting',
     \Zkr\Supplier\Price\Request::SENT           => 'color_sent',
@@ -28,7 +29,7 @@ $classColors = [
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h1><?= 'List of requests to ' . ($supplier ? $supplier->getName() : '') ?></h1>
+                    <h1><?= 'List of inquiries to ' . ($supplier ? $supplier->getName() : '') ?></h1>
                 </div>
             </div>
         </div>
@@ -100,6 +101,12 @@ $classColors = [
                             <tbody>
                             <tr>
                                 <td>
+                                    <span class="table_color color_new_blocked"></span>
+                                </td>
+                                <td>New, waiting for a reply</td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <span class="table_color color_new_waiting"></span>
                                 </td>
                                 <td>Waiting for a reply</td>
@@ -116,13 +123,8 @@ $classColors = [
                                 </td>
                                 <td>Sent</td>
                             </tr>
+
                             <? /*<tr>
-                                <td>
-                                    <span class="table_color color_new_waiting"></span>
-                                </td>
-                                <td>New, waiting for a reply</td>
-                            </tr>
-                            <tr>
                                 <td>
                                     <span class="table_color color_new_blocked"></span>
                                 </td>

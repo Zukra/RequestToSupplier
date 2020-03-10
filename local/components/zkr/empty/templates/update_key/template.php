@@ -21,7 +21,7 @@ $supplier = $arResult['SUPPLIER'];
 
                     <div class="form-group">
                         <div class="col-xs-12">
-                            <input type="email" class="form-control" name="email" placeholder="Email" required value="test@test.com">
+                            <input type="email" class="form-control" name="email" placeholder="Email" required>
                         </div>
                     </div>
                     <div class="form-group text_cent">
@@ -40,7 +40,7 @@ $supplier = $arResult['SUPPLIER'];
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="successUpdateKeyTitle">Modal title</h5>
+                <h5 class="modal-title" id="successUpdateKeyTitle">New key</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -54,9 +54,3 @@ $supplier = $arResult['SUPPLIER'];
         </div>
     </div>
 </div>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#successUpdateKey">
-  Launch demo modal
-</button>
-

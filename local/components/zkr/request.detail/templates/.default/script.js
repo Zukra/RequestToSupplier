@@ -22,10 +22,15 @@ $(function () {
                 numeralPositiveOnly: true,
                 // numeralThousandsGroupStyle: 'thousand'
             });
+            if ($(item).val() < 0.0001) {
+                $(item).val('');
+            }
         })
 
         recalcTotal();
         setRawRowsCounter();
+
+        setBackground();
 
         requestForm.find('[name=price_s]').focus(function () {
             $(this).select();
@@ -39,7 +44,6 @@ $(function () {
 
         requestForm.submit(function (event) {
             event.preventDefault();
-            console.log('1111111');
             var requiredElements = requestForm.find('.general-term input:required'),
                 isError          = false;
 
@@ -57,7 +61,7 @@ $(function () {
             requiredElements = requestForm.find('.specification input:required');
 
             requiredElements.each(function (index, item) {
-                console.log(item);
+                // console.log(item);
                 /*if (item.value.length === 0) {
                     $(item).parent().addClass('has-error');
                     isError = true;
@@ -124,16 +128,17 @@ $(function () {
                 } else {
                     parent.find('[name=comment_s]').attr('required', false);
                 }
-                console.log(parent.find('[name=comment_s]').val());
             }
             updateSpecification(this);
         });
 
-        $('form[name="request"] .specification input').keyup(function (event) {
+        $('form[name="request"] .specification input, form[name="request"] .specification textarea').keyup(function (event) {
             if (event.keyCode === 13 && event.target.name === 'price_s') {
                 var parent = $(this).parents('.specification-item');
                 parent.next().find('[name=price_s]').focus();
             }
+            setBackground();
+
             clearTimeout(timer);
             count = 0;
             updateSpecification(this);
@@ -346,8 +351,16 @@ $(function () {
                 items = form.find('.specification-item'),
                 summ  = 0;
             items.each(function (index, item) {
-                var sm = parseFloat($(item).find('input[name=quantity_s]').val().replace(',', '.'))
-                    * parseFloat($(item).find('input[name=price_s]').val().replace(',', '.').replace(/\s/g, ''));
+                var price    = $(item).find('input[name=price_s]').val()
+                        .replace(',', '.')
+                        .replace(/\s/g, ''),
+                    quantity = $(item).find('input[name=quantity_s]').val()
+                        .replace(',', '.');
+
+                price    = price.length < 1 ? 0 : price;
+                quantity = quantity.length < 1 ? 0 : quantity;
+
+                var sm = parseFloat(quantity) * parseFloat(price);
                 $(item).find('.total').text(number_format(sm, 2, '.', ' '));
                 summ += sm;
             });
@@ -426,9 +439,27 @@ function changeStatus(status) {
 function setRawRowsCounter() {
     var rawRowsCounter = 0;
     $('form[name="request"] .specification .specification-item [name=price_s]').each(function (index, item) {
-        if ($(item).val() < 0.001) {
+        if ($(item).val() < 0.0001) {
             rawRowsCounter++;
         }
     })
     $('form[name="request"] .raw_rows_counter').html(rawRowsCounter);
+}
+
+function setBackground() {
+    $('.specification .specification-item').each(function (index, item) {
+            var quantityR = $(item).find('.quantity_r'),
+                quantityS = $(item).find('[name=quantity_s]'),
+                measureR  = $(item).find('.measure_r'),
+                measureS  = $(item).find('[name=unit_s]');
+
+            quantityS.removeClass('background-grey');
+            measureS.removeClass('background-grey');
+            if (quantityR.text().trim() === quantityS.val().trim()) {
+                quantityS.addClass('background-grey');
+            }
+            if (measureR.text().trim() === measureS.val().trim()) {
+                measureS.addClass('background-grey');
+            }
+        })
 }

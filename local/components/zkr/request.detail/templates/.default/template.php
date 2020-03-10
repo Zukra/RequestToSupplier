@@ -29,6 +29,7 @@ $currencies = [
 //$measures = ['T', 't', 'm'];
 
 $classColors = [
+    \Zkr\Supplier\Price\Request::NEW            => 'color_new_blocked',
     \Zkr\Supplier\Price\Request::WAIT_REPLY     => 'color_new_waiting',
     \Zkr\Supplier\Price\Request::BLOCKED_UPDATE => 'color_updated_waiting',
     \Zkr\Supplier\Price\Request::SENT           => 'color_sent',
@@ -58,7 +59,7 @@ $this->setFrameMode(true);
                                 <img src="<?= $APPLICATION->GetTemplatePath('images/lef.svg') ?>" alt="">
                                 <img src="<?= $APPLICATION->GetTemplatePath('images/lef.svg') ?>" alt="">
                             </span>
-                            Back to Requests
+                            Back to Inquiries
                         </a>
                     </div>
                 </div>
@@ -71,7 +72,13 @@ $this->setFrameMode(true);
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <div class="gen_title">
-                        <h3><b><?= substr($arResult["NAME"], 0, 11) ?></b></h3>
+                        <h3>
+                            <b>
+                                Inquiry #<?= substr($arResult["NAME"], 0, 11) ?>
+                                by <?= (new \Bitrix\Main\Type\Date($arResult["TIMESTAMP_X"]))->toString() ?>
+                                to <?= $supplier->getName() ?>
+                            </b>
+                        </h3>
                         <h1>
                             <span class="request-event"><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] ?></span>
                             <span class="request-by_blocked">
@@ -105,7 +112,7 @@ $this->setFrameMode(true);
                         <div class="form_usb">
                             <button type="button" name='take_request_control' class="js-take_request_control btn btn-gen_it title_help"
                                     data-title="If you want to take general control of the request">
-                                Take control of the request
+                                Take control of the inquiry
                             </button>
                         </div>
                     <? } ?>
@@ -116,7 +123,7 @@ $this->setFrameMode(true);
             <div class="row">
                 <div class="col-xs-12">
                     <div class="gen_comment">
-                        <p>Comment to request
+                        <p>Comment to inquiry
                             <span><?= $arResult["PROPERTIES"]['COMMENT']["VALUE"] ?></span>
                         </p>
                     </div>
@@ -286,22 +293,20 @@ $this->setFrameMode(true);
                                                 <tr>
                                                     <th class="">Description</th>
                                                     <th class="title_help" data-title="Commen of Manager EMK">Comment</th>
-                                                    <th class="title_help" data-title="Quantity of Manager EMK">Quantity</th>
+                                                    <th class="title_help" data-title="Quantity of Manager EMK">Quantity<br>acc. to inquiry</th>
                                                     <th class="">
-                                                        Unit of<br> mea-<br>sure in<br> request
+                                                        Unit acc.<br>to inquiry
                                                     </th>
-                                                    <th class="">Quan-<br>tity of
-                                                        <br>supp-<br>lier's*
+                                                    <th class="">Quantity acc.
+                                                        <br>to Supplier's <br>offer
                                                     </th>
-                                                    <th class="">Unit
-                                                        <br>of supp-<br>lier's*
+                                                    <th class="">Unit acc.
+                                                        <br>to Supplier's <br>offer
                                                     </th>
-                                                    <th class="">Price by<br> Unit of<br> supplier's*,
-                                                        <br>EUR
+                                                    <th class="">Price per<br> unit acc.<br> to Supplier's
+                                                        <br>offer
                                                     </th>
-                                                    <th class="">Total
-                                                        <br>price
-                                                    </th>
+                                                    <th class="">Total</th>
                                                     <th class="">Common or
                                                         <br>individual
                                                         <br>delivery time
@@ -317,7 +322,7 @@ $this->setFrameMode(true);
                                                         <span class="example_help" tabindex="0"
                                                               data-toggle="popover"
                                                               data-trigger="focus"
-                                                              data-content="Specify on analogue">
+                                                              data-content="Specify analogue">
                                                             <img src="<?= $APPLICATION->GetTemplatePath('images/help.svg') ?>" alt="">
                                                         </span>
                                                     </th>
@@ -329,8 +334,8 @@ $this->setFrameMode(true);
                                                     <tr class="specification-item" id="<?= $item->getId(); ?>">
                                                         <td class="spec_name"><?= $item->getName() ?></td>
                                                         <td class="spec_comment"><?= $item->getComment()->getValue() ?: "" ?></td>
-                                                        <td><?= $item->getQuantityR()->getValue() ?></td>
-                                                        <td><?= $item->getUnitMeasure()->getValue() ?></td>
+                                                        <td class="quantity_r"><?= $item->getQuantityR()->getValue() ?></td>
+                                                        <td class="measure_r"><?= $item->getUnitMeasure()->getValue() ?></td>
                                                         <td class="r">
                                                             <input type="text" class="recalc redact_area"
                                                                    name="quantity_s"
@@ -368,7 +373,7 @@ $this->setFrameMode(true);
                                                             <input type="text" class="recalc redact_area"
                                                                    name="price_s"
                                                                    data-code="SUPPLIER_PRICE_UNIT"
-                                                                   value="<?= $item->getSupplierPriceUnit()->getValue() ?>"
+                                                                   value="<?= $item->getSupplierPriceUnit()->getValue() ?? '' ?>"
                                                                    onkeypress="return isNumberKey(event);"
                                                                    autocomplete="off">
                                                         </td>
@@ -376,28 +381,40 @@ $this->setFrameMode(true);
                                                             <?= $item->getSupplierQuantity()->getValue() * $item->getSupplierPriceUnit()->getValue() ?>
                                                         </td>
                                                         <td>
+                                                            <? /*
                                                             <input type="text" class="redact_area"
                                                                    placeholder="Common delivery time"
                                                                    name="delivery_time"
                                                                    data-code="DELIVERY_TIME"
                                                                    value="<?= $item->getDeliveryTime()->getValue() ?>">
+ */ ?>
                                                             <? /*<div class="error_box">
                                                                 <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
                                                                     <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
                                                                 </span>
                                                             </div>*/ ?>
+                                                            <textarea class="form-control"
+                                                                      name="delivery_time"
+                                                                      data-code="DELIVERY_TIME"
+                                                                      placeholder="Common delivery time"><?= $item->getDeliveryTime()->getValue() ?></textarea>
                                                         </td>
                                                         <td>
+                                                            <? /*
                                                             <input type="text" class="redact_area"
                                                                    placeholder="Common INCOTERMS"
                                                                    name="incoterms"
                                                                    data-code="INCOTERMS"
                                                                    value="<?= $item->getIncoterms()->getValue() ?>">
+ */ ?>
                                                             <? /*<div class="error_box">
                                                                 <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
                                                                     <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
                                                                 </span>
                                                             </div>*/ ?>
+                                                            <textarea class="form-control"
+                                                                      name="incoterms"
+                                                                      data-code="INCOTERMS"
+                                                                      placeholder="Common INCOTERMS"><?= $item->getIncoterms()->getValue() ?></textarea>
                                                         </td>
                                                         <td>
                                                             <label class="checkbox-transform">
@@ -410,6 +427,7 @@ $this->setFrameMode(true);
                                                             </label>
                                                         </td>
                                                         <td class="error_">
+                                                            <? /*
                                                             <input type="text"
                                                                    class="redact_area"
                                                                    name="comment_s"
@@ -417,16 +435,22 @@ $this->setFrameMode(true);
                                                                    value="<?= $item->getSupplierComment()->getValue() ?>"
                                                                    autocomplete="off"
                                                                 <?= $item->getReplacement()->getValue() ? "required" : "" ?>>
+*/ ?>
+                                                            <textarea class="form-control"
+                                                                      name="comment_s"
+                                                                      data-code="SUPPLIER_COMMENT"
+                                                                      autocomplete="off"
+                                                                      <?= $item->getReplacement()->getValue() ? "required" : "" ?>><?= $item->getSupplierComment()->getValue() ?></textarea>
                                                             <div class="error_box">
                                                                 <? /*<span class="error_area"
                                                                       data-toggle="tooltip"
                                                                       title="Disabled tooltip">
                                                                         <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
                                                                   </span>*/ ?>
-                                                                <?/*<span class="title_help"
+                                                                <? /*<span class="title_help"
                                                                       data-title="test test test">
                                                                        <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
-                                                                </span>*/?>
+                                                                </span>*/ ?>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -444,7 +468,7 @@ $this->setFrameMode(true);
                                         <div class="total_price_wrap">
                                             <div class="col-xs-12 col-sm-3 col-md-3 text_rig">
                                                 <p>
-                                                    <b>Total price of request </b>
+                                                    <b>Total price of inquiry </b>
                                                 </p>
                                             </div>
                                             <div class="col-xs-12 col-sm-9 col-md-9">
@@ -457,9 +481,9 @@ $this->setFrameMode(true);
                                                 <label for="" class="control-label">Comment</label>
                                             </div>
                                             <div class="col-xs-12 col-sm-9 col-md-9">
-                                                        <textarea class="form-control" name="supplier_comment" placeholder="Your comment"
-                                                                  data-id="<?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["ID"] ?>"
-                                                                  data-code="<?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["CODE"] ?>"><?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["VALUE"] ?></textarea>
+                                                <textarea class="form-control" name="supplier_comment" placeholder="Your comment"
+                                                          data-id="<?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["ID"] ?>"
+                                                          data-code="<?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["CODE"] ?>"><?= $arResult["PROPERTIES"]['SUPPLIER_COMMENT']["VALUE"] ?></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -470,11 +494,10 @@ $this->setFrameMode(true);
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <div class="form_specific_sub">
-                                            <!--                                            <button type="submit" class="btn btn-spec_it js_form_submit">Send reply</button>-->
-                                            <input type="submit" class="btn btn-spec_it" value="Send reply">
+                                            <button type="submit" class="btn btn-spec_it js_form_submit">Send reply</button>
                                             <button type="button" class="btn btn-outline-light js_raw_rows_counter" data-toggle="button" aria-pressed="false" autocomplete="off">
                                                 <span class="raw_rows_text">
-                                                    Show raw rows <span class="badge badge-light raw_rows_counter"></span>
+                                                    Missed rows <span class="badge badge-light raw_rows_counter"></span>
                                                 </span>
                                                 <span class="all_rows_text" style="display: none">Show all rows</span>
                                             </button>
@@ -499,7 +522,7 @@ $this->setFrameMode(true);
                                 <img src="<?= $APPLICATION->GetTemplatePath('images/lef.svg') ?>" alt="">
                                 <img src="<?= $APPLICATION->GetTemplatePath('images/lef.svg') ?>" alt="">
                             </span>
-                            Back to Requests
+                            Back to Inquiries
                         </a>
                     </div>
                 </div>
