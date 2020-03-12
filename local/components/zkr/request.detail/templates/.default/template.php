@@ -79,7 +79,7 @@ $this->setFrameMode(true);
                                 to <?= $supplier->getName() ?>
                             </b>
                         </h3>
-                        <h1>
+                        <? /*<h1>
                             <span class="request-event"><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] ?></span>
                             <span class="request-by_blocked">
                                 <? if ($arResult["PROPERTIES"]["IS_BLOCKED"]['VALUE']) { ?>
@@ -92,7 +92,7 @@ $this->setFrameMode(true);
                                 <? } ?>
                             </span>
                             <span class="request-supplier"><?= ' to ' . $supplier->getName() ?></span>
-                        </h1>
+                        </h1>*/ ?>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">
@@ -293,7 +293,8 @@ $this->setFrameMode(true);
                                                 <tr>
                                                     <th class="">Description</th>
                                                     <th class="title_help" data-title="Commen of Manager EMK">Comment</th>
-                                                    <th class="title_help" data-title="Quantity of Manager EMK">Quantity<br>acc. to inquiry</th>
+                                                    <th class="title_help" data-title="Quantity of Manager EMK">Quantity<br>acc. to inquiry
+                                                    </th>
                                                     <th class="">
                                                         Unit acc.<br>to inquiry
                                                     </th>
@@ -304,9 +305,12 @@ $this->setFrameMode(true);
                                                         <br>to Supplier's <br>offer
                                                     </th>
                                                     <th class="">Price per<br> unit acc.<br> to Supplier's
-                                                        <br>offer
+                                                        <br>offer,
+                                                        <span class="total-currency"></span>
                                                     </th>
-                                                    <th class="">Total</th>
+                                                    <th class="">Total,
+                                                        <span class="total-currency"></span>
+                                                    </th>
                                                     <th class="">Common or
                                                         <br>individual
                                                         <br>delivery time
@@ -393,7 +397,7 @@ $this->setFrameMode(true);
                                                                     <img src="<?= $APPLICATION->GetTemplatePath('images/help_r.svg') ?>" alt="">
                                                                 </span>
                                                             </div>*/ ?>
-                                                            <textarea class="form-control"
+                                                            <textarea class="form-control text_area"
                                                                       name="delivery_time"
                                                                       data-code="DELIVERY_TIME"
                                                                       placeholder="Common delivery time"><?= $item->getDeliveryTime()->getValue() ?></textarea>

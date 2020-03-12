@@ -30,7 +30,8 @@ $(function () {
         recalcTotal();
         setRawRowsCounter();
 
-        setBackground();
+        // setBackground();
+        setTextColor();
 
         requestForm.find('[name=price_s]').focus(function () {
             $(this).select();
@@ -137,7 +138,8 @@ $(function () {
                 var parent = $(this).parents('.specification-item');
                 parent.next().find('[name=price_s]').focus();
             }
-            setBackground();
+            // setBackground();
+            setTextColor();
 
             clearTimeout(timer);
             count = 0;
@@ -398,6 +400,12 @@ $(function () {
             }
         }
 
+        $('textarea').each(function () {
+            this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+        }).on('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
     }
 );
 
@@ -448,18 +456,36 @@ function setRawRowsCounter() {
 
 function setBackground() {
     $('.specification .specification-item').each(function (index, item) {
-            var quantityR = $(item).find('.quantity_r'),
-                quantityS = $(item).find('[name=quantity_s]'),
-                measureR  = $(item).find('.measure_r'),
-                measureS  = $(item).find('[name=unit_s]');
+        var quantityR = $(item).find('.quantity_r'),
+            quantityS = $(item).find('[name=quantity_s]'),
+            measureR  = $(item).find('.measure_r'),
+            measureS  = $(item).find('[name=unit_s]');
 
-            quantityS.removeClass('background-grey');
-            measureS.removeClass('background-grey');
-            if (quantityR.text().trim() === quantityS.val().trim()) {
-                quantityS.addClass('background-grey');
-            }
-            if (measureR.text().trim() === measureS.val().trim()) {
-                measureS.addClass('background-grey');
-            }
-        })
+        quantityS.removeClass('background-grey');
+        measureS.removeClass('background-grey');
+        if (quantityR.text().trim() === quantityS.val().trim()) {
+            quantityS.addClass('background-grey');
+        }
+        if (measureR.text().trim() === measureS.val().trim()) {
+            measureS.addClass('background-grey');
+        }
+    })
+}
+
+function setTextColor() {
+    $('.specification .specification-item').each(function (index, item) {
+        var quantityR = $(item).find('.quantity_r'),
+            quantityS = $(item).find('[name=quantity_s]'),
+            measureR  = $(item).find('.measure_r'),
+            measureS  = $(item).find('[name=unit_s]');
+
+        quantityS.removeClass('text-grey');
+        measureS.removeClass('text-grey');
+        if (quantityR.text().trim() === quantityS.val().trim()) {
+            quantityS.addClass('text-grey');
+        }
+        if (measureR.text().trim() === measureS.val().trim()) {
+            measureS.addClass('text-grey');
+        }
+    })
 }
