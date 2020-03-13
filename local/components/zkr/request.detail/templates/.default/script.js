@@ -33,6 +33,18 @@ $(function () {
         // setBackground();
         setTextColor();
 
+        autoHeightTextArea();
+        setDeliveryTimePlaceholder();
+        setIncotermsPlaceholder();
+
+        requestForm.find('.general-term [name=delivery_time]').keyup(function () {
+            setDeliveryTimePlaceholder(this);
+        })
+
+        requestForm.find('.general-term [name=incoterms]').keyup(function () {
+            setIncotermsPlaceholder(this);
+        })
+
         requestForm.find('[name=price_s]').focus(function () {
             $(this).select();
         })
@@ -400,12 +412,35 @@ $(function () {
             }
         }
 
-        $('textarea').each(function () {
-            this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
-        }).on('input', function () {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-        });
+        function setDeliveryTimePlaceholder(that = null) {
+            if (that === null || that.length < 1) {
+                that = document.querySelector('form[name="request"] .general-term [name=delivery_time]');
+            }
+
+            var value       = $(that).val().trim(),
+                placeholder = that.placeholder;
+
+            requestForm.find('.specification [name=delivery_time]').each(function (index, item) {
+                if (item.innerHTML.trim().length < 1) {
+                    item.placeholder = value ? value : placeholder;
+                }
+            })
+        }
+
+        function setIncotermsPlaceholder(that = null) {
+            if (that === null || that.length < 1) {
+                that = document.querySelector('form[name="request"] .general-term [name=incoterms]');
+            }
+
+            var value       = $(that).val().trim(),
+                placeholder = that.placeholder;
+
+            requestForm.find('.specification [name=incoterms]').each(function (index, item) {
+                if (item.innerHTML.trim().length < 1) {
+                    item.placeholder = value ? value : placeholder;
+                }
+            })
+        }
     }
 );
 
@@ -488,4 +523,13 @@ function setTextColor() {
             measureS.addClass('text-grey');
         }
     })
+}
+
+function autoHeightTextArea() {
+    $('textarea').each(function () {
+        this.setAttribute('style', 'height:' + (this.scrollHeight) + 'px;overflow-y:hidden;');
+    }).on('input', function () {
+        this.style.height = 'auto';
+        this.style.height = (this.scrollHeight) + 'px';
+    });
 }

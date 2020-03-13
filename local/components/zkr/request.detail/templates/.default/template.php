@@ -176,6 +176,9 @@ $this->setFrameMode(true);
                                                value="<?= $arResult["PROPERTIES"]['DELIVERY_TIME']["VALUE"] ?>"
                                                data-id="<?= $arResult["PROPERTIES"]['DELIVERY_TIME']["ID"] ?>"
                                                data-code="<?= $arResult["PROPERTIES"]['DELIVERY_TIME']["CODE"] ?>">
+                                        <input type="hidden" class="form-control"
+                                               name="delivery_time_old"
+                                               value="<?= $arResult["PROPERTIES"]['DELIVERY_TIME']["VALUE"] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">

@@ -210,7 +210,16 @@ header .col-xs-12 {
     font-weight : 400;
     font-size   : 12px;
 }
-
+.table textarea.form-control {
+    border: none;
+    resize: vertical;
+    box-shadow: none;
+    min-height: 52px;
+}
+.gen_title h3{
+    font-size: 15px;
+        margin-top: 12px;
+}
 @media (max-width : 767px) {
     .offcanvas-stop-scrolling {
         height   : 100%;
@@ -574,6 +583,7 @@ header .col-xs-12 {
     vertical-align : middle;
     font-size      : 12px;
     text-align     : center;
+    white-space: nowrap;
 }
 
 .redact_area {
@@ -605,7 +615,7 @@ header .col-xs-12 {
 }
 
 .gen_form {
-    margin-top : 20px;
+    margin-top : 0px;
 }
 
 .form_usb {
@@ -631,7 +641,7 @@ header .col-xs-12 {
 }
 
 .specif_wrap {
-    margin-top : 50px;
+    margin-top : 0px;
     position   : relative;
 }
 
@@ -745,11 +755,18 @@ header .col-xs-12 {
 .form-group.has-error {
     margin-bottom : 2px;
 }
-
+.general-term .form-group {
+    margin-bottom: 8px;
+}
+.btn-outline-light.btn:active, .btn-outline-light.btn.active{
+    background: #c7e1ee;
+}
 .footer_bottom {
     margin : 10px 0;
 }
-
+button:focus{
+    outline: none;
+}
 .login {
     margin     : 20px 0;
     text-align : center;
@@ -847,7 +864,21 @@ header .col-xs-12 {
 .btn.disabled, .btn[disabled], fieldset[disabled] .btn {
     pointer-events : all;
 }
-
+.form-horizontal .control-label {
+    font-size: 12px;
+}
+.show {
+    display: flex!important;
+    justify-content: center;
+    align-items: center;
+}
+.modal-header .close {
+    margin-top: -22px;
+}
+.modal-content {
+    box-shadow: 0 5px 43px rgb(183, 183, 183);
+    border: 1px solid #cccccc;
+}
 @media (max-width : 450px) {
     .popover {
         max-width : 350px;
@@ -928,7 +959,9 @@ header .col-xs-12 {
         padding-right : 30px;
         padding-left  : 30px;
     }
-
+    .gen_title h3{
+        font-size: 18px;
+    }
     .gen_form {
         width  : 990px;
         margin : 0 auto;
@@ -940,6 +973,9 @@ header .col-xs-12 {
 
     .specif_table tbody tr td {
         font-size : 14px;
+    }
+    .form-horizontal .control-label {
+        font-size: 14px;
     }
 
 }
