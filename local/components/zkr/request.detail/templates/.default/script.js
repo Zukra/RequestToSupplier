@@ -7,8 +7,8 @@ $(function () {
             blockContact    = requestForm.find('.general-term select[name=contact]'),
             oldValueContact = blockContact.val(),
             count           = 0,
-            max             = 5,
-            delay           = 25,
+            max             = 3, // 5,
+            delay           = 5, //25,
             timer           = 0;
 
         $('.gen_ststus .saving_data').hide();
@@ -345,7 +345,6 @@ $(function () {
                     }).catch(function (reason) {
                         console.log(reason);
                     });
-
                 }
             } else {
                 timer = setTimeout(updateSpecification, delay, that);
@@ -476,7 +475,8 @@ function changeStatus(status) {
     block.find('.status').html(status);
     $('.general_terms .request-event').html(status);
     $('.gen_ststus .saving_data').show();
-    setTimeout("$('.gen_ststus .saving_data').hide()", 1000);
+    $('.gen_ststus .saved_data').hide();
+    setTimeout("$('.gen_ststus .saving_data').hide(); $('.gen_ststus .saved_data').show();", 1000);
 }
 
 function setRawRowsCounter() {

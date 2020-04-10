@@ -4,3 +4,6 @@
 .text-grey {
     color : gray;
 }
+.specification-item .total{
+    white-space: nowrap;
+}

@@ -583,7 +583,7 @@ header .col-xs-12 {
     vertical-align : middle;
     font-size      : 12px;
     text-align     : center;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
 }
 
 .redact_area {

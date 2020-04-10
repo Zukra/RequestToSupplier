@@ -100,6 +100,7 @@ $this->setFrameMode(true);
                         <p class="status"><?= $arResult["PROPERTIES"]['STATUS']["VALUE"] ?></p>
                         <p>
                             <span class="saving_data">Changes is saving...</span>
+                            <span class="saved_data">All changes saved</span>
                         </p>
                     </div>
                 </div>
