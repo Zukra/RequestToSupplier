@@ -117,7 +117,6 @@ class CustomAjax extends CBitrixComponent implements Controllerable
     {
         $data = ['status' => 0, 'errors' => 'error!'];
 
-//        $url = 'http://API:1111m@138.201.231.186:8080/testnew2/hs/1c/api/v1/request/getKey';
         $baseUrl = BASE_URL_1C_API;
         $uri = 'request/getKey';
 

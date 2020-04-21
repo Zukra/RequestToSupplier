@@ -93,42 +93,5 @@ class Helper
         $data = \GuzzleHttp\json_decode((string)$body, true);
 
         return $data;
-
-//curl -i -v -H "Content-Type: application/json" -d "{\"email\":\"test@test.com\",\"request_id\":\"11111\"}" http://API:1111m@srv-1c.emk.loc:8080//testnew2/hs/1c/api/v1/request/getKey
-//curl -i -v -H "Content-Type: application/json" -d "{\"email\":\"test@test.com\",\"request_id\":\"11111\"}" http://API:1111m@138.201.231.186:8080/testnew2/hs/1c/api/v1/request/getKey
-//curl -i -v -H "Content-Type: application/json" -d "{\"vcard_id\":\"11\", \"token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3RzdC5wZXJzb2dyYW0uY29tL2FwaS92MS9hdXRoL2xvZ2luIiwiaWF0IjoxNTgyMzU3MDMxLCJuYmYiOjE1ODIzNTcwMzEsImp0aSI6IkhzMkZlQTNKVzJqMTB5ZFQiLCJzdWIiOjIsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEifQ.vWT51sqLd0nJyeJrgV7wEVhPmidYIv9-WK-sgaDe0Yk\"}" https://tst.persogram.com/api/v1/card
-//$params = http_build_query($params);
-        /*$params = json_encode($params);
-        $url = 'http://API:1111m@138.201.231.186:8080/testnew2/hs/1c/api/v1/request/getKey';
-        $url = 'http://API:1111m@srv-1c.emk.loc:8080/testnew2/hs/1c/api/v1/request/getKey';
-        //dump($url, $params, $_SERVER);
-        dump($url, $params);
-        $ch = curl_init();
-        curl_setopt_array($ch, [
-            CURLOPT_URL            => $url,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POST           => 1,
-            //    CURLOPT_CUSTOMREQUEST  => "POST",
-            CURLOPT_SSL_VERIFYPEER => 0,
-            CURLOPT_HEADER         => 0,
-            CURLOPT_POSTFIELDS     => $params,
-            CURLOPT_HTTPHEADER     => [
-        //        "REMOTE_ADDR: 188.120.253.16",
-        //        "HTTP_X_FORWARDED_FOR: 188.120.253.16",
-        //        'Content-Type: text/plain',
-        'Content-Type: application/json',
-        //        'Content-type: application/x-www-form-urlencoded',
-        //        'Content-Length: ' . strlen($params),
-        //                'Accept: application/json',
-        //        'Connection: Keep-Alive',
-            ],
-            CURLOPT_FOLLOWLOCATION => 1,
-            CURLOPT_TIMEOUT        => 15000,
-        ]);
-        if (! $res = curl_exec($ch)) {
-            dump('Error: "' . curl_error($ch) . '" - Code: ' . curl_errno($ch));
-        } else {
-            dump($res);
-        }*/
     }
 }
