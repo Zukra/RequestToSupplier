@@ -26,7 +26,7 @@ $currencies = [
     "PLN" => "PLN",
 ];
 //$currencies = \Bitrix\Currency\CurrencyManager::getCurrencyList();
-//$measures = ['T', 't', 'm'];
+$measures = ['', 'm', 't', 'kg', 'pc'];
 
 $classColors = [
     \Zkr\Supplier\Price\Request::NEW            => 'color_new_blocked',
@@ -155,7 +155,7 @@ $this->setFrameMode(true);
                                     </label>
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="payment_order"
-                                               required
+                                               required tabindex="1"
                                                placeholder="Payment conditions" aria-label="PaymentOrder" aria-describedby="payment_order"
                                                value="<?= $arResult["PROPERTIES"]['PAYMENT_ORDER']["VALUE"] ?>"
                                                data-id="<?= $arResult["PROPERTIES"]['PAYMENT_ORDER']["ID"] ?>"
@@ -172,6 +172,7 @@ $this->setFrameMode(true);
                                     <div class="col-sm-8">
                                         <input type="text" class="form-control" name="delivery_time"
                                                required
+                                               tabindex="2"
                                                placeholder="Delivery time" aria-label="DeliveryTime"
                                                aria-describedby="basic-delivery_time"
                                                value="<?= $arResult["PROPERTIES"]['DELIVERY_TIME']["VALUE"] ?>"
@@ -193,6 +194,7 @@ $this->setFrameMode(true);
                                                placeholder="INCOTERMS" aria-label="INCOTERMS"
                                                aria-describedby="basic-incoterms"
                                                required
+                                               tabindex="3"
                                                value="<?= $arResult["PROPERTIES"]['INCOTERMS']["VALUE"] ?>"
                                                data-id="<?= $arResult["PROPERTIES"]['INCOTERMS']["ID"] ?>"
                                                data-code="<?= $arResult["PROPERTIES"]['INCOTERMS']["CODE"] ?>">
@@ -205,7 +207,9 @@ $this->setFrameMode(true);
                                     </span>
                                     </label>
                                     <div class="col-sm-8">
-                                        <select class="browser-default custom-select form-control" name="currency"
+                                        <select class="browser-default custom-select form-control"
+                                                name="currency"
+                                                tabindex="4"
                                                 data-id="<?= $arResult["PROPERTIES"]['CURRENCY']["ID"] ?>"
                                                 data-code="<?= $arResult["PROPERTIES"]['CURRENCY']["CODE"] ?>">
                                             <? foreach ($currencies as $key => $currency) { ?>
@@ -226,6 +230,7 @@ $this->setFrameMode(true);
                                     <div class="col-sm-8">
                                         <select class="custom-browser-default custom-select form-control"
                                                 name="contact"
+                                                tabindex="5"
                                                 data-id="<?= $arResult["PROPERTIES"]['CONTACT']["ID"] ?>"
                                                 data-code="<?= $arResult["PROPERTIES"]['CONTACT']["CODE"] ?>">
                                             <? foreach ($supplierContacts as $contact) { ?>
@@ -279,6 +284,7 @@ $this->setFrameMode(true);
                                             </div>
                                             <div class="specif_search">
                                                 <input type="text" class="form-control"
+                                                       tabindex="6"
                                                        id="" placeholder="Quick search by table"
                                                        onkeyup="filterSearch(this)">
                                             </div>
@@ -358,18 +364,20 @@ $this->setFrameMode(true);
                                                             </div>*/ ?>
                                                         </td>
                                                         <td>
-                                                            <input type="text" class="redact_area" name="unit_s"
-                                                                   data-code="SUPPLIER_UNIT"
-                                                                   value="<?= $item->getSupplierUnit()->getValue() ?: $item->getUnitMeasure()->getValue() ?>">
-                                                            <? /* <select class="custom-select" id="inputGroupSelectMeasure" name="unit_s"
+                                                            <? /*
+                                                                <input type="text" class="redact_area" name="unit_s"
+                                                                       data-code="SUPPLIER_UNIT"
+                                                                       value="<?= $item->getSupplierUnit()->getValue() ?: $item->getUnitMeasure()->getValue() ?>">
+                                                            <? */ ?>
+                                                            <select class="custom-select" id="inputGroupSelectMeasure" name="unit_s"
                                                                     data-code="SUPPLIER_UNIT">
                                                                 <? foreach ($measures as $measure) { ?>
-                                                                    <option <?= $item->getSupplierUnit()->getValue() == $measure ? "selected" : "" ?>
+                                                                    <option <?= trim($item->getSupplierUnit()->getValue()) == trim($measure) ? "selected" : "" ?>
                                                                             value="<?= $measure ?>">
                                                                         <?= $measure ?>
                                                                     </option>
                                                                 <? } ?>
-                                                            </select>*/ ?>
+                                                            </select>
                                                             <? /*<input type="text" class="redact_area" id="" placeholder="T">
                                                             <div class="error_box">
                                                                 <span class="error_area" data-toggle="tooltip" data-placement="top" title="" data-original-title="Error">
@@ -380,6 +388,7 @@ $this->setFrameMode(true);
                                                         <td data-col="price_s">
                                                             <input type="text" class="recalc redact_area"
                                                                    name="price_s"
+                                                                   required
                                                                    data-code="SUPPLIER_PRICE_UNIT"
                                                                    value="<?= $item->getSupplierPriceUnit()->getValue() ?? '' ?>"
                                                                    onkeypress="return isNumberKey(event);"
