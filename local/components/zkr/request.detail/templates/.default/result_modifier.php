@@ -29,3 +29,8 @@ if ($supplier) {
 $arResult['SUPPLIER'] = $supplier ?: [];
 $arResult['SUPPLIER_CONTACTS'] = $supplierContacts ?: [];
 $arResult['SPECIFICATION'] = $specification ?: [];
+
+$cp = $this->__component; // объект компонента
+if (is_object($cp)) {
+    $cp->SetResultCacheKeys(['SUPPLIER']);
+}
