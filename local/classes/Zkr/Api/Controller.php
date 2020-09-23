@@ -5,7 +5,7 @@ namespace Zkr\Api;
 
 use Zkr\Supplier\Price\Request;
 
-class Controller
+class Controller extends \IRestService
 {
     public static function OnRestServiceBuildDescription()
     {
