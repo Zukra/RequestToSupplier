@@ -60,7 +60,8 @@ class Helper
                     LocalRedirect('/personal/update-key/');
                 }
             }
-        } else {
+        }
+        else {
             LocalRedirect('/personal/error-key/');
         }
 
@@ -82,12 +83,20 @@ class Helper
 //            $body = $e->getRequest()->getBody();
             if ($e->hasResponse()) {
                 echo Psr7\str($e->getResponse());
-                $body = $e->getResponse()->getBody();
-                if (in_array($e->getResponse()->getStatusCode(), [401, 404])) {
+//                $body = $e->getResponse()->getBody();
+                $body = json_encode([
+                    'status' => 0,
+                    'errors' => [
+                        'status_code' => $e->getResponse()->getStatusCode(),
+                        'error'       => $e->getResponse()->getReasonPhrase()
+                    ]
+                ]);
+                /*if (in_array($e->getResponse()->getStatusCode(), [401, 404, 409])) {
                     $body = json_encode(['status' => 0, 'errors' => $e->getResponse()->getReasonPhrase()]);
-                }
-            } else {
-                $body = json_encode(['status' => 0, 'errors' => 'Response is null']);
+                }*/
+            }
+            else {
+                $body = json_encode(['status' => 0, 'errors' => ['Response is null']]);
             }
         }
         $data = \GuzzleHttp\json_decode((string)$body, true);

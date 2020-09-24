@@ -38,7 +38,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     //                    new ActionFilter\Authentication(),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -47,7 +47,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -56,7 +56,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -65,7 +65,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -74,7 +74,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -83,7 +83,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -92,7 +92,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -101,7 +101,16 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
                 ],
                 '-prefilters' => [
-                    ActionFilter\Authentication::class
+                    ActionFilter\Authentication::class,
+                ],
+                'postfilters' => [],
+            ],
+            'errorHandling'            => [
+                'prefilters'  => [
+                    new ActionFilter\HttpMethod([ActionFilter\HttpMethod::METHOD_GET, ActionFilter\HttpMethod::METHOD_POST]),
+                ],
+                '-prefilters' => [
+                    ActionFilter\Authentication::class,
                 ],
                 'postfilters' => [],
             ],
@@ -123,7 +132,8 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         $result = Helper::sendHttp($baseUrl, $uri, $params);
         if ($result["status"] < 1) {
             $data['errors'] = $result['errors'];
-        } else {
+        }
+        else {
             $params = [
                 "supplier_id" => $result['data']["supplier_id"],
                 "key"         => $result['data']["key"],
@@ -139,7 +149,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
                     "key"         => $supplier->getKey()->getValue(),   // сгенерированный ключ
                     "key_expiry"  => $supplier->getExpiryDate()->getValue(), // дата окончания действия ключа Unix-формат
                     "email"       => $params['email'],             // contact email (email ответственного лица) или ID сформированного к отправке письма
-                    'request_id'  => $params['request_id'] ?? ''
+                    'request_id'  => $params['request_id'] ?? '',
                 ];
             }
         }
@@ -169,7 +179,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             'IS_BLOCKED'            => REQUEST_IS_BLOCKED_ID,
             'STATUS'                => Request::BLOCKED_UPDATE,
             'EVENT'                 => Request::BLOCKED_UPDATE,
-            'SESSION_ID'            => bitrix_sessid()
+            'SESSION_ID'            => bitrix_sessid(),
         ];
         if ($params['prop']['code'] == 'CONTACT') {
             /** @var EO_ElementSupplierContact $contact */
@@ -237,7 +247,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             'IS_BLOCKED' => REQUEST_IS_BLOCKED_ID,
             'STATUS'     => Request::BLOCKED_UPDATE,
             'EVENT'      => Request::BLOCKED_UPDATE,
-            'SESSION_ID' => bitrix_sessid()
+            'SESSION_ID' => bitrix_sessid(),
         ]);
     }
 
@@ -249,7 +259,7 @@ class CustomAjax extends CBitrixComponent implements Controllerable
             'prop'       => [
                 'code'  => 'CONTACT',
                 'value' => $contact->getId(),
-            ]
+            ],
         ];
         $this->updateRequestAction($parameters);
 
@@ -289,7 +299,8 @@ class CustomAjax extends CBitrixComponent implements Controllerable
 
             if ($result["status"] < 1) {
                 $data = ["status" => 0, 'errors' => $result['errors']];
-            } else {
+            }
+            else {
                 $props = ['IS_BLOCKED' => false, 'STATUS' => Request::SENT, 'EVENT' => Request::SENT];
                 $el = new CIBlockElement;
                 $el->Update($params['request_id'], ['TIMESTAMP_X' => new \Bitrix\Main\Type\DateTime()]);
@@ -318,4 +329,24 @@ class CustomAjax extends CBitrixComponent implements Controllerable
         }
     }
 
+    public function errorHandlingAction($params)
+    {
+        $data = ["status" => 1];
+
+        $result = \Bitrix\Main\Mail\Event::send([
+            "EVENT_NAME" => 'ERROR_SEND_REQUEST_DATA',
+            "LID"        => SITE_ID,
+            "C_FIELDS"   => [
+                'INQUIRY' => $params['inquiry'],
+                'URI'     => $params['url'],
+                'MSG'     => implode(' ', $params['errors']),
+            ],
+        ]);
+
+        if ($err = $result->getErrorMessages()) {
+            $data = ["status" => 0, 'errors' => $err];
+        }
+
+        return $data;
+    }
 }

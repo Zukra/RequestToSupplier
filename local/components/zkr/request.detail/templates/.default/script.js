@@ -1,7 +1,6 @@
 "use strict";
 
 $(function () {
-
     var requestForm     = $('form[name="request"]'),
         blockNewContact = requestForm.find('.new-contact'),
         blockContact    = requestForm.find('.general-term select[name=contact]'),
@@ -101,7 +100,7 @@ $(function () {
                 if (response.data.status === 1) {
                     location.href = "/personal/requests/";
                 } else {
-                    console.log(response.data.errors);
+                    errorHandling(response.data.errors);
                 }
             }
             BX.closeWait();
@@ -112,6 +111,13 @@ $(function () {
         });
         // location.href = location.href.split('?')[0];
         // location.reload();
+    });
+
+    $('form[name="request"] .general-term input').blur(function (event) {
+        var value = $(this).val();
+        $(this).val(value.trim());
+
+        updateGeneralTerm(this);
     });
 
     $('form[name="request"] .general-term select').change(function (event) {
@@ -443,54 +449,54 @@ $(function () {
 
     $('form[name="request"] .specification input, form[name="request"] .specification textarea, form[name="request"] .specification select')
         .keyup(function (event) {
-        var row    = $(this).parents('.specification-item'),
-            column = $(this).parents('td'),
-            name   = $(this).attr('name'),
-            nextColumn,
-            prevColumn;
+            var row    = $(this).parents('.specification-item'),
+                column = $(this).parents('td'),
+                name   = $(this).attr('name'),
+                nextColumn,
+                prevColumn;
 
-        switch (event.keyCode) {
-            case 37:
-                // console.log('left');
-                prevColumn = column.prev();
-                for (var i = 0; i < 4; i++) {
-                    if (prevColumn.has('input').length > 0) {
-                        prevColumn.find('input').focus();
-                        break;
-                    } else if (prevColumn.has('textarea').length > 0) {
-                        prevColumn.find('textarea').focus();
-                        break;
-                    } else if (prevColumn.has('select').length > 0) {
-                        // prevColumn.find('select').focus();
-                        // break;
+            switch (event.keyCode) {
+                case 37:
+                    // console.log('left');
+                    prevColumn = column.prev();
+                    for (var i = 0; i < 4; i++) {
+                        if (prevColumn.has('input').length > 0) {
+                            prevColumn.find('input').focus();
+                            break;
+                        } else if (prevColumn.has('textarea').length > 0) {
+                            prevColumn.find('textarea').focus();
+                            break;
+                        } else if (prevColumn.has('select').length > 0) {
+                            // prevColumn.find('select').focus();
+                            // break;
+                        }
+                        prevColumn = prevColumn.prev();
                     }
-                    prevColumn = prevColumn.prev();
-                }
-                break;
-            case 39:
-                // console.log('right');
-                nextColumn = column.next();
-                for (var i = 0; i < 4; i++) {
-                    if (nextColumn.has('input').length > 0) {
-                        nextColumn.find('input').focus();
-                        break;
-                    } else if (nextColumn.has('textarea').length > 0) {
-                        nextColumn.find('textarea').focus();
-                        break;
+                    break;
+                case 39:
+                    // console.log('right');
+                    nextColumn = column.next();
+                    for (var i = 0; i < 4; i++) {
+                        if (nextColumn.has('input').length > 0) {
+                            nextColumn.find('input').focus();
+                            break;
+                        } else if (nextColumn.has('textarea').length > 0) {
+                            nextColumn.find('textarea').focus();
+                            break;
+                        }
+                        nextColumn = nextColumn.next();
                     }
-                    nextColumn = nextColumn.next();
-                }
-                break;
-            case 38:
-                // console.log('up');
-                row.prev().find('[name=' + name + ']').focus();
-                break;
-            case 40:
-                // console.log('down');
-                row.next().find('[name=' + name + ']').focus();
-                break;
-        }
-    });
+                    break;
+                case 38:
+                    // console.log('up');
+                    row.prev().find('[name=' + name + ']').focus();
+                    break;
+                case 40:
+                    // console.log('down');
+                    row.next().find('[name=' + name + ']').focus();
+                    break;
+            }
+        });
 
 });
 
@@ -582,5 +588,32 @@ function autoHeightTextArea() {
     }).on('input', function () {
         this.style.height = 'auto';
         this.style.height = (this.scrollHeight) + 'px';
+    });
+}
+
+function errorHandling(errors) {
+    var accessKey = document.getElementsByName("access_key")[0].value;
+    var msg       = typeof errors.status_code !== "undefined"
+        ? (errors.status_code + ' ' + errors.error) : '';
+    var params    = {
+        url: location.href + '&key=' + accessKey,
+        errors: errors
+    };
+
+    $('#errorSendRequestData').find('.js-replace-msg').html(msg);
+    $('#errorSendRequestData').modal('show');
+
+    BX.ajax.runComponentAction('zkr:ajax',
+        'errorHandling', {
+            mode: 'class',
+            data: {params: params}
+        }
+    ).then(function (response) {
+        if (response.status === 'success') {
+            // console.log('update general terms!');
+            // location.reload();
+        }
+    }).catch(function (reason) {
+        console.log(reason);
     });
 }

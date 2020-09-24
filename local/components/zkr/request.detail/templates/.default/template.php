@@ -40,6 +40,10 @@ $currentContact = $arResult["PROPERTIES"]["CONTACT"]['VALUE']
 
 $isBlocked = $arResult["PROPERTIES"]["IS_BLOCKED"]['VALUE'];
 
+$nameInquiry = 'Inquiry #' . substr($arResult["NAME"], 0, 11)
+               . ' by ' . (new \Bitrix\Main\Type\Date($arResult["TIMESTAMP_X"]))->toString()
+               . ' to ' . $supplier->getName();
+
 $this->setFrameMode(true);
 ?>
 <div class="request-detail">
@@ -48,6 +52,11 @@ $this->setFrameMode(true);
            value="<?= bitrix_sessid() ?>"
            data-id="<?= $arResult["PROPERTIES"]['SESSION_ID']["ID"] ?>"
            data-code="<?= $arResult["PROPERTIES"]['SESSION_ID']["CODE"] ?>">
+
+    <input type="hidden" id="name_inquiry" name="name_inquiry" value="<?= $nameInquiry ?>">
+    <input type="hidden" name="access_key" value="<?= $supplier->getKey()->getValue() ?>">
+
+    <? /*<input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>"> */ ?>
 
     <section class="bread_crumbs_sect">
         <div class="container">
@@ -72,27 +81,7 @@ $this->setFrameMode(true);
             <div class="row">
                 <div class="col-xs-12 col-sm-8">
                     <div class="gen_title">
-                        <h3>
-                            <b>
-                                Inquiry #<?= substr($arResult["NAME"], 0, 11) ?>
-                                by <?= (new \Bitrix\Main\Type\Date($arResult["TIMESTAMP_X"]))->toString() ?>
-                                to <?= $supplier->getName() ?>
-                            </b>
-                        </h3>
-                        <? /*<h1>
-                            <span class="request-event"><?= $arResult["PROPERTIES"]['EVENT']["VALUE"] ?></span>
-                            <span class="request-by_blocked">
-                                <? if ($arResult["PROPERTIES"]["IS_BLOCKED"]['VALUE']) { ?>
-                                    by
-                                    <span class="blocked-contact">
-                                        <?= $currentContact->state
-                                            ? $currentContact->getName() . ' (' . $currentContact->getEmail()->getValue() . ')'
-                                            : '' ?>
-                                    </span>
-                                <? } ?>
-                            </span>
-                            <span class="request-supplier"><?= ' to ' . $supplier->getName() ?></span>
-                        </h1>*/ ?>
+                        <h3><b><?= $nameInquiry ?></b></h3>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-4">
@@ -143,8 +132,6 @@ $this->setFrameMode(true);
                                 <input type="hidden" name="request-id" value="<?= $arResult['ID'] ?>">
                                 <input type="hidden" name="request-1c" value="<?= $arResult['PROPERTIES']['REQUEST_ID']['VALUE'] ?>">
                                 <input type="hidden" name="supplier-id" value="<?= $supplier->getId() ?>">
-                                <? /*<input type="hidden" name="request-token" value="<?= REQUEST_TOKEN ?>">
-                                <input type="hidden" name="key" value="<?= $_SESSION["access_key"] ?>">*/ ?>
 
                                 <? /*<div class="form-group has-error">*/ ?>
                                 <div class="form-group">
@@ -556,3 +543,27 @@ $this->setFrameMode(true);
         WAIT_REPLY: '<?=\Zkr\Supplier\Price\Request::WAIT_REPLY?>'
     });
 </script>
+
+<!-- Modal -->
+<div class="modal fade" id="errorSendRequestData" tabindex="-1" role="dialog" aria-labelledby="errorSendRequestDataTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorSendRequestDataTitle">Error</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Error:
+                    <span class="js-replace-msg">Error Send Request Data.</span>
+                </p>
+                <p class="text-center">Reply not sent.
+                    <a href="/">Contact</a> the purchasing manager.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
